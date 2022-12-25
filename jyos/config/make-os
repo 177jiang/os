@@ -1,0 +1,5 @@
+
+OS_ARCH := x86
+OS_NAME = jyos
+OS_BIN = $(OS_NAME).bin
+OS_ISO = $(OS_NAME).iso
