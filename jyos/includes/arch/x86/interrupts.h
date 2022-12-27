@@ -1,4 +1,3 @@
-
 #ifndef __jyos_interrupts_h_
 #define  __jyos_interrupts_h_
 
@@ -27,6 +26,24 @@
 
 #define JYOS_SYS_PANIC                  32
 
+
+#define EX_INTERRUPT_BEGIN              200
+
+// Keyboard
+#define PC_KBD_IV                       201
+
+#define RTC_TIMER_IV                    210
+
+// 来自APIC的中断有着最高的优先级。
+// APIC related
+#define APIC_ERROR_IV                   250
+#define APIC_LINT0_IV                   251
+#define APIC_SPIV_IV                    252
+#define APIC_TIMER_IV                   253
+
+#define PC_AT_IRQ_RTC                   8
+#define PC_AT_IRQ_KBD                   1
+
 #ifndef    __INTERRUPTS_S_
 typedef struct {
 
@@ -50,6 +67,11 @@ typedef struct {
 
 } __attribute__((packed)) isr_param;
 
+typedef void (*interrupt_function)(const isr_param*) ;
+
+#define INTERRUPTS_VECTOR_SIZE 256
+
+// #pragma region ISR_DECLARATION
 void _asm_isr0();
 void _asm_isr1();
 void _asm_isr2();
@@ -75,7 +97,30 @@ void _asm_isr21();
 
 void _asm_isr32();
 
+void _asm_isr201();
+
+void _asm_isr210();
+
+void _asm_isr250();
+void _asm_isr251();
+void _asm_isr252();
+void _asm_isr253();
+void _asm_isr254();
+
+// #pragma endregion
+
+void intr_setvector(const unsigned int vector, interrupt_function fun);
+
+void intr_unsetvector(const unsigned int vector, interrupt_function fun);
+
+void intr_set_fallback_handler(interrupt_function fun);
+
+void _intr_handler(isr_param* param);
+
 void _interrupts_handler(isr_param* param);
+
+void intr_routine_init();
+
 #endif
 
 #endif

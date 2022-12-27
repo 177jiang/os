@@ -1,4 +1,6 @@
 #include <stddef.h>
+
+#include <stdint.h>
 #include <libc/string.h>
 
 
@@ -78,6 +80,14 @@ char *strcpy(char *dest, const char *src){
   memmove(dest, src, n);
   dest[n] = '\0';
 
+  return dest;
+}
+
+char *strncpy(char *dest, const char *src, size_t n){
+  char c;
+  uint32_t i = 0;
+  while((c=src[i]) && i < n)dest[i++] = c;
+  while(i < n)dest[i++] = 0;
   return dest;
 }
 

@@ -1,8 +1,8 @@
 #include <arch/x86/boot/multiboot.h>
 #include <libc/stdio.h>
 #include <libc/string.h>
-#include <jyos/constant.h>
-#include <jyos/mm/page.h>
+#include <constant.h>
+#include <mm/page.h>
 #include <stdint.h>
 
 #define PT_ADDR(ptd, index)                       ((ptd_t*)ptd + ((index + 1) <<  10) )

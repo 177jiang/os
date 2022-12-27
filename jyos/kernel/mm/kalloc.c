@@ -1,12 +1,12 @@
-#include <jyos/mm/kalloc.h>
+#include <mm/kalloc.h>
 #include <libc/string.h>
-#include <jyos/mm/dmm.h>
+#include <mm/dmm.h>
 
 extern uint8_t __kernel_heap_start;
 
 heap_context_t __kalloc_heap;
 
-int kmalloc_init(){
+int kalloc_init(){
     __kalloc_heap.start =  sym_vaddr(__kernel_heap_start);
     __kalloc_heap.end   = 0;
     return dmm_init(&__kalloc_heap);
@@ -30,5 +30,5 @@ void kfree(void *addr){
 }
 
 void __debug_kalloc(){
-    printf("start :%x     end :%x\n", __kalloc_heap.start, __kalloc_heap.end);
+    printf_("start :%x     end :%x\n", __kalloc_heap.start, __kalloc_heap.end);
 }

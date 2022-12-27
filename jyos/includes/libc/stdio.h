@@ -9,12 +9,13 @@
 
 void _putchar(char character);
 
+int printf_error(const char * format, ...);
 
-#define printf printf_
+// #define printf printf_
 int printf_(const char* format, ...);
 
 
-#define sprintf sprintf_
+// #define sprintf sprintf_
 int sprintf_(char* buffer, const char* format, ...);
 
 

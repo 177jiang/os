@@ -33,7 +33,9 @@
   .global start_
 
    start_:
-
+  
+  cld
+  cli
 
     movl $stack_top, %esp
  

@@ -1,5 +1,5 @@
-#include <jyos/mm/pmm.h>
-#include <jyos/mm/page.h>
+#include <mm/pmm.h>
+#include <mm/page.h>
 #include <stddef.h>
 
 static struct p_page mem_map[MEM_MEP_MAX_SIZE];

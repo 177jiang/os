@@ -2,6 +2,7 @@ ENTRY(start_)
 
 SECTIONS {
     . = 0x100000;
+    __init_hhk_start = . ;
 
     .hhk_init_text BLOCK(4K) : {
         * (.multiboot)

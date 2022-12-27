@@ -1,8 +1,8 @@
-#include <jyos/mm/page.h>
-#include <jyos/mm/vmm.h>
-#include <jyos/mm/dmm.h>
+#include <mm/page.h>
+#include <mm/vmm.h>
+#include <mm/dmm.h>
 
-#include <jyos/spike.h>
+#include <spike.h>
 
 #include <stdint.h>
 
@@ -221,7 +221,6 @@ void jfree(void *addr){
     size_t size     = DMM_GET_SIZE(header);
     uint8_t *nhd    = hd + size;
 
-    printf("%x", addr );
 
     assert_msg(((uintptr_t)addr < (uintptr_t)(-size)) && (((uintptr_t)addr & 0x3) == 0),
                "free(): invalid pointer");

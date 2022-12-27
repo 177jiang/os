@@ -1,7 +1,62 @@
 #include <arch/x86/interrupts.h>
-#include <jyos/tty/tty.h>
+#include <tty/tty.h>
 #include <libc/stdio.h>
 #include <libc/stdlib.h>
+#include <hal/apic.h>
+
+
+static interrupt_function interrupt_vecotrs[INTERRUPTS_VECTOR_SIZE];
+
+static interrupt_function   fallback = (interrupt_function) 0;
+
+void intr_setvector(const unsigned int vector, interrupt_function fun){
+    interrupt_vecotrs[vector] = fun;
+}
+
+void intr_unsetvector(const unsigned int vector, interrupt_function fun){
+    if(interrupt_vecotrs[vector] == fun){
+        interrupt_vecotrs[vector] = (interrupt_function) 0;
+    }
+}
+
+void intr_set_fallback_handler(interrupt_function fun){
+    fallback = fun;
+}
+
+void _msg_panic (const char *msg, isr_param* param){
+
+    char buf[1024];
+    sprintf_(buf, "INT %u: (%x) [%p: %p] %s",
+            param->vector, param->err_code, param->cs, param->eip, msg);
+    tty_set_theme(VGA_COLOR_RED, VGA_COLOR_BLACK);
+    printf_(buf);
+    while(1);
+}
+
+void _intr_handler(isr_param* param){
+
+    if(param->vector < 256){
+        interrupt_function int_fun = interrupt_vecotrs[param->vector];
+        if(int_fun){
+            int_fun(param);
+        }
+        goto done;
+    }
+    if(fallback){
+        fallback(param);
+        goto done;
+    }
+
+    _msg_panic("Unknow interrupt vector", param);
+
+done:
+    if (param->vector >= EX_INTERRUPT_BEGIN && param->vector != APIC_SPIV_IV) {
+        apic_done_servicing();
+    }
+
+    return;
+}
+
 
 void isr0(isr_param *param){
 
@@ -29,17 +84,10 @@ void _panic_msg(const char *msg){
 
     tty_set_theme(VGA_COLOR_RED, VGA_COLOR_BLACK);
 
-    printf("%s", msg);
+    printf_("%s", msg);
 
 }
 
-void panic (const char *msg, isr_param* param){
-    char buf[1024];
-    sprintf(buf, "INT %u: (%x) [%p: %p] %s",
-            param->vector, param->err_code, param->cs, param->eip, msg);
-    _panic_msg(msg);
-    while(1);
-}
 
 
 void _interrupts_handler(isr_param *param){

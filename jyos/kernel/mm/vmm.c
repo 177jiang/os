@@ -1,7 +1,7 @@
 
-#include <jyos/mm/vmm.h>
-#include <jyos/mm/pmm.h>
-#include <jyos/spike.h>
+#include <mm/vmm.h>
+#include <mm/pmm.h>
+#include <spike.h>
 #include <libc/string.h>
 #include <hal/cpu.h>
 #include <stdbool.h>
@@ -200,9 +200,7 @@ int vmm_set_mapping(pid_t pid, void *va, Pysical(void *) pa, p_page_attr attr){
 
   if(d_index == RECURSION_MAP_INDEX)return 0;
 
-  __vmm_map_page(pid, d_index, t_index, pa, attr, 0);
-
-  return 1;
+  return __vmm_map_page(pid, d_index, t_index, pa, attr, 0);
 
 }
 

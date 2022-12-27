@@ -17,11 +17,18 @@
 
 .section .text
 
-  isr_template     FAULT_DIVISION_ERROR
-  isr_template FAULT_GENERAL_PROTECTION, no_error_code=0
-  isr_template FAULT_PAGE_FAULT, no_error_code=0
+  isr_template      FAULT_DIVISION_ERROR
+  isr_template      FAULT_GENERAL_PROTECTION, no_error_code=0
+  isr_template      FAULT_PAGE_FAULT, no_error_code=0
 
-  isr_template     JYOS_SYS_PANIC
+  isr_template      JYOS_SYS_PANIC
+
+  isr_template      APIC_ERROR_IV
+  isr_template      APIC_LINT0_IV
+  isr_template      APIC_TIMER_IV
+  isr_template      APIC_SPIV_IV
+  isr_template      RTC_TIMER_IV
+  isr_template      PC_KBD_IV
 
   _interrupt_wrapper:
   
@@ -46,7 +53,8 @@
     movw %dx, %es
     movw %dx, %fs
 
-    call _interrupts_handler
+    /* call _interrupts_handler */
+    call _intr_handler
 
     pop %eax
     movl %eax, %esp

@@ -46,8 +46,7 @@
       mov $_init_kernel_esp, %esp
       call _kernel_main
   
-     cli
-  
+    cli
      l_:
        hlt
        jmp l_

@@ -1,14 +1,22 @@
-#include <stdint.h>
-#include <jyos/tty/tty.h>
 #include <arch/x86/boot/multiboot.h>
 #include <arch/x86/gdt.h>
 #include <arch/x86/idt.h>
-#include <jyos/constant.h>
+
+#include <mm/kalloc.h>
+#include <tty/tty.h>
+#include <constant.h>
+#include <timer.h>
+#include <clock.h>
+
 #include <libc/stdlib.h>
 #include <libc/stdio.h>
-#include <stddef.h>
 #include <libc/stdio.h>
-#include <jyos/mm/kalloc.h>
+
+#include <stdint.h>
+#include <stddef.h>
+
+#include <peripheral/keyboard.h>
+#include <clock.h>
 
 extern uint8_t __kernel_start;
 
@@ -43,36 +51,51 @@ uint32_t _init_kernel_esp = (uint32_t)_init_kernel_stack + _init_ks_size;
 //
 //    // clear_screen();
 // }
+//
+void test_timer(void *paylod){
+  static datetime_t datetime;
+  time_getdatetime(&datetime);
+
+  char buf[128];
+  sprintf_(buf, "local time: %u/%02u/%02u %02u:%02u:%02u\r",
+           datetime.year,
+           datetime.month,
+           datetime.day,
+           (datetime.hour + 8) % 24,
+           datetime.minute,
+           datetime.second);
+
+  tty_put_str_at_line(buf, 10, VGA_COLOR_RED | VGA_COLOR_GREEN );
+
+}
+
 
 int _kernel_main() {
 
-  // printf("this is a test %d, %s, %x\n", 1, "str", 16);
-  // printf("this is a test %d, %s, %x\n", -1, "stsdasdr", 16);
-  // printf("this is a test %d, %s, %x\n", 1123123, "str", 16);
-  // printf("this is a test %d, %s, %x\n", -199922, "str", 16);
+  // char *alloc_test = (char *) kmalloc(64);
+  // for(int i=0; i<20; ++i){
+  //   alloc_test[i] = i;
+  // }
+  // for(int i=0; i<20; ++i){
+  //   printf_("%u ", alloc_test[i]);
+  // }
   //
-  // while(1);
-
-  // char str[128] = "";
-  // __itoa_internal(-1, str, 10, 0);
-  // tty_put_str(str);
-
-  // __asm__("int $0");
-  // __asm__("int $0");
-
-  // beep();
-
-  char *alloc_test = (char *) kmalloc(64);
-  for(int i=0; i<20; ++i){
-    alloc_test[i] = i;
+  // kfree(alloc_test);
+ 
+  /*test timer*/
+  timer_run_second(1, test_timer, NULL, TIMER_MODE_PERIODIC);
+  
+  /*test keyboard*/
+  struct kdb_keyinfo_pkt keyevent;
+  while (1) {
+      if (!kbd_recv_key(&keyevent)) {
+          continue;
+      }
+      if ((keyevent.state & KBD_KEY_FPRESSED) && (keyevent.keycode & 0xff00) <= KEYPAD) {
+          tty_put_char((char)(keyevent.keycode & 0x00ff));
+          tty_sync_cursor();
+      }
   }
-  for(int i=0; i<20; ++i){
-    printf("%u ", alloc_test[i]);
-  }
-
-  kfree(alloc_test);
-
-  while(1);
 
   while (1) play_cxk_gif();
 

@@ -1,13 +1,13 @@
 
-#include <jyos/tty/tty.h>
+#include <tty/tty.h>
 #include <libc/string.h>
 #include <stdint.h>
 
 #ifdef  JYOS_TEST_CXK
-  #include <jyos/tty/cxk.h>
+  #include <tty/cxk.h>
   #define CXK_PAGE 694
 #else
-  #include <jyos/tty/cxk2.h>
+  #include <tty/cxk2.h>
   #define CXK_PAGE 1
 #endif
 
@@ -40,6 +40,9 @@ void tty_put_char(char c) {
   if(c == '\n'){
     go_next_line();
     return;
+  }else if(c == '\r'){
+    TTY_COLUMN = 0;
+    return;
   }
   *(vga_buffer + TTY_COLUMN + TTY_ROW * TTY_WIDTH) = (THEME_COLOR | c);
   if (++TTY_COLUMN == TTY_WIDTH) {
@@ -59,6 +62,20 @@ void tty_put_str(char *str) {
   while(*str) tty_put_char(*str++);
 }
 
+void tty_put_str_at_line(char *str, uint32_t line, uint32_t color){
+
+  tty_clear_line(line);
+  tty_set_theme(color, VGA_COLOR_BLACK);
+  uint32_t x  = TTY_ROW, y = TTY_COLUMN;
+  TTY_ROW  = line, TTY_COLUMN  = 0;
+
+  while(*str) tty_put_char(*str++);
+
+  TTY_ROW = x, TTY_COLUMN = y;
+  tty_set_theme(VGA_COLOR_BLUE, VGA_COLOR_BLACK);
+
+}
+
 uint16_t random_color(uint16_t p, uint16_t i, uint16_t j) {
   uint16_t color = 0;
   color |= (i + j + p) >> 2;
@@ -76,8 +93,12 @@ void _tty_init(void *addr){
 
 }
 
-void tty_set_sx(uint32_t x, uint32_t y){
+void tty_set_xy(uint32_t x, uint32_t y){
   TTY_COLUMN = y, TTY_ROW = x;
+}
+
+void tty_sync_cursor(){
+  tty_set_xy(TTY_ROW, TTY_COLUMN);
 }
 
 void tty_clear_line(uint32_t line){
