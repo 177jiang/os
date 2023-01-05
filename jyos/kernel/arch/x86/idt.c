@@ -34,4 +34,6 @@ void _init_idt(){
   _set_idt_entry(PC_KBD_IV, 0x08, _asm_isr201,0);
 
   _set_idt_entry(JYOS_SYS_PANIC, 0x08, _asm_isr32, 0);
+  _set_idt_entry(JYOS_SYS_CALL, 0x08, _asm_isr33, 0);
+
 }

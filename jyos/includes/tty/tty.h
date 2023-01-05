@@ -28,7 +28,8 @@ void _tty_init(void *vga_addr);
 void clear_screen();
 
 void tty_clear_line(uint32_t line);
-void tty_set_xy(uint32_t x, uint32_t y);
+void tty_set_cursor(uint32_t x, uint32_t y);
+void tty_scroll_up();
 
 void tty_put_str_at_line(char *str, uint32_t line, uint32_t color);
 

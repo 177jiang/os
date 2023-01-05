@@ -30,18 +30,22 @@ SECTIONS {
     .text BLOCK(4K) : AT ( ADDR(.text) - 0xC0000000 ) {
         __kernel_start = .;
         build/obj/kernel/*.o (.text)
+        build/obj/hal/*.o (.text)
     }
 
     .bss BLOCK(4K) : AT ( ADDR(.bss) - 0xC0000000 ) {
         build/obj/kernel/*.o (.bss)
+        build/obj/hal/*.o (.bss)
     }
 
     .data BLOCK(4k) : AT ( ADDR(.data) - 0xC0000000 ) {
         build/obj/kernel/*.o (.data)
+        build/obj/hal/*.o (.data)
     }
 
     .rodata BLOCK(4K) : AT ( ADDR(.rodata) - 0xC0000000 ) {
         build/obj/kernel/*.o (.rodata)
+        build/obj/hal/*.o (.rodata)
     }
 
     /* kernel page _table */
@@ -50,5 +54,10 @@ SECTIONS {
     }
 
     __kernel_end = ALIGN(4K);
+    __pg_mount_point = ALIGN(4K);
+    . += 12K;
+    __task_table = ALIGN(4K);
+    . += 128M;
+
     __kernel_heap_start = ALIGN(4K);    /* 内核结束的地方即堆开始的地方 */
 }

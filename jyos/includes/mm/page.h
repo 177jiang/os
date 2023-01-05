@@ -13,6 +13,8 @@
 
 #define PG_MAX_ENTRIES              1024U
 #define PG_LAST_TABLE               PG_MAX_ENTRIES - 1
+#define PD_LAST_INDEX               PG_MAX_ENTRIES - 1
+
 #define PG_FIRST_TABLE              0
 
 #define P2V(paddr)          ((uintptr_t)(paddr)  +  HIGHER_HLF_BASE)
@@ -85,5 +87,10 @@ typedef  struct {
   
 } v_mapping;
 
+extern void __pg_mount_point;
+
+#define PG_MOUNT_1    (sym_vaddr(__pg_mount_point) + 0)
+#define PG_MOUNT_2    (sym_vaddr(__pg_mount_point) + PG_SIZE)
+#define PG_MOUNT_3    (sym_vaddr(__pg_mount_point) + PG_SIZE + PG_SIZE)
 
 #endif

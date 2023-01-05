@@ -25,6 +25,7 @@
 #define FAULT_CONTROL_PROTECTION        21
 
 #define JYOS_SYS_PANIC                  32
+#define JYOS_SYS_CALL                   33
 
 
 #define EX_INTERRUPT_BEGIN              200
@@ -44,7 +45,7 @@
 #define PC_AT_IRQ_RTC                   8
 #define PC_AT_IRQ_KBD                   1
 
-#ifndef    __INTERRUPTS_S_
+#ifndef    __ASM_S_
 typedef struct {
 
   unsigned int fs;
@@ -57,12 +58,13 @@ typedef struct {
   unsigned int ecx;
   unsigned int ebx;
   unsigned int eax;
+  unsigned int esp;
   unsigned int vector;
   unsigned int err_code;
   unsigned int eip;
   unsigned int cs;
   unsigned int eflags;
-  unsigned int esp;
+  unsigned int old_esp;
   unsigned int ss;
 
 } __attribute__((packed)) isr_param;
@@ -96,6 +98,7 @@ void _asm_isr20();
 void _asm_isr21();
 
 void _asm_isr32();
+void _asm_isr33();
 
 void _asm_isr201();
 

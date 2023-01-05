@@ -2,6 +2,7 @@
 #include <tty/tty.h>
 #include <libc/stdio.h>
 #include <libc/stdlib.h>
+#include <process.h>
 #include <hal/apic.h>
 
 
@@ -35,24 +36,31 @@ void _msg_panic (const char *msg, isr_param* param){
 
 void _intr_handler(isr_param* param){
 
+    __current->regs = *param;
     if(param->vector < 256){
         interrupt_function int_fun = interrupt_vecotrs[param->vector];
         if(int_fun){
             int_fun(param);
+            goto done;
         }
-        goto done;
     }
     if(fallback){
         fallback(param);
         goto done;
     }
 
-    _msg_panic("Unknow interrupt vector", param);
+    printf_error("INT %u: (%x) [%p: %p] Unknown",
+            param->vector,
+            param->err_code,
+            param->cs,
+            param->eip);
 
 done:
     if (param->vector >= EX_INTERRUPT_BEGIN && param->vector != APIC_SPIV_IV) {
         apic_done_servicing();
     }
+
+    *param = __current->regs;
 
     return;
 }

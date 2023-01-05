@@ -273,10 +273,6 @@ Pysical(void *) vmm_v2p(void *va){
 }
 
 
-Pysical(void *) vmm_dup_page(void *va){
-  return 0; return va;
-}
-
 
 
 

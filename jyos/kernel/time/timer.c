@@ -7,6 +7,7 @@
 #include <mm/kalloc.h>
 #include <spike.h>
 #include <clock.h>
+#include <sched.h>
 #include <timer.h>
 #include <libc/stdio.h>
 
@@ -22,6 +23,9 @@ static volatile struct timer_context *timer_ctx;
 
 static volatile uint32_t rtc_counter = 0;
 static volatile uint8_t apic_timer_done = 0;
+
+static volatile uint32_t sched_ticks = 0;
+static volatile uint32_t sched_ticks_counter = 0;
 
 #define APIC_CALIBRATION_CONST 0x100000
 
@@ -110,6 +114,10 @@ void timer_init(uint32_t frequency){
     intr_setvector(APIC_TIMER_IV, timer_update);
 
     apic_write_reg(APIC_TIMER_ICR, timer_ctx->tick_interval);
+
+    sched_ticks         = timer_ctx->running_frequency / 1000 * SCHED_TIME_SLICE;
+    sched_ticks_counter = 0;
+
 }
 
 int timer_run_second(uint32_t second, void (*callback)(void*), void* payload, uint8_t flags) {
@@ -155,6 +163,12 @@ static void timer_update(const isr_param* param) {
             kfree(pos);
         }
     }
+
+    if(sched_ticks_counter++ >= sched_ticks){
+        sched_ticks_counter = 0;
+        schedule();
+    }
+
 }
 
 static void temp_intr_routine_rtc_tick(const isr_param* param) {

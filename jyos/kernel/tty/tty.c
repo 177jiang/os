@@ -2,6 +2,7 @@
 #include <tty/tty.h>
 #include <libc/string.h>
 #include <stdint.h>
+#include <hal/io.h>
 
 #ifdef  JYOS_TEST_CXK
   #include <tty/cxk.h>
@@ -34,23 +35,33 @@ void tty_set_theme(uint8_t fg, uint8_t bg) {
 
 void go_next_line(){
     TTY_COLUMN = 0;
-    if(++TTY_ROW == TTY_HEIGHT)TTY_ROW = 0;
+    if(++TTY_ROW == TTY_HEIGHT){
+
+    }
 }
 void tty_put_char(char c) {
-  if(c == '\n'){
-    go_next_line();
-    return;
-  }else if(c == '\r'){
-    TTY_COLUMN = 0;
-    return;
+  switch (c){
+    case '\t':
+      TTY_COLUMN += 4;
+      break;
+    case '\n':
+      ++TTY_ROW;
+      TTY_COLUMN = 0;
+      break;
+    case '\r':
+      TTY_COLUMN = 0;
+    default:
+      *(vga_buffer + TTY_COLUMN + TTY_ROW * TTY_WIDTH) =
+        (THEME_COLOR | c);
+      ++TTY_COLUMN;
+      break;
   }
-  *(vga_buffer + TTY_COLUMN + TTY_ROW * TTY_WIDTH) = (THEME_COLOR | c);
-  if (++TTY_COLUMN == TTY_WIDTH) {
+  if(TTY_COLUMN >= TTY_WIDTH){
     TTY_COLUMN = 0;
-    if(++TTY_ROW == TTY_HEIGHT){
-      clear_screen();
-      TTY_ROW = 0;
-    }
+    ++TTY_ROW;
+  }
+  if(TTY_ROW >= TTY_HEIGHT){
+    tty_scroll_up();
   }
 }
 
@@ -93,12 +104,29 @@ void _tty_init(void *addr){
 
 }
 
-void tty_set_xy(uint32_t x, uint32_t y){
-  TTY_COLUMN = y, TTY_ROW = x;
+void tty_scroll_up(){
+
+  size_t last_line = TTY_WIDTH * (TTY_HEIGHT - 1);
+  memcpy(vga_buffer, vga_buffer + TTY_WIDTH, last_line * 2);
+  for(size_t i=0; i<TTY_WIDTH; ++i){
+    *(vga_buffer + i + last_line) = THEME_COLOR;
+  }
+  TTY_ROW = TTY_ROW ? TTY_HEIGHT-1 : 0;
+}
+
+void tty_set_cursor(uint32_t x, uint32_t y){
+    if (x >= TTY_WIDTH || y >= TTY_HEIGHT) {
+        x = y = 0;
+    }
+    uint32_t pos = y * TTY_WIDTH + x;
+    io_outb(0x3D4, 14);
+    io_outb(0x3D5, pos / 256);
+    io_outb(0x3D4, 15);
+    io_outb(0x3D5, pos % 256);
 }
 
 void tty_sync_cursor(){
-  tty_set_xy(TTY_ROW, TTY_COLUMN);
+  tty_set_cursor(TTY_COLUMN, TTY_ROW);
 }
 
 void tty_clear_line(uint32_t line){

@@ -2,7 +2,7 @@
 #define __ASM__ 1
 #include <arch/x86/boot/multiboot.h>
 
-#define KPG_SIZE       24*1024
+#define KPG_SIZE       10*4096
 
 .section .multiboot
   .long MB_MAGIC
@@ -63,7 +63,7 @@
     movl %eax, %cr3
     
     movl %cr0, %eax
-    orl $0x80000000, %eax
+    orl $0x80010000, %eax
     movl %eax, %cr0
 
 

@@ -76,9 +76,8 @@ void apic_init();
  * This will issue a write action to EOI register.
  * 
  */
-inline static void
-apic_done_servicing() {
+inline static void apic_done_servicing() {
     apic_write_reg(APIC_EOI, 0);
 }
 
-#endif /* __LUNAIX_APIC_H */
+#endif

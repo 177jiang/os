@@ -25,6 +25,7 @@ int acpi_init(multiboot_info_t* mb_info) {
     acpi_rsdt_t* rsdt = rsdp->rsdt;
 
     ctx = kcalloc(1 * sizeof(acpi_context));
+
     assert_msg(ctx, "Fail to create ACPI context");
 
     strncpy(ctx->oem_id, rsdt->header.oem_id, 6);

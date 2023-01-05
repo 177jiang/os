@@ -38,7 +38,7 @@ void _init_page_table(ptd_t *ptd){
   SET_PDE(
       ptd,
       0,
-      PDE(PG_PRESENT, ptd + PG_MAX_ENTRIES )
+      PDE(PG_PREM_RW, ptd + PG_MAX_ENTRIES )
   );
 
   /*1mb + hhk_init  identity map*/
@@ -61,7 +61,7 @@ void _init_page_table(ptd_t *ptd){
   uint32_t dir_counts         = PG_TABLE_STACK_INDEX - PG_TABLE_KERNEL_INDEX;
 
   if( kernel_page_counts > (dir_counts << 10 ) ){
-    while(1);
+    asm("ud2");
   }
 
   for(uint32_t i=0; i<dir_counts; ++i){

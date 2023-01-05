@@ -1,5 +1,6 @@
 
-#define  __INTERRUPTS_S_
+#define  __ASM_S_
+
 #include <arch/x86/interrupts.h>
 
 .macro isr_template vector, no_error_code=1
@@ -22,6 +23,7 @@
   isr_template      FAULT_PAGE_FAULT, no_error_code=0
 
   isr_template      JYOS_SYS_PANIC
+  isr_template      JYOS_SYS_CALL
 
   isr_template      APIC_ERROR_IV
   isr_template      APIC_LINT0_IV
@@ -31,7 +33,8 @@
   isr_template      PC_KBD_IV
 
   _interrupt_wrapper:
-  
+    pushl %esp
+
     pushl %eax
     pushl %ebx
     pushl %ecx
@@ -56,8 +59,9 @@
     /* call _interrupts_handler */
     call _intr_handler
 
-    pop %eax
-    movl %eax, %esp
+.global soft_iret
+soft_iret:
+    pop %esp   // param addr
 
     pop %fs
     pop %es
@@ -70,16 +74,19 @@
     pop %ebx
     pop %eax
 
-    addl $8, %esp
+    pop %esp
+
+    addl $8, %esp  //  at esp
 
     iret
 
-/* ... */
+/* ... */  /*old_esp*/
 /* eflag */
 /* cs */
 /* eip */
 /* err_code */
 /* vector */
+/* esp */
 /* eax */
 /* ebx */
 /* ecx */

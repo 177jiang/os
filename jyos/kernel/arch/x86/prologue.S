@@ -1,3 +1,6 @@
+#define __ASM_S_
+#include <constant.h>
+
 .section .text
 
   .global hhk_entry_
@@ -5,7 +8,7 @@
   hhk_entry_:
 
 ; /* set gdt */
-    subl $0x06, %esp
+    subl $0x10, %esp
 
     call _init_gdt
     movl $_gdt, 2(%esp)
@@ -37,15 +40,22 @@
 /* r0_code */
     ljmp $0x08, $___start_kernel
     jmp l_ /* test */
-  
-   
-   ___start_kernel:
-      movl $mb_info, (%esp)
-      call _kernel_init
 
-      mov $_init_kernel_esp, %esp
+   ___start_kernel:
+
+      movw $TSS_SEG, %ax
+      ltr %ax
+
+      movl $mb_info, _init_mb_info
+      call _kernel_pre_init
+
+/*
+      movl $0xFFBFFFF0, %esp
+      call _kernel_post_init
       call _kernel_main
-  
+
+      */
+
     cli
      l_:
        hlt
