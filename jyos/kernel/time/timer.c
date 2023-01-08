@@ -29,7 +29,7 @@ static volatile uint32_t sched_ticks_counter = 0;
 
 #define APIC_CALIBRATION_CONST 0x100000
 
-void timer_init_context() {
+void timer_primary_init() {
     timer_ctx =
       (struct timer_context*)kmalloc(sizeof(struct timer_context));
 
@@ -41,8 +41,6 @@ void timer_init_context() {
 }
 
 void timer_init(uint32_t frequency){
-
-    timer_init_context();
 
     cpu_disable_interrupt();
 
@@ -120,15 +118,15 @@ void timer_init(uint32_t frequency){
 
 }
 
-int timer_run_second(uint32_t second, void (*callback)(void*), void* payload, uint8_t flags) {
+struct timer *timer_run_second(uint32_t second, void (*callback)(void*), void* payload, uint8_t flags) {
     return timer_run(second * timer_ctx->running_frequency, callback, payload, flags);
 }
 
-int timer_run_ms(uint32_t millisecond, void (*callback)(void*), void* payload, uint8_t flags) {
+struct timer *timer_run_ms(uint32_t millisecond, void (*callback)(void*), void* payload, uint8_t flags) {
     return timer_run(timer_ctx->running_frequency / 1000 * millisecond, callback, payload, flags);
 }
 
-int timer_run(uint32_t ticks, void (*callback)(void*), void* payload, uint8_t flags) {
+struct timer *timer_run(uint32_t ticks, void (*callback)(void*), void* payload, uint8_t flags) {
     struct timer *timer = (struct timer*)kmalloc(sizeof(struct timer));
 
     if (!timer) return 0;
@@ -141,10 +139,11 @@ int timer_run(uint32_t ticks, void (*callback)(void*), void* payload, uint8_t fl
 
     list_append((struct list_header*)timer_ctx->active_timers, &timer->link);
 
-    return 1;
+    return timer;
 }
 
 static void timer_update(const isr_param* param) {
+
 
     struct timer *pos, *n;
     struct timer* timer_list_head = timer_ctx->active_timers;
@@ -153,6 +152,7 @@ static void timer_update(const isr_param* param) {
         if (--pos->counter) {
             continue;
         }
+
 
         pos->callback ? pos->callback(pos->payload) : 1;
 

@@ -34,7 +34,11 @@ Pysical(void *) vmm_v2p(void *va);
 
 v_mapping vmm_lookup(void *va);
 
-Pysical(void *) vmm_dup_page(void *va);
+Pysical(void *) vmm_dup_page(pid_t pid, Pysical(void *paddr) );
+
+void *vmm_mount_pg_dir(uintptr_t mount, void *pde);
+
+void vmm_unmount_pg_dir(uintptr_t mount);
 
 
 #endif

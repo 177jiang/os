@@ -19,12 +19,11 @@
 // use table #1
 #define PG_TABLE_IDENTITY_INDEX           0
 
-// use table #2-4
 // hence the max size of kernel is 8MiB
 #define PG_TABLE_KERNEL_INDEX             1
 
-// use table #5
-#define PG_TABLE_STACK_INDEX              9
+// use table #9
+#define PG_TABLE_STACK_INDEX              8
 
 
 extern uint8_t __kernel_start;
@@ -65,7 +64,6 @@ void _init_page_table(ptd_t *ptd){
   }
 
   for(uint32_t i=0; i<dir_counts; ++i){
-
     SET_PDE(
         ptd,
         kernel_pde_index + i,
@@ -133,5 +131,4 @@ void _hhk_init(ptd_t *ptd, uint32_t kpg_size){
   for(uint32_t i=0; i<kpg_size; ++i)*(pg + i) = 0;
 
   _init_page_table(ptd);
-
 }

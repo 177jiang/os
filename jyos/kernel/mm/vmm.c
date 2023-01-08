@@ -108,6 +108,7 @@ void * vmm_map_page_occupy(pid_t pid, void *va, Pysical(void * pa), v_page_attr 
   assert_msg(((uint32_t)va & 0xFFFU)==0, "page must align 4k");
 
   uint32_t d_index = PD_INDEX(va);
+
   uint32_t t_index = PT_INDEX(va);
 
   if(!__vmm_map_page(pid, d_index, t_index, pa, attr, 1)){
@@ -272,7 +273,25 @@ Pysical(void *) vmm_v2p(void *va){
   return (void *)vmm_lookup(va).p_addr;
 }
 
+void *vmm_mount_pg_dir(uintptr_t mount, void *pde){
 
+  x86_page_t *page_dir         = (x86_page_t *)PD_BASE_VADDR;
+  page_dir->entry[mount >> 22] = PDE(T_SELF_REF_PERM, pde);
+
+  cpu_invplg(mount);
+
+  return mount;
+}
+
+void vmm_unmount_pg_dir(uint32_t mount){
+
+  x86_page_t *page_dir            = (x86_page_t *)PD_BASE_VADDR;
+
+  page_dir->entry[mount>> 22] = 0;
+
+  cpu_invplg(mount);
+
+}
 
 
 

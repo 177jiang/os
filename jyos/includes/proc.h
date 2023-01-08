@@ -5,7 +5,5 @@
 
 __SYSTEMCALL_0(void, yield)
 
-__SYSTEMCALL_1(void, exit, int, status)
-
 #endif
 

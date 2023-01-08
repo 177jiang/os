@@ -45,6 +45,17 @@
 #define PC_AT_IRQ_RTC                   8
 #define PC_AT_IRQ_KBD                   1
 
+#define REGS_ESP 56
+#define REGS_EIP 52
+#define REGS_ESP 40
+#define REGS_EAX 36
+#define REGS_EBX 32
+#define REGS_ECX 28
+#define REGS_EDX 24
+#define REGS_EDI 20
+#define REGS_ESI 16
+#define REGS_EBP 12
+
 #ifndef    __ASM_S_
 typedef struct {
 
@@ -64,10 +75,11 @@ typedef struct {
   unsigned int eip;
   unsigned int cs;
   unsigned int eflags;
-  unsigned int old_esp;
+  unsigned int user_esp;
   unsigned int ss;
 
 } __attribute__((packed)) isr_param;
+
 
 typedef void (*interrupt_function)(const isr_param*) ;
 

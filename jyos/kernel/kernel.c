@@ -36,7 +36,7 @@ void test_timer(void *paylod){
            datetime.minute,
            datetime.second);
 
-  tty_put_str_at_line(buf, 10, VGA_COLOR_RED | VGA_COLOR_GREEN );
+  tty_put_str_at_line(buf, 0, VGA_COLOR_RED | VGA_COLOR_GREEN );
 
 }
 
@@ -44,19 +44,42 @@ extern struct scheduler sched_ctx;
 
 int _kernel_main() {
 
-  pid_t pid = fork();
-  if(!pid){
-    while(1){
-      printf_("This is the son task\n");
-      yield();
+  // if(!fork()){
+  //   printf_error("This is first fork\n");
+  //   sleep(1);
+  //   printf_error("After sleep now first fork exit\n");
+  //   _exit(7);
+  // }
+  // int state ;
+  // pid_t pid = wait(&state);
+  // printf_error("Parent: chiled (%d) exit whith code(%d)\n", pid, state);
+
+  for(int i=0; i<10; ++i){
+    pid_t pid = fork();
+    if(!pid){
+      while(1){
+          if(i==9)i = *(uint32_t*)0xDEADC0DE;
+          if(i == 7){
+            printf_warn("This is a living task(%d)\n", i);
+            yield();
+          }else{
+            sleep(1);
+            _exit(0);
+          }
+      }
     }
+    printf_error("create task %d\n",pid);
   }
-  // char buf[64];
-  // cpu_get_brand(buf);
-  // printf_("CPU: %s\n\n", buf);
-  // /*test timer*/
+
+   char buf[64];
+   cpu_get_brand(buf);
+   printf_("CPU: %s\n\n", buf);
+   printf_("------------------------- Initialization end !!! ----------------\n");
+
+  /*test timer*/
   timer_run_second(1, test_timer, NULL, TIMER_MODE_PERIODIC);
-  // // /*test keyboard*/
+
+  /*test keyboard*/
   struct kdb_keyinfo_pkt keyevent;
   while (1) {
       if (!kbd_recv_key(&keyevent)) {
@@ -67,9 +90,9 @@ int _kernel_main() {
           tty_sync_cursor();
       }
   }
-  while(1);
-  while (1) play_cxk_gif();
 
+  play_cxk_gif();
+  while(1);
 }
 
 

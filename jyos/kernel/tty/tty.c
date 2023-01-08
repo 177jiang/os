@@ -29,6 +29,9 @@ void clear_screen(){
   memset(vga_buffer, 0, tty_sizeof_char);
 }
 
+void tty_set_color(uint16_t color){
+  THEME_COLOR = color;
+}
 void tty_set_theme(uint8_t fg, uint8_t bg) {
   THEME_COLOR = (bg << 4 | fg) << 8;
 }

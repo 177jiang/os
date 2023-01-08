@@ -20,7 +20,16 @@
 #define VGA_COLOR_LIGHT_BROWN 14
 #define VGA_COLOR_WHITE 15
 
+#define VGA_HIGHT_LIGHT   (1 << 7)
+
+#define VGA_TWINKLE       (1 << 3)
+
+#define VGA_COLOR_WARN    (( VGA_TWINKLE | (VGA_COLOR_GREEN )) << 8)
+
 void tty_set_theme(uint8_t fg, uint8_t bg);
+
+void tty_set_color(uint16_t color);
+
 void tty_put_char(char c);
 void tty_put_str(char *str);
 void play_cxk_gif();

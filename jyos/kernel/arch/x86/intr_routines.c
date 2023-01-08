@@ -6,7 +6,9 @@
 
 #include <hal/apic.h>
 
-static _intr_print_msg(const char *msg, const isr_param *param){
+extern void intr_routine_page_fault(const isr_param *param);
+
+void _intr_print_msg(const char *msg, const isr_param *param){
 
     char buf[1024];
 
@@ -28,18 +30,6 @@ void intr_routine_general_protection(const isr_param *param){
     _intr_print_msg("General Protection !", param);
 }
 
-void intr_routine_page_fault(const isr_param *param){
-
-    void *pg_fault_ptr = cpu_rcr2();
-    if(!pg_fault_ptr){
-        _intr_print_msg("Null pointer reference", param);
-    }
-    char buf[32];
-    sprintf_(buf, "Page fault on %p", pg_fault_ptr);
-
-    _intr_print_msg(buf, param);
-
-}
 
 void intr_routine_sys_panic(const isr_param *param){
     _intr_print_msg((const char *)(param->edi), param);

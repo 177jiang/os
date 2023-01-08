@@ -7,5 +7,6 @@
 #define INVLDPTR -(2)
 #define OUTOFMEM -(3)
 #define INVLDPID -(4)
+#define SEGFAULT -(5)
 
 #endif

@@ -106,10 +106,7 @@ int pmm_free_page(pid_t owner, void *pg){
   struct p_page *page = mem_map + ((uint32_t )pg >> 12);
 
   if(page->ref_counts == 0)return 0;
-
-  if((page->owner & owner) != page->owner){
-    return 0;
-  }
+  if( ((uintptr_t)pg >> 12) >= MAX_PAGE)return 0;
 
   --page->ref_counts;
   return 1;
@@ -128,8 +125,8 @@ int pmm_ref_page(pid_t owner, void *p_addr){
   if(page->ref_counts == 0)return 0;
 
   ++page->ref_counts;
-  return 1;
 
+  return 1;
 }
 
 struct p_page  *pmm_query(void *p_addr){

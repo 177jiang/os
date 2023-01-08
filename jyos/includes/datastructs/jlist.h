@@ -40,7 +40,7 @@ list_prepend(struct list_header* head, struct list_header* elem)
 static inline void
 list_delete(struct list_header* elem) {
     elem->prev->next = elem->next;
-    elem->next->prev = elem->next;
+    elem->next->prev = elem->prev;
     
     // make elem orphaned
     elem->prev = elem;
@@ -56,6 +56,9 @@ list_delete(struct list_header* elem) {
 #define list_entry(ptr, type, member) \
 	container_of(ptr, type, member)
 
+static inline int list_empty(struct list_header *head){
+    return head->next == head;
+}
 /**
  * list_for_each_entry	-	iterate over list of given type
  * @pos:	the type * to use as a loop counter.

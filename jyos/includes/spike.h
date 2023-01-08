@@ -17,7 +17,6 @@ inline static void spin() {
     while(1);
 }
 
-#ifdef __JYOS_DEBUG__
 #define assert(cond)                                  \
     if (!(cond)) {                                    \
         __assert_fail(#cond, __FILE__, __LINE__);     \
@@ -28,12 +27,10 @@ inline static void spin() {
         __assert_fail(msg, __FILE__, __LINE__);   \
     }
 void __assert_fail(const char* expr, const char* file, unsigned int line) __attribute__((noinline, noreturn));
-#else
-
-#define assert(cond) //nothing
 
 
-#endif
+#define spin() while(1);
+
 
 #define wait_until(cond)   while(!(cond))
 #define loop_until(cond)   while(!(cond))

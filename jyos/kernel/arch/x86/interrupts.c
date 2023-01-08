@@ -4,6 +4,8 @@
 #include <libc/stdlib.h>
 #include <process.h>
 #include <hal/apic.h>
+#include <hal/cpu.h>
+#include <mm/page.h>
 
 
 static interrupt_function interrupt_vecotrs[INTERRUPTS_VECTOR_SIZE];
@@ -34,33 +36,38 @@ void _msg_panic (const char *msg, isr_param* param){
     while(1);
 }
 
+extern x86_page_t *__kernel_pg_dir;
+
 void _intr_handler(isr_param* param){
 
     __current->regs = *param;
-    if(param->vector < 256){
-        interrupt_function int_fun = interrupt_vecotrs[param->vector];
-        if(int_fun){
-            int_fun(param);
-            goto done;
+
+    isr_param *tparam = &__current->regs;
+
+    do{
+        if(tparam->vector < 256){
+            interrupt_function int_fun = interrupt_vecotrs[tparam->vector];
+            if(int_fun){
+                int_fun(param);
+                break;
+            }
         }
-    }
-    if(fallback){
-        fallback(param);
-        goto done;
-    }
+        if(fallback){
+            fallback(tparam);
+            break;
+        }
+        printf_error("INT %u: (%x) [%p: %p] Unknown",
+                tparam->vector,
+                tparam->err_code,
+                tparam->cs,
+                tparam->eip);
+    }while(0);
 
-    printf_error("INT %u: (%x) [%p: %p] Unknown",
-            param->vector,
-            param->err_code,
-            param->cs,
-            param->eip);
+    if(tparam->vector == 33){ }
 
-done:
-    if (param->vector >= EX_INTERRUPT_BEGIN && param->vector != APIC_SPIV_IV) {
+    if (tparam->vector >= EX_INTERRUPT_BEGIN && tparam->vector != APIC_SPIV_IV) {
         apic_done_servicing();
     }
-
-    *param = __current->regs;
 
     return;
 }

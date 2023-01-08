@@ -29,33 +29,33 @@
 #define GET_PT_ADDR(pde)    PG_ALIGN(pde)
 #define GET_PG_ADDR(pte)    PG_ALIGN(pte)
 
-#define PG_DIRTY(pte)           ((pte & (1 << 6)) >> 6)
-#define PG_ACCESSED(pte)        ((pte & (1 << 5)) >> 5)
+#define PG_DIRTY(pte)           (((pte) & (1 << 6)) >> 6)
+#define PG_ACCESSED(pte)        (((pte) & (1 << 5)) >> 5)
 
 #define IS_CACHED(entry)    ((entry & 0x1))
 
 #define PG_PRESENT              (0x1)
 #define PG_WRITE                (0x1 << 1)
 #define PG_ALLOW_USER           (0x1 << 2)
-#define PG_WRITE_THROUGHT       (1 << 3)
+#define PG_WRITE_THROUGH        (1 << 3)
 #define PG_DISABLE_CACHE        (1 << 4)
 #define PG_PDE_4MB              (1 << 7)
 
-#define PDE(flags, pt_addr)     (PG_ALIGN(pt_addr) | ((flags) & 0xfff))
+#define PDE(flags, pt_addr)     (PG_ALIGN(pt_addr) | (((flags) | PG_WRITE_THROUGH)& 0xfff))
 #define PTE(flags, pg_addr)     (PG_ALIGN(pg_addr) | ((flags) & 0xfff))
 
 #define V_ADDR(pd, pt, offset)  ((pd) << 22 | (pt) << 12 | (offset))
 #define P_ADDR(ppn, offset)     ((ppn << 12) | (offset))
 
-// 用于对PD进行循环映射，因为我们可能需要对PD进行频繁操作，我们在这里禁用TLB缓存
 #define PG_PREM_R              PG_PRESENT
 #define PG_PREM_RW             PG_PRESENT | PG_WRITE
 #define PG_PREM_UR             PG_PRESENT | PG_ALLOW_USER
 #define PG_PREM_URW            PG_PRESENT | PG_WRITE | PG_ALLOW_USER
-#define T_SELF_REF_PERM        PG_PREM_RW | PG_DISABLE_CACHE
+// 用于对PD进行循环映射，因为我们可能需要对PD进行频繁操作，我们在这里禁用TLB缓存
+#define T_SELF_REF_PERM        PG_PREM_RW | PG_DISABLE_CACHE | PG_WRITE_THROUGH
 
-#define PG_ENTRY_FLAGS(entry)   (entry & 0xFFFU)
-#define PG_ENTRY_ADDR(entry)   (entry & ~0xFFFU)
+#define PG_ENTRY_FLAGS(entry)   ((entry) & 0xFFFU)
+#define PG_ENTRY_ADDR(entry)   ((entry) & ~0xFFFU)
 
 #define HAS_FLAGS(entry, flags)             ((PG_ENTRY_FLAGS(entry) & (flags)) == flags)
 #define CONTAINS_FLAGS(entry, flags)        (PG_ENTRY_FLAGS(entry) & (flags))
@@ -67,7 +67,7 @@
 #define PT_BASE_VADDR                 0xFFC00000U
 
 // 用来获取特定的页表的虚拟地址
-#define PT_VADDR(pd_offset)           (PT_BASE_VADDR | (pd_offset << 12))
+#define PT_VADDR(pd_offset)           ((PT_BASE_VADDR) | ((pd_offset) << 12))
 
 typedef unsigned int ptd_t;
 typedef unsigned int pt_t;
@@ -88,9 +88,41 @@ typedef  struct {
 } v_mapping;
 
 extern void __pg_mount_point;
+extern void __pd_mount_point;
 
-#define PG_MOUNT_1    (sym_vaddr(__pg_mount_point) + 0)
-#define PG_MOUNT_2    (sym_vaddr(__pg_mount_point) + PG_SIZE)
-#define PG_MOUNT_3    (sym_vaddr(__pg_mount_point) + PG_SIZE + PG_SIZE)
+#define MEM_4MB         (MEM_1MB << 2)
+
+#define PD_MOUNT_1      0xAFC00000
+// #define PD_MOUNT_2      (0xAF800000)
+
+#define MNT_PG_BASE         ((uint32_t)sym_vaddr(__pg_mount_point))
+#define MNT_PD_BASE         ((uint32_t)sym_vaddr(__pd_mount_point))
+
+#define PD_MOUNT_2      (MNT_PD_BASE)
+
+#define PG_MOUNT_1      (MNT_PG_BASE)
+#define PG_MOUNT_2      (MNT_PG_BASE + PG_SIZE)
+#define PG_MOUNT_3      (MNT_PG_BASE + PG_SIZE + PG_SIZE)
+#define PG_MOUNT_4      (MNT_PG_BASE + PG_SIZE + PG_SIZE + PG_SIZE)
+
+#define PD_REFERENCED    0xFFC00000U
+
+#define PG_HIG_MSK    0xFFC00000
+#define PG_HIG(vaddr) (PG_HIG_MSK & vaddr)
+
+#define PG_MID_MSk    0x003FF000
+#define PG_MID(vaddr) (PG_MID_MSk & vaddr)
+
+#define __CURRENT_PTE(vaddr) \
+  ((x86_page_t *)(PD_MOUNT_1 | (PG_HIG(vaddr)>>10)))->entry + ((PG_MID(vaddr)) >> 12)
+
+#define __MOUNTED_PTE(mnt, vaddr) \
+  ((x86_page_t *)(mnt | (PG_HIG(vaddr)>>10)))->entry + ((PG_MID(vaddr)) >> 12)
 
 #endif
+
+
+
+
+
+

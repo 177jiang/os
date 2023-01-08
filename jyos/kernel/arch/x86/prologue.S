@@ -47,8 +47,12 @@
       ltr %ax
 
       movl $mb_info, _init_mb_info
-      call _kernel_pre_init
 
+      call _kernel_pre_init
+      call _kernel_init
+
+      movl $K_STACK_TOP, %esp
+      call _kernel_post_init
 /*
       movl $0xFFBFFFF0, %esp
       call _kernel_post_init

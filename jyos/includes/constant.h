@@ -3,12 +3,12 @@
 
 
 #define K_STACK_SIZE            (64 << 10)
-#define K_STACK_START            ((0xFFBFFFFFU - K_STACK_SIZE) + 1)
-#define K_STACK_TOP              (0xFFBFFFF0)
+#define K_STACK_START           ((0xFFBFFFFFU - K_STACK_SIZE) + 1)
+#define K_STACK_TOP             (0xFFBFFFF0)
 #define HIGHER_HLF_BASE         0xC0000000
 #define MEM_1MB                 0x100000
 
-#define VGA_BUFFER_VADDR        0xB0000000
+#define VGA_BUFFER_VADDR        HIGHER_HLF_BASE + (PG_SIZE << 2)
 #define VGA_BUFFER_PADDR        0xB8000
 #define VGA_BUFFER_SIZE         4096
 
@@ -19,6 +19,12 @@
 #define U_CODE_SEG              0x1B
 #define U_DATA_SEG              0x23
 #define TSS_SEG                 0x28
+
+#define USER_START              0x400000
+#define U_STACK_SIZE            0x100000
+#define U_STACK_TOP             0x9fffffff
+#define U_STACK_END             (USTACK_TOP - USTACK_SIZE + 1)
+#define U_MMAP_AREA             0x4D000000
 
 
 #ifndef __ASM_S_

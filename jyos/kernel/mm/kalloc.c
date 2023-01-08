@@ -11,30 +11,31 @@ void _place_chunk(uint8_t *ptr, size_t size);
 void *_coalesce(uint8_t *chunk_ptr);
 void jfree(void *ptr);
 
+static heap_context_t kernel_heap;
+
 int kalloc_init(){
 
-    heap_context_t *kheap = &__current->mm.kernel_heap;
-    kheap->start          = sym_vaddr(__kernel_heap_start);
-    kheap->end            = kheap->start;
-    kheap->max_addr       = (void*)K_STACK_START;
+    kernel_heap.start          = sym_vaddr(__kernel_heap_start);
+    kernel_heap.end            = kernel_heap.start;
+    kernel_heap.max_addr       = (void*)K_STACK_START;
 
-    if(!dmm_init(kheap)) {
+    if(!dmm_init(&kernel_heap)) {
         return 0;
     }
 
     DMM_SET_HT(
-            kheap->start,
+            kernel_heap.start,
             DMM_MAKE(4, (DMM_PREV_ALLOC | DMM_SELF_ALLOC) )
     );
 
     DMM_SET_HT(
-            kheap->start + DMM_HEADER_SIZE,
+            kernel_heap.start + DMM_HEADER_SIZE,
             DMM_MAKE(0, DMM_PREV_ALLOC | DMM_SELF_ALLOC)
             );
 
-    kheap->end +=  DMM_HEADER_SIZE;
+    kernel_heap.end +=  DMM_HEADER_SIZE;
 
-    return _grow_heap(kheap, HEAP_INIT_SIZE) != 0;
+    return _grow_heap(&kernel_heap, HEAP_INIT_SIZE) != 0;
 }
 
 void  _place_chunk(uint8_t *addr, size_t size){
@@ -164,6 +165,8 @@ void jfree(void *addr){
 
     if(!addr)return ;
 
+    mutex_lock(&kernel_heap.lock);
+
     uint8_t *hd     = (uint8_t *)addr - DMM_HEADER_SIZE;
     uint32_t header = DMM_GET_HEADER(hd);
     size_t size     = DMM_GET_SIZE(header);
@@ -184,9 +187,13 @@ void jfree(void *addr){
 
     _coalesce(hd);
 
+    mutex_unlock(&kernel_heap.lock);
+
 }
 void *kmalloc(size_t size){
-    void*res =  jmalloc(&__current->mm.kernel_heap, size);
+    mutex_lock(&kernel_heap.lock);
+    void*res =  jmalloc(&kernel_heap, size);
+    mutex_unlock(&kernel_heap.lock);
     return res;
 }
 

@@ -5,11 +5,12 @@
 #include <spike.h>
 #include <status.h>
 #include <process.h>
+#include <syscall.h>
 
 #include <stdint.h>
 
 
-void *_syscall_brk(size_t size){
+__DEFINE_SYSTEMCALL_1(void*, brk, size_t, size) {
 
     heap_context_t *heap = &__current->mm.user_heap;
 
@@ -20,7 +21,7 @@ void *_syscall_brk(size_t size){
     return ad;
 }
 
-void *_syscall_sbrk(void *addr){
+__DEFINE_SYSTEMCALL_1(int, sbrk, void*, addr) {
 
     heap_context_t *heap = &__current->mm.user_heap;
 
@@ -84,5 +85,6 @@ int dmm_init(heap_context_t *heap){
     return vmm_alloc_page(__current->pid, heap->end, 0, PG_PREM_RW, 0);
 
 }
+
 
 

@@ -1,7 +1,7 @@
 #ifndef __jyos_sched_h_
 #define __jyos_sched_h_
 
-#define SCHED_TIME_SLICE 1000
+#define SCHED_TIME_SLICE 1500
 
 struct scheduler {
 
@@ -12,6 +12,7 @@ struct scheduler {
 };
 
 void sched_init();
+
 void schedule();
 
 #endif
