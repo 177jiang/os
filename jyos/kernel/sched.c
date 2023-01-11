@@ -5,17 +5,14 @@
 #include <status.h>
 #include <sched.h>
 #include <spike.h>
+#include <types.h>
 #include <timer.h>
 #include <syscall.h>
 
 #define MAX_TASKS        512
 
-struct task_struct temp_task = {
-    .pid = 0,
-    .parent = -1,
-};
 
-struct task_struct *__current = &temp_task;
+volatile struct task_struct *__current;
 
 extern void __task_table;
 
@@ -24,14 +21,14 @@ struct scheduler sched_ctx;
 void sched_init(){
 
     uint32_t pg_size = ROUNDUP(sizeof(struct task_struct) * MAX_TASKS, (PG_SIZE));
-    uint32_t tvaddr  = sym_vaddr(__task_table);
-    assert_msg(
-            vmm_alloc_pages(0, tvaddr, pg_size, PG_PREM_RW, PP_FGPERSIST),
-            "Failed to alloc tasks table"
-            );
+
+    for(uint32_t i=0; i<=pg_size; i += PG_SIZE){
+        uint32_t pa = pmm_alloc_page(KERNEL_PID, PP_FGPERSIST);
+        vmm_set_mapping(PD_REFERENCED, TASK_TABLE_START+i, pa, PG_PREM_RW, VMAP_NULL);
+    }
 
     sched_ctx = (struct scheduler){
-        .tasks         = (struct task_struct *)(tvaddr),
+        .tasks         = (struct task_struct *)(TASK_TABLE_START),
         .current_index = 0,
         .task_len      = 0
     };
@@ -46,21 +43,14 @@ void switch_to(struct task_struct *new_task){
 
     new_task->state  = TASK_RUNNING;
 
-    if(__current->page_table != new_task->page_table){
-        __current  = new_task;
-        cpu_lcr3(__current->page_table);
-
-    }else{
-        __current  = new_task;
-    }
-
+    tss_update_esp(new_task->regs.esp);
 
     apic_done_servicing();
 
     asm volatile (
             "pushl %0\n"
-            "jmp soft_iret\n"
-            ::"r"(&__current->regs)
+            "jmp __do_switch_to\n"
+            ::"r"(new_task)
             :"memory"
     );
 
@@ -75,6 +65,8 @@ void schedule(){
     if (!sched_ctx.task_len) {
         return;
     }
+
+    cpu_disable_interrupt();
 
     int p_task  = sched_ctx.current_index;
     int i       = p_task;
@@ -96,7 +88,12 @@ void schedule(){
 
 void commit_task(struct task_struct *task){
 
-    list_init_head(&task->children);
+    assert_msg(task==(sched_ctx.tasks + task->pid), "Task set error\n");
+
+    if(task->state != TASK_CREATED){
+        __current->k_status = INVL;
+        return ;
+    }
 
     if(task->parent){
         list_append(&task->parent->children, &task->siblings);
@@ -108,6 +105,26 @@ void commit_task(struct task_struct *task){
 
 }
 
+struct task_struct *alloc_task(){
+
+    pid_t pid = alloc_pid();
+    assert_msg(pid!=-1, "Task alloc failed \n");
+
+    struct task_struct *new_task = get_task(pid);
+    memset(new_task, 0, sizeof(struct task_struct));
+
+    new_task->pid     = pid;
+    new_task->pgid    = pid;
+    new_task->state   = TASK_CREATED;
+    new_task->created = clock_systime();
+
+
+    list_init_head(&new_task->mm.regions.head);
+    list_init_head(&new_task->children);
+    list_init_head(&new_task->group);
+
+    return new_task;
+}
 
 pid_t alloc_pid(){
 
@@ -211,6 +228,7 @@ static void task_timer_callback(struct task_struct *task){
     task->timer = 0;
     task->state = TASK_STOPPED;
 }
+
 __DEFINE_SYSTEMCALL_1(unsigned int, sleep, unsigned int, seconds){
 
     if(!seconds)return 0;
@@ -220,12 +238,53 @@ __DEFINE_SYSTEMCALL_1(unsigned int, sleep, unsigned int, seconds){
     }
 
     struct timer *timer = timer_run_second(seconds, task_timer_callback, __current, 0);
+
     __current->timer    = timer;
     __current->regs.eax = seconds;
     __current->state    = TASK_BLOCKED;
 
     schedule();
 
+}
+
+pid_t _wait(pid_t wp, int *state, int options){
+
+    if(list_empty(&__current->children)){
+        return -1;
+    }
+
+    if(!wp)wp = -__current->pgid;
+    cpu_enable_interrupt();
+
+    while(1){
+
+        struct task_struct *pos, *n;
+        list_for_each(pos, n, &__current->children, siblings){
+
+            if(!~wp || wp == pos->pid || pos->pgid==-wp){
+
+                if(pos->state == TASK_TERMNAT && !options){
+                    cpu_disable_interrupt();
+                    *state = (pos->exit_code & 0xFFFF) | TASKTERM;
+                    return destroy_task(pos->pid);
+                }
+
+                if(pos->state == TASK_STOPPED && (options & WUNTRACED)){
+                    cpu_disable_interrupt();
+                    *state = (pos->exit_code & 0xFFFF) | TASKSTOP;
+                    return destroy_task(pos->pid);
+                }
+
+            }
+        }
+
+        if((options & WNOHANG))return 0;
+
+        sched_yield();
+    }
+
+    /* never reach here */
+    return  0;
 }
 
 __DEFINE_SYSTEMCALL_0(void, yield){
@@ -236,30 +295,12 @@ __DEFINE_SYSTEMCALL_1(void, _exit, int, exit_code){
     terminate_task(exit_code);
 }
 
+__DEFINE_SYSTEMCALL_3(pid_t, waitpid, pid_t, wp, int, *state, int, options){
+    return _wait(wp, state, options);
+}
+
 __DEFINE_SYSTEMCALL_1(pid_t, wait, int, *state){
-
-    if(list_empty(&__current->children)){
-        return -1;
-    }
-
-    struct task_struct *pos, *n;
-
-    while(1){
-
-        list_for_each(pos, n, &__current->children, siblings){
-
-            if(pos->state == TASK_TERMNAT){
-
-                *state = pos->exit_code;
-
-                return destroy_task(pos->pid);
-            }
-
-        }
-    }
-
-    /* never reach here */
-    return  0;
+    return _wait(-1, state, 0);
 }
 
 

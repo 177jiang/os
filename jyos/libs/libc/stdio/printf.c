@@ -857,8 +857,19 @@ static int _vsnprintf(out_fct_type out, char* buffer, const size_t maxlen, const
   return (int)idx;
 }
 
-int printf_warn(const char* format, ...){
+int printf_live(const char* format, ...){
+  tty_set_color(VGA_COLOR_LIVE);
+  va_list va;
+  va_start(va, format);
+  char buffer[1];
+  const int ret = _vsnprintf(_out_char, buffer, (size_t)-1, format, va);
+  va_end(va);
+  tty_set_theme(VGA_COLOR_BLUE, VGA_COLOR_BLACK);
 
+  return ret;
+
+}
+int printf_warn(const char* format, ...){
   tty_set_color(VGA_COLOR_WARN);
   va_list va;
   va_start(va, format);

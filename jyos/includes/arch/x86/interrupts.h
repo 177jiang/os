@@ -45,23 +45,31 @@
 #define PC_AT_IRQ_RTC                   8
 #define PC_AT_IRQ_KBD                   1
 
-#define REGS_ESP 56
-#define REGS_EIP 52
-#define REGS_ESP 40
-#define REGS_EAX 36
-#define REGS_EBX 32
-#define REGS_ECX 28
-#define REGS_EDX 24
-#define REGS_EDI 20
-#define REGS_ESI 16
-#define REGS_EBP 12
+#define REGS_EBP      16
+#define REGS_ESI      (REGS_EBP + 4)
+#define REGS_EDI      (REGS_ESI + 4)
+#define REGS_EDX      (REGS_EDI + 4)
+#define REGS_ECX      (REGS_EDX + 4)
+#define REGS_EBX      (REGS_ECX + 4)
+#define REGS_EAX      (REGS_EBX + 4)
+#define REGS_ESP      (REGS_EAX + 4)
+
+#define REGS_VECTOR   (REGS_ESP     + 4)
+#define REGS_ERRCODE  (REGS_VECTOR  + 4)
+#define REGS_EIP      (REGS_ERRCODE + 4)
+#define REGS_CS       (REGS_EIP     + 4)
+#define REGS_EFLAGS   (REGS_CS      + 4)
+#define REGS_UESP     (REGS_EFLAGS  + 4)
+#define REGS_SS       (REGS_UESP    + 4)
 
 #ifndef    __ASM_S_
 typedef struct {
 
+  unsigned int gs;
   unsigned int fs;
   unsigned int es;
   unsigned int ds;
+
   unsigned int ebp;
   unsigned int esi;
   unsigned int edi;

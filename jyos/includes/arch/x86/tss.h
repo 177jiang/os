@@ -15,5 +15,6 @@ struct x86_tss{
 }__attribute__((packed));
 
 void tss_update(uint32_t ss0, uint32_t esp0);
+void tss_update_esp(uint32_t esp0);
 
 #endif

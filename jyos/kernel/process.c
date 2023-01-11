@@ -1,45 +1,63 @@
-#include <process.h>
-#include <syscall.h>
 #include <mm/vmm.h>
 #include <mm/pmm.h>
-#include <clock.h>
 #include <hal/cpu.h>
 #include <libc/stdio.h>
 #include <libc/string.h>
 
+#include <process.h>
+#include <clock.h>
+#include <syscall.h>
+#include <status.h>
+
+
+void init_task_user_space(struct task_struct *task){
+
+    vmm_mount_pg_dir(PD_MOUNT_2, task->page_table);
+
+    /* user stack */
+    region_add(&task->mm.regions, U_STACK_END, U_STACK_TOP, (REGION_RW | REGION_RSHARED));
+    /* user stack in page_table just set 0 , if used will alloc in page_fault*/
+    for(uint32_t i=PG_ALIGN(U_STACK_END); i<=PG_ALIGN(U_STACK_TOP); i+=PG_SIZE){
+        vmm_set_mapping(PD_MOUNT_2, i, 0, (PG_ALLOW_USER | PG_WRITE), VMAP_NULL);
+    }
+
+    vmm_unmount_pg_dir(PD_MOUNT_2);
+
+}
 
 Pysical(void *) __dup_page_table(pid_t pid, uint32_t mount_point){
 
     /* moint_point is a pg_addr in dir*/
 
+    x86_page_t *new_dir_vaddr = PG_MOUNT_1;
     void       *new_dir_paddr = pmm_alloc_page(pid, PP_FGPERSIST);
-    x86_page_t *new_dir_vaddr = vmm_map_page_occupy(pid, PG_MOUNT_1, new_dir_paddr, PG_PREM_RW);
+    vmm_set_mapping( PD_REFERENCED, new_dir_vaddr, new_dir_paddr, PG_PREM_RW, VMAP_NULL);
+
     x86_page_t *page_dir      = (x86_page_t *)((mount_point) | (0x3FF << 12));
 
-
+    size_t kspace = PD_INDEX(KERNEL_VSTART);
     for(uint32_t i=0; i<PD_LAST_INDEX; ++i){
 
         x86_pte_t pde = page_dir->entry[i];
-        if(!pde || !(pde & PG_PRESENT)){
+        if(!pde || i>=kspace || !(pde & PG_PRESENT)){
             new_dir_vaddr->entry[i] = pde;
             continue;
         }
 
+        x86_page_t *new_pt_vaddr = PG_MOUNT_2;
         void       *new_pt_paddr = pmm_alloc_page(pid, PP_FGPERSIST);
-        x86_page_t *new_pt_vaddr = vmm_map_page_occupy(pid, PG_MOUNT_2, new_pt_paddr, PG_PREM_RW);
+        vmm_set_mapping( PD_REFERENCED, new_pt_vaddr, new_pt_paddr, PG_PREM_RW, VMAP_NULL);
 
         x86_page_t *page_table   = (x86_page_t *)(mount_point | (i << 12));
 
         for(uint32_t j=0; j<PG_MAX_ENTRIES; ++j){
-
-            uint32_t va = ((i << 10) | j ) << 12;
 
             x86_pte_t pte          = page_table->entry[j];
             pmm_ref_page(pid, PG_ENTRY_ADDR(pte));
             new_pt_vaddr->entry[j] = pte;
         }
 
-        new_dir_vaddr->entry[i] = PDE(PG_PREM_RW, new_pt_paddr);
+        new_dir_vaddr->entry[i] = PDE(PG_ENTRY_FLAGS(pde), new_pt_paddr);
     }
 
     new_dir_vaddr->entry[PD_LAST_INDEX] = PDE(T_SELF_REF_PERM, new_dir_paddr);
@@ -51,7 +69,8 @@ void __del_page_table(pid_t pid, uintptr_t mount_point){
 
     x86_page_t *page_dir      = (x86_page_t *)((mount_point) | (0x3FF << 12));
 
-    for(uint32_t i=0; i<PD_LAST_INDEX; ++i){
+    // for(uint32_t i=0; i<PD_LAST_INDEX; ++i){
+    for(uint32_t i=0; i<PD_INDEX(KERNEL_VSTART); ++i){
 
         x86_pte_t pde = page_dir->entry[i];
         if(!pde || !(pde & PG_PRESENT)){
@@ -62,7 +81,7 @@ void __del_page_table(pid_t pid, uintptr_t mount_point){
         for(uint32_t j=0; j<PG_MAX_ENTRIES; ++j){
 
             x86_pte_t pte  = page_table->entry[j];
-            if(pte & PG_PRESENT){
+            if( (pte & PG_PRESENT) ){
                 pmm_free_page(pid, PG_ENTRY_ADDR(pte));
             }
 
@@ -78,10 +97,15 @@ void *dup_page_table(pid_t pid){
 }
 
 
-void setup_task_mem(struct task_struct *task, uintptr_t mount){
+void setup_task_page_table(struct task_struct *task, uintptr_t mount){
 
     pid_t pid     = task->pid;
     void *new_dir = __dup_page_table(pid, mount);
+
+    if(pid == 1){
+        task->page_table = new_dir;
+        return ;
+    }
 
     vmm_mount_pg_dir(PD_MOUNT_2, new_dir);
 
@@ -103,56 +127,51 @@ void setup_task_mem(struct task_struct *task, uintptr_t mount){
 
 }
 
+void setup_task_mem_region(struct mm_region *from,
+                           struct mm_region *to){
 
-pid_t dup_proc(){
+    region_copy(from, to);
 
-    pid_t   pid                  = alloc_pid();
-    struct task_struct *new_task = get_task(pid);
-    memset(new_task, 0, sizeof(struct task_struct));
-    new_task->pid          = pid;
-    new_task->state        = TASK_CREATED;
-    new_task->created      = clock_systime();
-    new_task->mm.user_heap = __current->mm.user_heap;
-    new_task->regs         = __current->regs;
-    new_task->parent       = __current;
+    struct mm_region *pos, *n;
+    list_for_each(pos, n, &to->head, head){
 
-    list_init_head(&new_task->mm.regions.head);
+        if( (pos->attr & REGION_WSHARED) ){
+            continue;
+        }
 
-    setup_task_mem(new_task, PD_REFERENCED);
+        uintptr_t start_p = PG_ALIGN(pos->start);
+        uintptr_t end_p   = PG_ALIGN(pos->end);
+        for(uint32_t i=start_p; i<end_p; i+=PG_SIZE){
+            x86_pte_t *c_pte = __MOUNTED_PTE(PD_REFERENCED, i);
+            x86_pte_t *n_pte = __MOUNTED_PTE(PD_MOUNT_2, i);
+            cpu_invplg(n_pte);
 
-    do{
+            if( (pos->attr & REGION_MODE_MASK) == REGION_RSHARED){
 
-        if(list_empty(&__current->mm.regions.head))break;
-
-        struct mm_region *pos, *n;
-        list_for_each(pos, n, &__current->mm.regions.head, head){
-            region_add(new_task, pos->start, pos->end, pos->attr);
-
-            if(pos->attr & REGION_WSHARED){
-                continue;
-            }
-
-            uintptr_t start_p = PG_ALIGN(pos->start);
-            uintptr_t end_p   = PG_ALIGN(pos->end);
-            for(uint32_t i=start_p; i<end_p; i+=PG_SIZE){
-
-                x86_pte_t *c_pte = __MOUNTED_PTE(PD_MOUNT_1, i);
-                x86_pte_t *n_pte = __MOUNTED_PTE(PD_MOUNT_2, i);
                 cpu_invplg(c_pte);
-                cpu_invplg(n_pte);
 
-                if(pos->attr == REGION_RSHARED){
-                    *c_pte = *c_pte & ~PG_WRITE;
-                    *n_pte = *c_pte & ~PG_WRITE;
-                }else{
-                    *n_pte = 0;
-                }
-
+                *c_pte = *c_pte & ~PG_WRITE;
+                *n_pte = *c_pte & ~PG_WRITE;
+            }else{
+                *n_pte = 0;
             }
 
         }
+    }
 
-    }while(0);
+}
+
+
+pid_t dup_proc(){
+
+    struct task_struct *new_task = alloc_task();
+    new_task->mm.user_heap       = __current->mm.user_heap;
+    new_task->regs               = __current->regs;
+    new_task->parent             = __current;
+
+    setup_task_page_table(new_task, PD_REFERENCED);
+
+    setup_task_mem_region(&__current->mm.regions, &new_task->mm.regions);
 
     vmm_unmount_pg_dir(PD_MOUNT_2);
 
@@ -160,10 +179,7 @@ pid_t dup_proc(){
 
     commit_task(new_task);
 
-    // push_task(&new_task);
-
     return new_task->pid;
-
 }
 
  __DEFINE_SYSTEMCALL_0(pid_t, fork){
@@ -175,7 +191,34 @@ pid_t dup_proc(){
  __DEFINE_SYSTEMCALL_0(pid_t, getppid){
      return __current->parent->pid;
  }
+__DEFINE_SYSTEMCALL_0(pid_t, getpgid){
+    return __current->pgid;
+}
 
+__DEFINE_SYSTEMCALL_2(int, setpgid, pid_t, pid, pid_t, pgid){
+
+    struct task_struct *task = pid > 0 ? get_task(pid) : __current;
+
+    if(!task || task->pid == task->pgid){
+        __current->k_status = INVL;
+        return -1;
+    }
+
+    struct task_struct *pg_task = pgid > 0 ? get_task(pgid) : __current;
+
+    if(!pg_task){
+        __current->k_status = INVL;
+        return -1;
+    }
+
+    list_delete(&task->group);
+    list_append(&pg_task->group, &pg_task->group);
+
+    task->pgid = pg_task->pid;
+
+    return 0;
+
+}
 
 
 

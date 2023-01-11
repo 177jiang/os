@@ -51,7 +51,14 @@ void pmm_init(uint32_t mem_upper_limit){
   MAX_PAGE = (PG_ALIGN(mem_upper_limit) >> 12);
   NEXT_PAGE = START_PAGE;
 
-  pmm_mark_pages_occupied(0, 0, MEM_MEP_MAX_SIZE, 0);
+  // pmm_mark_pages_occupied(0, 0, MEM_MEP_MAX_SIZE, 0);
+  for(uint32_t i=0; i<MEM_MEP_MAX_SIZE; ++i){
+    mem_map[i] = (struct p_page){
+      .owner      = 0,
+      .attr       = 0,
+      .ref_counts = 1
+    };
+  }
 
 }
 

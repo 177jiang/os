@@ -2,6 +2,7 @@
 #include <mm/kalloc.h>
 #include <libc/string.h>
 #include <mm/dmm.h>
+#include <constant.h>
 
 extern uint8_t __kernel_heap_start;
 
@@ -15,27 +16,40 @@ static heap_context_t kernel_heap;
 
 int kalloc_init(){
 
-    kernel_heap.start          = sym_vaddr(__kernel_heap_start);
-    kernel_heap.end            = kernel_heap.start;
-    kernel_heap.max_addr       = (void*)K_STACK_START;
+    kernel_heap.start          = K_HEAP_START;
+    kernel_heap.end            = NULL;
+    kernel_heap.max_addr       = (void*)TASK_TABLE_START;
+
+    for(size_t i=0; i<K_HEAP_SIZE_MB >> 2; ++i){
+        int a = vmm_set_mapping(
+                PD_REFERENCED,
+                (uint32_t)kernel_heap.start + (i << 22),
+                0,
+                PG_PREM_RW,
+                VMAP_NOMAP
+        );
+    }
 
     if(!dmm_init(&kernel_heap)) {
         return 0;
     }
+
+
 
     DMM_SET_HT(
             kernel_heap.start,
             DMM_MAKE(4, (DMM_PREV_ALLOC | DMM_SELF_ALLOC) )
     );
 
+
     DMM_SET_HT(
             kernel_heap.start + DMM_HEADER_SIZE,
             DMM_MAKE(0, DMM_PREV_ALLOC | DMM_SELF_ALLOC)
-            );
+    );
 
     kernel_heap.end +=  DMM_HEADER_SIZE;
 
-    return _grow_heap(&kernel_heap, HEAP_INIT_SIZE) != 0;
+    return  _grow_heap(&kernel_heap, HEAP_INIT_SIZE);
 }
 
 void  _place_chunk(uint8_t *addr, size_t size){
@@ -111,9 +125,10 @@ void *_coalesce(uint8_t * addr){
 void *_grow_heap(heap_context_t *heap, size_t size){
     size = ROUNDUP(size, DMM_BOUNDRY);
 
-    uint8_t *start = jbrk(heap, size);
+    uint8_t *start = jsbrk(heap, size, 0);
 
     if(!start)return 0;
+
 
     uint32_t old_header = DMM_GET_HEADER(start);
     uint32_t new_header = DMM_MAKE(size, DMM_GET_PREV(old_header));

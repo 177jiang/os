@@ -3,16 +3,20 @@
 
 #include <arch/x86/interrupts.h>
 
-#define __SYSCALL_fork      1
-#define __SYSCALL_yield     2
-#define __SYSCALL_sbrk      3
-#define __SYSCALL_brk       4
+#define __SYSCALL_fork          1
+#define __SYSCALL_yield         2
+#define __SYSCALL_sbrk          3
+#define __SYSCALL_brk           4
 
-#define __SYSCALL_getpid     5
-#define __SYSCALL_getppid    6
-#define __SYSCALL_sleep      7
-#define __SYSCALL__exit      8
-#define __SYSCALL_wait       9
+#define __SYSCALL_getpid        5
+#define __SYSCALL_getppid       6
+#define __SYSCALL_sleep         7
+#define __SYSCALL__exit         8
+#define __SYSCALL_wait          9
+#define __SYSCALL_waitpid       10
+#define __SYSCALL_sigreturn     11
+#define __SYSCALL_sigtaskmask   12
+#define __SYSCALL_signal        13
 
 #define __SYSCALL_MAX    0x100
 
@@ -64,37 +68,33 @@ static void *syscall(unsigned int callcode){
 
 
 #define __SYSTEMCALL_0(ret_type, name)              \
-    ret_type name () {                              \
-        __DO_INT_33(ret_type, __SYSCALL_##name)      \
+    static ret_type name () {                              \
+        __DO_INT_33(ret_type, __SYSCALL_##name)     \
     }
 
 #define __SYSTEMCALL_1(ret_type, name, tp1, v1)     \
-    ret_type name (tp1 v1) {                        \
+    static ret_type name (tp1 v1) {                        \
         asm(""::"b"(v1));                           \
-        __DO_INT_33(ret_type, __SYSCALL_##name);     \
+        __DO_INT_33(ret_type, __SYSCALL_##name);    \
     }
 
 #define __SYSTEMCALL_2(ret_type, name, tp1, v1, tp2, v2)                    \
-    ret_type name (tp1 v1, tp2 v2) {                                        \
+    static ret_type name (tp1 v1, tp2 v2) {                                 \
         asm("\n"::"b"(v1), "c"(v2));                                        \
-        __DO_INT_33(ret_type, __SYSCALL_##name);                             \
+        __DO_INT_33(ret_type, __SYSCALL_##name);                            \
     }
 
 #define __SYSTEMCALL_3(ret_type, name, tp1, v1, tp2, v2, tp3, v3)           \
-    ret_type name (tp1 v1, tp2 v2, tp3 v3) {                                \
+    static ret_type name (tp1 v1, tp2 v2, tp3 v3) {                         \
         asm("\n"::"b"(v1), "c"(v2), "d"(v3));                               \
-        __DO_INT_33(ret_type, __SYSCALL_##name);                             \
+        __DO_INT_33(ret_type, __SYSCALL_##name);                            \
     }
 
 #define __SYSTEMCALL_4(ret_type, name, tp1, v1, tp2, v2, tp3, v3, tp4, v4)  \
-    ret_type name (tp1 v1, tp2 v2, tp3 v3, tp4 v4) {                        \
+    static ret_type name (tp1 v1, tp2 v2, tp3 v3, tp4 v4) {                 \
         asm("\n"::"b"(v1), "c"(v2), "d"(v3), "D"(v4));                      \
-        __DO_INT_33(ret_type, __SYSCALL_##name);                             \
+        __DO_INT_33(ret_type, __SYSCALL_##name);                            \
     }
-
-
-
-
 
 
 #endif

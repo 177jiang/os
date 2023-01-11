@@ -29,7 +29,6 @@
 extern uint8_t __kernel_start;
 extern uint8_t __kernel_end;
 extern uint8_t __init_hhk_end;
-extern uint8_t _k_stack;
 
 void _init_page_table(ptd_t *ptd){
 
@@ -68,7 +67,7 @@ void _init_page_table(ptd_t *ptd){
         ptd,
         kernel_pde_index + i,
         PDE(
-          PG_PREM_RW,
+          PG_PREM_URW,
           PT_ADDR(ptd, PG_TABLE_KERNEL_INDEX + i)
           )
     );
@@ -82,7 +81,7 @@ void _init_page_table(ptd_t *ptd){
         PG_TABLE_KERNEL_INDEX ,
         kernel_pte_index + i,
         PTE(
-          PG_PREM_RW,
+          PG_PREM_URW,
           (kernel_paddr + (i << 12))
           )
     );

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define SEL_RPL(s)    ((s) & 0x3)
+
 typedef unsigned int reg32;
 typedef unsigned short reg16;
 
@@ -35,19 +37,19 @@ int cpu_has_apic();
 static inline reg32
 cpu_rcr0() {
     uintptr_t val;
-    asm volatile("movl %%cr0,%0" : "=r" (val));
+    asm volatile("movl %%cr0,%0" : "=r"(val));
     return val;
 }
 
 static inline reg32 cpu_rcr2() {
     uintptr_t val;
-    asm volatile("movl %%cr2,%0" : "=r" (val));
+    asm volatile("movl %%cr2,%0" : "=r"(val));
     return val;
 }
 
 static inline reg32 cpu_rcr3() {
     uintptr_t val;
-    asm volatile("movl %%cr3,%0" : "=r" (val));
+    asm volatile("movl %%cr3,%0" : "=r"(val));
     return val;
 }
 

@@ -3,10 +3,9 @@
 
 Pysical(void *) vmm_dup_page(pid_t pid, void * paddr){
 
-    void *new_page  = pmm_alloc_page(pid, 0);
-
-    void *a = vmm_map_page_occupy(pid, PG_MOUNT_3, new_page, PG_PREM_RW);
-    void *b = vmm_map_page_occupy(pid, PG_MOUNT_4, paddr, PG_PREM_RW);
+    void *new_page = pmm_alloc_page(pid, 0);
+    vmm_set_mapping(PD_REFERENCED, PG_MOUNT_3, new_page, PG_PREM_RW, VMAP_NULL);
+    vmm_set_mapping(PD_REFERENCED, PG_MOUNT_4, paddr, PG_PREM_RW, VMAP_NULL);
 
     asm volatile (
             "movl %1, %%edi\n"
@@ -16,9 +15,8 @@ Pysical(void *) vmm_dup_page(pid_t pid, void * paddr){
             :"memory", "%edi", "%esi"
     );
 
-
-    vmm_unset_mapping(PG_MOUNT_3);
-    vmm_unset_mapping(PG_MOUNT_4);
+    vmm_unset_mapping(PD_REFERENCED, PG_MOUNT_3);
+    vmm_unset_mapping(PD_REFERENCED, PG_MOUNT_4);
 
     return new_page;
 

@@ -22,8 +22,9 @@
 
 #define PG_ALIGN(addr)      ((uintptr_t)(addr)   & 0xFFFFF000UL)
 
-#define PD_INDEX(vaddr)     (((uintptr_t)(vaddr) & 0xFFC00000UL) >> 22)
-#define PT_INDEX(vaddr)     (((uintptr_t)(vaddr) & 0x003FF000UL) >> 12)
+#define PD_INDEX(vaddr)     (uint32_t)(((uintptr_t)(vaddr) & 0xFFC00000UL) >> 22)
+#define PT_INDEX(vaddr)     (uint32_t)(((uintptr_t)(vaddr) & 0x003FF000UL) >> 12)
+
 #define PG_OFFSET(vaddr)    ((uintptr_t)(vaddr)  & 0x00000FFFUL)
 
 #define GET_PT_ADDR(pde)    PG_ALIGN(pde)
@@ -54,6 +55,8 @@
 // 用于对PD进行循环映射，因为我们可能需要对PD进行频繁操作，我们在这里禁用TLB缓存
 #define T_SELF_REF_PERM        PG_PREM_RW | PG_DISABLE_CACHE | PG_WRITE_THROUGH
 
+#define PTE_NULL              (0)
+
 #define PG_ENTRY_FLAGS(entry)   ((entry) & 0xFFFU)
 #define PG_ENTRY_ADDR(entry)   ((entry) & ~0xFFFU)
 
@@ -80,25 +83,26 @@ typedef struct {
 
 typedef  struct {
 
-  uint32_t p_index;
-  uint32_t p_addr;
-  uint16_t flags;
-  x86_pte_t *pte;
+  uint32_t    va;
+  uint32_t    p_index;
+  uint32_t    p_addr;
+  uint16_t    flags;
+  x86_pte_t   *pte;
   
 } v_mapping;
 
 extern void __pg_mount_point;
 extern void __pd_mount_point;
 
-#define MEM_4MB         (MEM_1MB << 2)
 
-#define PD_MOUNT_1      0xAFC00000
-// #define PD_MOUNT_2      (0xAF800000)
 
+#define MEM_4MB             (MEM_1MB << 2)
 #define MNT_PG_BASE         ((uint32_t)sym_vaddr(__pg_mount_point))
 #define MNT_PD_BASE         ((uint32_t)sym_vaddr(__pd_mount_point))
 
 #define PD_MOUNT_2      (MNT_PD_BASE)
+#define PD_MOUNT_1      (PD_MOUNT_2 + MEM_4MB)
+
 
 #define PG_MOUNT_1      (MNT_PG_BASE)
 #define PG_MOUNT_2      (MNT_PG_BASE + PG_SIZE)
@@ -117,7 +121,13 @@ extern void __pd_mount_point;
   ((x86_page_t *)(PD_MOUNT_1 | (PG_HIG(vaddr)>>10)))->entry + ((PG_MID(vaddr)) >> 12)
 
 #define __MOUNTED_PTE(mnt, vaddr) \
-  ((x86_page_t *)(mnt | (PG_HIG(vaddr)>>10)))->entry + ((PG_MID(vaddr)) >> 12)
+  ((x86_page_t *)((mnt) | (PG_HIG(vaddr)>>10)))->entry + ((PG_MID(vaddr)) >> 12)
+
+#define __MOUNTED_PGDIR(mnt)  \
+  ((x86_page_t*)( (mnt) | (1023 << 12) ))
+
+#define __MOUNTED_PGTABLE(mnt, va) \
+  ((x86_page_t*)( (mnt) | (PD_INDEX(va) << 12) ))
 
 #endif
 

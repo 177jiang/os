@@ -17,7 +17,7 @@
 
 static void temp_intr_routine_rtc_tick(const isr_param *param);
 static void temp_intr_routine_apic_timer(const isr_param *param);
-static void timer_update(const isr_param *param);
+static void do_timer_interrupt(const isr_param *param);
 
 static volatile struct timer_context *timer_ctx;
 
@@ -87,17 +87,16 @@ void timer_init(uint32_t frequency){
     rtc_enable_timer();                                     // start RTC timer
     apic_write_reg(APIC_TIMER_ICR, APIC_CALIBRATION_CONST); // start APIC timer
 
-    // while(1);
     // enable interrupt, just for our RTC start ticking!
     cpu_enable_interrupt();
 
     wait_until(apic_timer_done);
 
-    // cpu_disable_interrupt();
+    cpu_disable_interrupt();
 
     assert_msg(timer_ctx->base_frequency, "Fail to initialize timer (NOFREQ)");
 
-    printf_("Base frequency: %u Hz\n", timer_ctx->base_frequency);
+    printf_("[TIMER]: Base frequency: %u Hz\n", timer_ctx->base_frequency);
 
     timer_ctx->running_frequency = frequency;
     timer_ctx->tick_interval = timer_ctx->base_frequency / frequency;
@@ -109,13 +108,15 @@ void timer_init(uint32_t frequency){
     apic_write_reg(APIC_TIMER_LVT,
                    LVT_ENTRY_TIMER(APIC_TIMER_IV, LVT_TIMER_PERIODIC));
 
-    intr_setvector(APIC_TIMER_IV, timer_update);
+    intr_setvector(APIC_TIMER_IV, do_timer_interrupt);
 
     apic_write_reg(APIC_TIMER_ICR, timer_ctx->tick_interval);
 
     sched_ticks         = timer_ctx->running_frequency / 1000 * SCHED_TIME_SLICE;
     sched_ticks_counter = 0;
 
+
+    cpu_enable_interrupt();
 }
 
 struct timer *timer_run_second(uint32_t second, void (*callback)(void*), void* payload, uint8_t flags) {
@@ -142,7 +143,7 @@ struct timer *timer_run(uint32_t ticks, void (*callback)(void*), void* payload, 
     return timer;
 }
 
-static void timer_update(const isr_param* param) {
+static void do_timer_interrupt(const isr_param* param) {
 
 
     struct timer *pos, *n;
@@ -156,7 +157,7 @@ static void timer_update(const isr_param* param) {
 
         pos->callback ? pos->callback(pos->payload) : 1;
 
-        if (pos->flags & TIMER_MODE_PERIODIC) {
+        if ((pos->flags & TIMER_MODE_PERIODIC)) {
             pos->counter = pos->deadline;
         } else {
             list_delete(&pos->link);
@@ -180,13 +181,19 @@ static void temp_intr_routine_rtc_tick(const isr_param* param) {
 }
 
 static void temp_intr_routine_apic_timer(const isr_param* param) {
+
     timer_ctx->base_frequency =
       APIC_CALIBRATION_CONST / rtc_counter * RTC_TIMER_BASE_FREQUENCY;
     apic_timer_done = 1;
 
     rtc_disable_timer();
+
 }
 
 struct timer_context *timer_context(){
     return timer_ctx;
+}
+
+void sched_yield(){
+    sched_ticks_counter = sched_ticks;
 }

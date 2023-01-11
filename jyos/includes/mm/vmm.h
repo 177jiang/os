@@ -8,31 +8,24 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#define VMAP_NULL 0
+
+#define VMAP_IGNORE 1
+
+#define VMAP_NOMAP 2
+
+
 #define v_page_attr uint32_t
 
 void vmm_init();
 
 Pysical(x86_page_t*) vmm_create_new_pd();
 
-void * vmm_map_page(pid_t pid, void *va, Pysical(void *pa), v_page_attr attr);
+int vmm_set_mapping(uintptr_t mnt, void *va, Pysical(void *) pa, p_page_attr attr, int op);
 
-int vmm_map_pages(pid_t pid, void *va, Pysical(void *pa), size_t pgs, v_page_attr attr);
+Pysical(uintptr_t) vmm_unset_mapping(uintptr_t mnt, uintptr_t va);
 
-void * vmm_map_page_occupy(pid_t pid, void *va, Pysical(void * pa), v_page_attr attr);
-
-void *vmm_alloc_page(pid_t pid, void *va, void **pa, v_page_attr vattr, p_page_attr pattr);
-
-int vmm_alloc_pages(pid_t pid, void *va, size_t sz, v_page_attr vattr, p_page_attr pattr);
-
-int vmm_set_mapping(pid_t pid, void *va, Pysical(void *) pa, p_page_attr attr);
-
-void vmm_unmap_page(pid_t pid, void *va);
-
-void vmm_unset_mapping(void *va);
-
-Pysical(void *) vmm_v2p(void *va);
-
-v_mapping vmm_lookup(void *va);
+int vmm_lookup(void *va, v_mapping *mapping);
 
 Pysical(void *) vmm_dup_page(pid_t pid, Pysical(void *paddr) );
 

@@ -15,4 +15,6 @@ void sched_init();
 
 void schedule();
 
+void schedule_yield();
+
 #endif

@@ -4,8 +4,6 @@
 #include <stdint.h>
 #include <constant.h>
 
-// #define APIC_BASE_VADDR 0x1000
-#define APIC_BASE_VADDR  KERNEL_VSTART
 
 #define __APIC_BASE_PADDR 0xFEE00000
 

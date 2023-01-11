@@ -1,11 +1,12 @@
-
 #include <tty/tty.h>
 #include <libc/string.h>
 #include <stdint.h>
 #include <hal/io.h>
 
+#define JYOS_TEST_CXK
+
 #ifdef  JYOS_TEST_CXK
-  #include <tty/cxk.h>
+#include <tty/cxk.h>
   #define CXK_PAGE 694
 #else
   #include <tty/cxk2.h>
@@ -24,10 +25,6 @@ uint32_t TTY_ROW = 0;
 uint16_t THEME_COLOR = 0x7500;
 
 
-#define tty_sizeof_char  (sizeof(vga_buffer))
-void clear_screen(){
-  memset(vga_buffer, 0, tty_sizeof_char);
-}
 
 void tty_set_color(uint16_t color){
   THEME_COLOR = color;
@@ -141,8 +138,19 @@ void tty_clear_line(uint32_t line){
 }
 
 
+#define tty_sizeof_char  (sizeof(vga_buffer))
+void clear_screen(){
+    for (uint16_t i = 0; i < TTY_HEIGHT; ++i) {
+      for (uint16_t j = 0; j < TTY_WIDTH; ++j) {
+        tty_put_data(i, j, 0);
+      }
+    }
+}
+
 void play_cxk_gif() {
+
   clear_screen();
+
   for (uint16_t p = 0; p < CXK_PAGE; ++p) {
     for (uint16_t i = 0; i < TTY_HEIGHT; ++i) {
       for (uint16_t j = 0; j < TTY_WIDTH; ++j) {
@@ -154,7 +162,7 @@ void play_cxk_gif() {
         tty_put_data(i, j, color | c);
       }
     }
-    for (int S = 0; S < 10000000 * 2; ++S) {
+    for (int S = 0; S < 10000000/2; ++S) {
       int a;
       a += S - p * 1 / 21;
       a += a - 65535;

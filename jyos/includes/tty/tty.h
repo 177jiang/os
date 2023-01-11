@@ -24,7 +24,8 @@
 
 #define VGA_TWINKLE       (1 << 3)
 
-#define VGA_COLOR_WARN    (( VGA_TWINKLE | (VGA_COLOR_GREEN )) << 8)
+#define VGA_COLOR_LIVE    (( VGA_TWINKLE | (VGA_COLOR_GREEN )) << 8)
+#define VGA_COLOR_WARN    (( VGA_TWINKLE | (VGA_COLOR_GREEN | VGA_COLOR_RED )) << 8)
 
 void tty_set_theme(uint8_t fg, uint8_t bg);
 

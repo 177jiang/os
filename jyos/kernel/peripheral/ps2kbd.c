@@ -187,7 +187,8 @@ void ps2_kbd_init() {
     ioapic_redirect(irq_kbd, PC_KBD_IV, 0, IOAPIC_DELMOD_FIXED);
 
 done:
-    cpu_enable_interrupt();
+    // cpu_enable_interrupt();
+
 }
 
 

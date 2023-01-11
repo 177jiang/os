@@ -21,7 +21,7 @@ SECTIONS {
     .hhk_init_rodata BLOCK(4K) : {
         build/obj/arch/x86/*.o (.rodata)
     }
-    __init_hhk_end = .;
+    __init_hhk_end = ALIGN(4K);
 
     /* Relocation of our higher half kernel */
     . += 0xC0000000;
@@ -32,6 +32,12 @@ SECTIONS {
         build/obj/kernel/*.o (.text)
         build/obj/hal/*.o (.text)
     }
+
+    __user_text_start = ALIGN(4K);
+    .user_text BLOCK(4K) : AT ( ADDR(.user_text) - 0xC0000000 ) {
+        build/obj/kernel/*.o (.user_text)
+    }
+    __user_text_end = ALIGN(4K);
 
     .bss BLOCK(4K) : AT ( ADDR(.bss) - 0xC0000000 ) {
         build/obj/kernel/*.o (.bss)
@@ -48,21 +54,13 @@ SECTIONS {
         build/obj/hal/*.o (.rodata)
     }
 
-    /* kernel page _table */
+    /* temp kernel page _table */
     .kpg BLOCK(4K) : AT (  ADDR(.kpg) - 0xC0000000  ) {
         build/obj/arch/x86/*.o (.kpg)
     }
-
     __kernel_end     = ALIGN(4K);
-
     __pg_mount_point = ALIGN(4K);
     . += 20K;
-
     __pd_mount_point = ALIGN(4M);
-    . += 12M;
-
-    __task_table = ALIGN(4K);
-    . += 128M;
-    __kernel_heap_start = ALIGN(4K);    /* 内核结束的地方即堆开始的地方 */
-
+    . += 4M;
 }

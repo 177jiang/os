@@ -4,8 +4,6 @@
 #include <stdint.h>
 #include <constant.h>
 
-// #define IOAPIC_BASE_VADDR   0x2000
-#define IOAPIC_BASE_VADDR       KERNEL_VSTART + 0x2000
 
 #define IOAPIC_IOREGSEL             0x00
 #define IOAPIC_IOWIN                0x10

@@ -9,4 +9,6 @@
 #define INVLDPID -(4)
 #define SEGFAULT -(5)
 
+#define INVL     -(6)
+
 #endif

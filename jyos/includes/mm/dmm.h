@@ -38,7 +38,9 @@
 
 int dmm_init(heap_context_t *heap);
 
-void *jbrk(heap_context_t *heap, size_t size);
+void *jsbrk(heap_context_t *heap, size_t size, int user);
+
+int  jbrk(heap_context_t *heap, void *addr, int user);
 
 
 #endif
