@@ -25,7 +25,7 @@ int kalloc_init(){
                 PD_REFERENCED,
                 (uint32_t)kernel_heap.start + (i << 22),
                 0,
-                PG_PREM_RW,
+                PG_PREM_RW ,
                 VMAP_NOMAP
         );
     }

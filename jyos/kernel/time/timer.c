@@ -42,12 +42,14 @@ void timer_primary_init() {
 
 void timer_init(uint32_t frequency){
 
+    timer_primary_init();
+
     cpu_disable_interrupt();
 
     // Setup APIC timer
+
     // Setup a one-shot timer, we will use this to measure the bus speed. So we
-    // can
-    //   then calibrate apic timer to work at *nearly* accurate hz
+    // can then calibrate apic timer to work at *nearly* accurate hz
     apic_write_reg(APIC_TIMER_LVT,
                    LVT_ENTRY_TIMER(APIC_TIMER_IV, LVT_TIMER_ONESHOT));
 
@@ -58,13 +60,13 @@ void timer_init(uint32_t frequency){
         Timer calibration process - measure the APIC timer base frequency
 
          step 1: setup a temporary isr for RTC timer which trigger at each tick
-                 (1024Hz) 
-         step 2: setup a temporary isr for #APIC_TIMER_IV 
-         step 3: setup the divider, APIC_TIMER_DCR 
-         step 4: Startup RTC timer 
-         step 5: Write a large value, v, to APIC_TIMER_ICR to start APIC timer (this must be
-                 followed immediately after step 4) 
-          step 6: issue a write to EOI and clean up.
+                 (1024Hz)
+         step 2: setup a temporary isr for #APIC_TIMER_IV
+         step 3: setup the divider, APIC_TIMER_DCR
+         step 4: Startup RTC timer
+         step 5: Write a large value, v, to APIC_TIMER_ICR to start APIC timer
+       (this must be followed immediately after step 4) step 6: issue a write to
+       EOI and clean up.
 
         When the APIC ICR counting down to 0 #APIC_TIMER_IV triggered, save the
        rtc timer's counter, k, and disable RTC timer immediately (although the
@@ -76,6 +78,12 @@ void timer_init(uint32_t frequency){
             =>  F_apic = v / k * 1024
 
     */
+
+#ifdef __LUNAIXOS_DEBUG__
+    if (frequency < 1000) {
+        printf_("Frequency too low. Millisecond timer might be dodgy.");
+    }
+#endif
 
     timer_ctx->base_frequency = 0;
     rtc_counter = 0;
@@ -92,14 +100,12 @@ void timer_init(uint32_t frequency){
 
     wait_until(apic_timer_done);
 
-    cpu_disable_interrupt();
-
     assert_msg(timer_ctx->base_frequency, "Fail to initialize timer (NOFREQ)");
 
-    printf_("[TIMER]: Base frequency: %u Hz\n", timer_ctx->base_frequency);
+    printf_("Base frequency: %u Hz\n", timer_ctx->base_frequency);
 
     timer_ctx->running_frequency = frequency;
-    timer_ctx->tick_interval = timer_ctx->base_frequency / frequency;
+    timer_ctx-> tick_interval= timer_ctx->base_frequency / frequency;
 
     // cleanup
     intr_unsetvector(APIC_TIMER_IV, temp_intr_routine_apic_timer);
@@ -107,16 +113,13 @@ void timer_init(uint32_t frequency){
 
     apic_write_reg(APIC_TIMER_LVT,
                    LVT_ENTRY_TIMER(APIC_TIMER_IV, LVT_TIMER_PERIODIC));
+    intr_setvector(APIC_TIMER_IV,do_timer_interrupt);
 
-    intr_setvector(APIC_TIMER_IV, do_timer_interrupt);
+    apic_write_reg(APIC_TIMER_ICR, timer_ctx-> tick_interval);
 
-    apic_write_reg(APIC_TIMER_ICR, timer_ctx->tick_interval);
-
-    sched_ticks         = timer_ctx->running_frequency / 1000 * SCHED_TIME_SLICE;
+    sched_ticks = timer_ctx->running_frequency / 1000 * SCHED_TIME_SLICE;
     sched_ticks_counter = 0;
 
-
-    cpu_enable_interrupt();
 }
 
 struct timer *timer_run_second(uint32_t second, void (*callback)(void*), void* payload, uint8_t flags) {

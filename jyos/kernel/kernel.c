@@ -3,6 +3,8 @@
 #include <arch/x86/idt.h>
 
 #include <mm/kalloc.h>
+#include <hal/io.h>
+#include <hal/cpu.h>
 #include <tty/tty.h>
 #include <constant.h>
 #include <timer.h>
@@ -18,11 +20,16 @@
 #include <peripheral/keyboard.h>
 #include <clock.h>
 #include <proc.h>
+#include <junistd.h>
 #include <types.h>
 #include <sched.h>
-#include <junistd.h>
+#include <spike.h>
 
 extern uint8_t __kernel_start;
+
+extern struct scheduler sched_ctx;
+
+extern uint8_t __init_hhk_end;
 
 void test_timer(void *paylod){
   static datetime_t datetime;
@@ -41,76 +48,114 @@ void test_timer(void *paylod){
 
 }
 
-extern struct scheduler sched_ctx;
+void __USER_SPACE__ test_signal_handler(int signum){
+  printf_error("Signal [%d]  received at task %d!!!! \n", signum, getpid());
+}
+void __USER_SPACE__ test_signal_kill(int signum){
+  printf_error("Kill test at task %d!!!! \n",  getpid());
+}
 
-extern uint8_t __init_hhk_end;
+void test(int *a){
+  *a = 5;
+  printf_error("%x\n", a);
+}
 
-int _kernel_main() {
+void __USER_SPACE__ sigsegv_handler(int signum) {
+    pid_t pid = getpid();
+    printf_warn("SIGSEGV received on process %d\n", pid);
+    _exit(signum);
+}
 
-  // int state ;
-  // pid_t pid = wait(&state);
-  // printf_error("Parent: chiled (%d) exit whith code(%d)\n", pid, state);
+int __USER_SPACE__ _kernel_main() {
 
-  // for(int i=0; i<10; ++i){
-  //   pid_t pid = fork();
-  //   if(!pid){
+  // int status = 0;
+  //
+  // if(!fork()){
+  //   printf_warn("This is a test for wait\n");
+  //   sleep(3);
+  //   _exit(3);
+  // }
+  //
+  //
+  // pid_t pid = 0;
+  // for(int i=0; i<7; ++i){
+  //   if(!(pid=fork())){
   //     while(1){
-  //         if(i==9)i = *(uint32_t*)0xDEADC0DE;
-  //         if(i == 7){
-  //           printf_warn("This is a living task(%d)\n", i);
-  //           yield();
-  //         }else{
-  //           sleep(1);
-  //           _exit(0);
-  //         }
+  //       signal(_SIG_USER, test_signal_kill);
+  //       sleep(1);
+  //       printf_live("%d\n", getpid());
+  //       if(i !=6 )_exit(i);
   //     }
   //   }
-  //   printf_error("create task %d\n",pid);
   // }
-
-
-   char buf[64];
-   cpu_get_brand(buf);
-   printf_("CPU: %s\n\n", buf);
-   printf_("------------------------- Initialization end !!! ----------------\n");
-
-  /*test timer*/
-  timer_run_second(1, test_timer, NULL, TIMER_MODE_PERIODIC);
-
-  if(!fork()){
-    printf_warn("This is a test for wait\n");
-    sleep(2);
-    _exit(3);
-  }
-
-  int state;
-  pid_t pid = waitpid(-1, &state, WNOHANG);
-  for(size_t i=0; i<7; ++i){
-    if(!(pid=fork())){
-      while(1){
-        sleep(1+(i/2));
-        printf_live("%d\n", i);
-        if(i<5) _exit(i);
-      }
-    }
-  }
-
-  for(int i=0; i<5; ++i){
-    pid = waitpid(-1, &state, 0);
-    printf_error("task %d exit with code %d\n", pid, WEXITSTATUS(state));
-  }
-
-  // while((pid=wait(&state)) >=0 ){
-  //   short code = WEXITSTATUS(state);
-  //   printf_warn("TASK %d exited with code %d\n", pid, code);
+  //
+  //
+  // signal(_SIGCHLD, test_signal_handler);
+  // state = 0;
+  // int a = waitpid(-1, &state, 0);
+  //
+  // printf_error("task %d exit with code %d\n", a, WEXITSTATUS(state));
+  // kill(pid, _SIG_USER);
+  //
+  // state = 0;
+  // for(int i=0; i<5; ++i){
+  //   pid = waitpid(-1, &state, 0);
+  //   printf_error("task %d exit with code %d\n", pid, WEXITSTATUS(state));
   // }
+ // 
+ //    pid_t p = 0;
+ //
+ //    if (!fork()) {
+ //        printf_live("Test no hang!\n");
+ //        sleep(6);
+ //        _exit(0);
+ //    }
+ //
+ //    waitpid(-1, &status, WNOHANG);
+ //
+ //    for (size_t i = 0; i < 5; i++) {
+ //        pid_t pid = 0;
+ //        if (!(pid = fork())) {
+ //            signal(_SIGSEGV, sigsegv_handler);
+ //            sleep(i);
+ //
+ //            tty_put_char('0' + i);
+ //            tty_put_char('\n');
+ //            _exit(0);
+ //        }
+ //        printf_warn("Forked %d\n", pid);
+ //    }
+ //
+ //    while ((p = wait(&status)) >= 0) {
+ //        short code = WEXITSTATUS(status);
+ //        if (WIFSIGNALED(status)) {
+ //            printf_error("Process %d terminated by signal, exit_code: %d\n",
+ //                    p, code);
+ //        } else if (WIFEXITED(status)) {
+ //            printf_error("Process %d exited with code %d\n", p, code);
+ //        } else {
+ //            printf_error("Process %d aborted with code %d\n", p, code);
+ //        }
+ //    }
 
+    char buf[64];
+
+    printf_("Hello processes!\n");
+
+    cpu_get_brand(buf);
+    printf_("CPU: %s\n\n", buf);
+
+  /*now we just for testing */
+  /* just  the kernel code and data could be WR by user, and don't include heap */
+  /* so if we call a function that uses a addr in heap_space , it will cause a page fault */
+   /* such as timer queue */
+  // timer_run_second(1, test_timer, NULL, TIMER_MODE_PERIODIC);
 
   /*test keyboard*/
   struct kdb_keyinfo_pkt keyevent;
   while (1) {
       if (!kbd_recv_key(&keyevent)) {
-          continue;
+        continue;
       }
       if ((keyevent.state & KBD_KEY_FPRESSED) && (keyevent.keycode & 0xff00) <= KEYPAD) {
           tty_put_char((char)(keyevent.keycode & 0x00ff));

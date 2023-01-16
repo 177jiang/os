@@ -57,7 +57,9 @@ list_delete(struct list_header* elem) {
 	container_of(ptr, type, member)
 
 static inline int list_empty(struct list_header *head){
-    return head->next == head;
+
+    return  head->next == head && head->prev == head;
+
 }
 /**
  * list_for_each_entry	-	iterate over list of given type

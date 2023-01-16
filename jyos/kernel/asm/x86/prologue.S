@@ -50,13 +50,7 @@
 
       call _kernel_pre_init
       call _kernel_init
-      call _kernel_post_init
-/*
-      movl $0xFFBFFFF0, %esp
-      call _kernel_post_init
-      call _kernel_main
 
-      */
 
     cli
      l_:

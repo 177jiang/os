@@ -3,22 +3,28 @@
 
 #include <syscall.h>
 
-#define _SIG_MAX   8
+#define _SIG_MAX 16
 
-#define _SIG_PENGIND(map, sig)   ((map) & (1 << sig))
+#define _SIG_PENDING(bitmap, sig) ((bitmap) & (1 << (sig)))
 
-#define _SIGSEGV 0
-#define _SIGALRM 1
-#define _SIGCHLD 2
-#define _SIGCLD SIGCHLD
-#define _SIGINT 3
-#define _SIGKILL 4
-#define _SIGSTOP 5
-#define _SIGCONT 6
+#define _SIGSEGV 1
+#define _SIGALRM 2
+#define _SIGCHLD 3
+#define _SIGCLD _SIGCHLD
+#define _SIGINT 4
+#define _SIGKILL 5
+#define _SIGSTOP 6
+#define _SIGCONT 7
+#define _SIGTERM 8
 
-#define _SIGNAL_UNMASKABLE      ((1 << _SIGKILL) | (1 << _SIGSTOP))
-#define _SIGNAL(s)              (1 << (s));
-#define _SIGNAL_SET(sig, s)     ((sig) = (sig) | (_SIGNAL(s)))
+#define _SIG_USER 15
+
+#define __SIGNAL(num) (1 << (num))
+#define __SIGSET(bitmap, num) (bitmap = bitmap | __SIGNAL(num))
+#define __SIGTEST(bitmap, num) (bitmap & __SIGNAL(num))
+#define __SIGCLEAR(bitmap, num) ((bitmap) = (bitmap) & ~__SIGNAL(num))
+
+#define _SIGNAL_UNMASKABLE (__SIGNAL(_SIGKILL) | __SIGNAL(_SIGSTOP))
 
 #define _SIG_BLOCK 1
 #define _SIG_UNBLOCK 2

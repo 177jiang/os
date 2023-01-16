@@ -84,7 +84,7 @@ int dmm_init(heap_context_t *heap){
     if(heap->end >= K_HEAP_START){
         p = 0;
     }
-    return vmm_set_mapping(PD_REFERENCED, heap->end, 0, PG_WRITE | p, VMAP_NULL) != 0;
+    return vmm_set_mapping(PD_REFERENCED, heap->end, 0,  PG_WRITE | p, VMAP_NULL) != 0;
 
 }
 

@@ -3,6 +3,7 @@
 #include <spike.h>
 #include <hal/cpu.h>
 #include <libc/stdio.h>
+#include <process.h>
 
 #include <hal/apic.h>
 
@@ -26,7 +27,10 @@ void intr_routine_divide_zero(const isr_param *param){
 
 void intr_routine_general_protection(const isr_param *param){
 
+    printf_error("Expected: %p\n", __current->regs.esp);
+    printf_error("Task: %d\n", __current->pid);
     _intr_print_msg("General Protection !", param);
+
 }
 
 
@@ -54,13 +58,15 @@ void intr_routine_apic_error(const isr_param *param){
 void intr_routine_init(){
 
     intr_setvector(FAULT_DIVISION_ERROR,        intr_routine_divide_zero);
-    intr_setvector(FAULT_CONTROL_PROTECTION,    intr_routine_general_protection);
+    intr_setvector(FAULT_GENERAL_PROTECTION,    intr_routine_general_protection);
     intr_setvector(FAULT_PAGE_FAULT,            intr_routine_page_fault);
+    intr_setvector(FAULT_STACK_SEG_FAULT,       intr_routine_page_fault);
+
     intr_setvector(JYOS_SYS_PANIC,              intr_routine_sys_panic);
     intr_setvector(APIC_SPIV_IV,                intr_routine_apic_spi);
     intr_setvector(APIC_ERROR_IV,               intr_routine_apic_error);
 
-    intr_set_fallback_handler(intr_set_fallback_handler);
+    intr_set_fallback_handler(intr_routine_fallback);
 
 }
 

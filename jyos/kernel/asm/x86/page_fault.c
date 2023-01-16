@@ -6,6 +6,8 @@
 #include <sched.h>
 #include <status.h>
 
+#define COW_MASK (REGION_RSHARED | REGION_READ | REGION_WRITE)
+
 extern void _intr_print_msg(const char *fmt, ...);
 
 int __do_kernel_pg_fault(v_mapping *mapping);
@@ -13,6 +15,7 @@ int __do_kernel_pg_fault(v_mapping *mapping);
 void intr_routine_page_fault(const isr_param *param){
 
     uintptr_t pg_fault_ptr = cpu_rcr2();
+
 
     do{
 
@@ -29,7 +32,6 @@ void intr_routine_page_fault(const isr_param *param){
                 cpu_invplg(pg_fault_ptr);
                 return ;
             }
-            break;
         }
 
         struct mm_region *region = get_region(__current, pg_fault_ptr);
@@ -41,8 +43,7 @@ void intr_routine_page_fault(const isr_param *param){
         if(!(*pte)) break;
 
         if((*pte & PG_PRESENT)){
-            if((region->attr & REGION_PERM_MASK) !=
-               (REGION_RSHARED | REGION_READ)){
+            if((region->attr & COW_MASK) != COW_MASK){
                 break;
             }
             cpu_invplg(pte);
@@ -50,9 +51,12 @@ void intr_routine_page_fault(const isr_param *param){
 
             pmm_free_page(__current->pid, PG_ENTRY_ADDR(*pte));
 
-            *pte = (*pte & 0xFFF) | page | PG_WRITE;
+            *pte = PTE((*pte & 0xFFF)|PG_WRITE, page);
+
             return;
+
         }
+
 
         uintptr_t cache = *pte & ~0xFFF;
         if((region->attr & REGION_WRITE) &&
@@ -60,7 +64,9 @@ void intr_routine_page_fault(const isr_param *param){
             cpu_invplg(pte);
             cpu_invplg(pg_fault_ptr);
             uintptr_t page = pmm_alloc_page(__current->pid, 0);
-            *pte = *pte | page | PG_PRESENT;
+
+            *pte = PTE((*pte&0xFFF)|PG_PRESENT, page);
+
             return;
         }
 
@@ -69,7 +75,9 @@ void intr_routine_page_fault(const isr_param *param){
     printf_error("(pid: %d) Segmentation fault on %x (%p:%p)\n", 
                  __current->pid, pg_fault_ptr, param->cs, param->eip);
 
-    terminate_task(SEGFAULT);
+    __SIGSET(__current->sig_pending, _SIGSEGV);
+
+    schedule();
 
 }
 
