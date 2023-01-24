@@ -15,11 +15,13 @@
 #define __SYSCALL_wait          9
 #define __SYSCALL_waitpid       10
 #define __SYSCALL_sigreturn     11
-#define __SYSCALL_sigtaskmask   12
+#define __SYSCALL_sigprocmask   12
 #define __SYSCALL_signal        13
 #define __SYSCALL_pause         14
 #define __SYSCALL_kill          15
 #define __SYSCALL_alarm         16
+#define __SYSCALL_sigpending    17
+#define __SYSCALL_sigsuspend    18
 
 #define __SYSCALL_MAX    0x100
 

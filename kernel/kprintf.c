@@ -37,7 +37,7 @@ int kprintf_error(const char* format, ...){
 
     sprintf_(
         fmt,
-        "\x033[31;0m[%s]: %s\x033[39;49m",
+        "\033[31;0m[%s]: %s\033[39;49m",
         "EROR",
         format
     );
@@ -62,7 +62,7 @@ int kprintf_live(const char* format, ...){
 
     sprintf_(
         fmt,
-        "\x033[32;0m[%s]: %s\x033[39;49m",
+        "\033[32;0m[%s]: %s\033[39;49m",
         "NOTICE",
         format
     );
@@ -87,7 +87,7 @@ int kprintf_warn(const char* format, ...){
 
     sprintf_(
         fmt,
-        "\x033[35;0m[%s]: %s\x033[39;49m",
+        "\033[35;0m[%s]: %s\033[39;49m",
         "WARN",
         format
     );

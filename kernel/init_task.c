@@ -8,6 +8,7 @@
 #include <hal/apic.h>
 #include <hal/ioapic.h>
 #include <hal/acpi/acpi.h>
+#include <hal/pci.h>
 
 #include <libc/stdio.h>
 #include <libc/string.h>
@@ -111,6 +112,10 @@ void _kernel_post_init(){
   rtc_init();
   clock_init();
   ps2_kbd_init();
+
+  pci_init();
+
+  pci_print_device();
 
   syscall_init();
 

@@ -129,7 +129,7 @@ __DEFINE_SYSTEMCALL_1(void, sigreturn,
 
 }
 
-__DEFINE_SYSTEMCALL_3(int, sigtaskmask,
+__DEFINE_SYSTEMCALL_3(int, sigprocmask,
                       int, how,
                       const signal_t, *set,
                       signal_t, *old){
@@ -178,19 +178,50 @@ __DEFINE_SYSTEMCALL_2(int, kill, pid_t, pid, int, signum){
     return signal_send(pid, signum);
 }
 
-
-__DEFINE_SYSTEMCALL_0(int, pause){
+static  void __pause_interior(){
 
     __current->flags |= TASK_FINPAUSE;
-
     __SYSCALL_INTERRUPTIBLE({
         while((__current->flags & TASK_FINPAUSE)){
             sched_yield();
         }
     })
-
     __current->k_status = EINTR;
+
+}
+
+__DEFINE_SYSTEMCALL_0(int, pause){
+
+    __pause_interior();
+    return -1;
+
+}
+__DEFINE_SYSTEMCALL_1(int, sigpending,
+                      signal_t, *set){
+
+    *set  =__current->sig_pending;
+    return 0;
+
+}
+
+__DEFINE_SYSTEMCALL_1(int, sigsuspend,
+                      signal_t, *mask){
+
+    signal_t t          = __current->sig_mask;
+    __current->sig_mask = (*mask) & ~(_SIGNAL_UNMASKABLE);
+
+    __pause_interior();
+
+    __current->sig_mask = t;
 
     return -1;
 
 }
+
+
+
+
+
+
+
+

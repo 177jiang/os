@@ -304,7 +304,7 @@ int  tty_flush_buffer(char *buffer, int pos,
           case TEXT:
           {
               switch (c) {
-                case '\x033':
+                case '\033':
                   tty_put_buf(&x, &y);
                   tty_buf.cmd[tty_buf.cpos++] = (THEME(Fc, Bc) | c);
                   _state = ESCAPE;
@@ -366,6 +366,7 @@ int  tty_flush_buffer(char *buffer, int pos,
                   if(c == ';'){
                       _format_Value = 0;
                       flag          = 0;
+                      _state        = FORMAT;
                   }else{
                       tty_buf.cpos = 0;
                       _state       = TEXT;

@@ -7,17 +7,17 @@
 
 #define _SIG_PENDING(bitmap, sig) ((bitmap) & (1 << (sig)))
 
-#define _SIGSEGV 1
-#define _SIGALRM 2
-#define _SIGCHLD 3
-#define _SIGCLD _SIGCHLD
-#define _SIGINT 4
-#define _SIGKILL 5
-#define _SIGSTOP 6
-#define _SIGCONT 7
-#define _SIGTERM 8
+#define _SIGSEGV        1
+#define _SIGALRM        2
+#define _SIGCHLD        3
+#define _SIGCLD         _SIGCHLD
+#define _SIGINT         4
+#define _SIGKILL        5
+#define _SIGSTOP        6
+#define _SIGCONT        7
+#define _SIGTERM        8
 
-#define _SIG_USER 15
+#define _SIG_USER       15
 
 #define __SIGNAL(num) (1 << (num))
 #define __SIGSET(bitmap, num) (bitmap = bitmap | __SIGNAL(num))
@@ -36,6 +36,30 @@ typedef void (*signal_handler) (int);
 
 void *signal_dispatch();
 
-__SYSTEMCALL_2(int, signal, int, signum, signal_handler, handler);
+__SYSTEMCALL_2(int, signal,
+               int, signum,
+               signal_handler, handler);
+
+__SYSTEMCALL_1(int, sigpending,
+               signal_t, *set);
+
+__SYSTEMCALL_1(int, sigsuspend,
+               const signal_t, *mask);
+
+__SYSTEMCALL_3(int, sigprocmask,
+               int, how,
+               const signal_t, *set,
+               signal_t, *old);
+
 
 #endif
+
+
+
+
+
+
+
+
+
+

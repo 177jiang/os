@@ -17,10 +17,12 @@
         .long __do_wait
         .long __do_waitpid
         .long __do_sigreturn
-        .long __do_sigtaskmask
+        .long __do_sigprocmask
         .long __do_signal
         .long __do_pause
         .long __do_kill                 /* pause 15 */
+        .long __do_sigpending
+        .long __do_sigsuspend
 
     __pos:
         .rept __SYSCALL_MAX - (__pos - syscall_table)/4

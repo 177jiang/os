@@ -118,21 +118,14 @@ void console_write(struct console *console, char *data, size_t size){
     unsigned int  wp = console->buffer.wpos;
     unsigned int  rp = console->buffer.rpos;
 
-    int lines = 0, cs = 0, si = size, i=0, p = 0;
+    int lines = 0, si = size, i=0;
     char c;
 
     while(i < size){
         c = *(data + i);
-        buffer[(wp + p) % console->buffer.size] = c;
-        if(c == '\n'){
-            cs = 0;
-            ++lines;
-        }else if(++cs == TTY_WIDTH - 1){
-            cs = 0;
-            ++si, ++p;
-            buffer[(wp + p) % console->buffer.size] = c;
-        }
-        ++i, ++p;
+        buffer[(wp + i) % console->buffer.size] = c;
+        lines += (c == '\n');
+        ++i;
     }
 
     if(console->lines > TTY_HEIGHT && lines){
@@ -175,32 +168,6 @@ void console_start_flushing(){
     k_console.flush_timer = timer;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
