@@ -13,10 +13,6 @@
 
 #define TASK_TERMMASK 0x6
 
-#define TASK_TERMINATED(state) (state & 0x6)
-
-#define TASK_FINPAUSE 1
-
 #define pid_t int32_t
 
 #define SIZEOF_REGS        (76)
@@ -38,32 +34,31 @@
 struct proc_mm{
     heap_context_t      user_heap;
     struct mm_region    regions;
-}__attribute__((packed));
+};
 
 struct sig_struct{
     isr_param   prev_regs;
     void        *signal_handler;
     int         sig_num;
-}__attribute__((packed));
+};
 
 struct task_struct{
 
     isr_param               regs;
 
-    uint32_t                user_stack_top;
+    uint32_t                *user_stack_top;
 
     void                    *page_table;
 
     pid_t                   pid;
     pid_t                   pgid;
+    time_t                  created;
     uint8_t                 state;
     int32_t                 exit_code;
     int32_t                 k_status;
-    int                     flags;
 
     signal_t                sig_pending;
     signal_t                sig_mask;
-    signal_t                sig_doing;
     void                    *signal_handlers[_SIG_MAX];
 
     struct proc_mm          mm;
@@ -73,14 +68,9 @@ struct task_struct{
     struct list_header      siblings;
     struct list_header      group;
 
-    struct {
-        struct list_header sleepers;
-        time_t             created;
-        time_t             wakeup;
-        time_t             alarm;
-    }timer;
+    struct timer*           timer;
 
-}__attribute__((packed));
+};
 
 extern volatile struct task_struct *__current;
 

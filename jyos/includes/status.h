@@ -11,6 +11,4 @@
 
 #define INVL     -(6)
 
-#define EINTR    -(7)
-
 #endif

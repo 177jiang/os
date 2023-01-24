@@ -17,9 +17,6 @@
 #define __SYSCALL_sigreturn     11
 #define __SYSCALL_sigtaskmask   12
 #define __SYSCALL_signal        13
-#define __SYSCALL_pause         14
-#define __SYSCALL_kill          15
-#define __SYSCALL_alarm         16
 
 #define __SYSCALL_MAX    0x100
 
@@ -27,12 +24,6 @@
 
 #ifndef     __ASM_S_
 void syscall_init();
-
-#define __SYSCALL_INTERRUPTIBLE(code)               \
-    asm("sti");                                     \
-    { code };                                       \
-    asm("cli");
-
 
 static void *syscall(unsigned int callcode){
 

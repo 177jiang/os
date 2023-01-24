@@ -12,8 +12,6 @@
 #define MAX_TASKS        512
 
 
-void check_sleepers();
-
 volatile struct task_struct *__current;
 
 extern void __task_table;
@@ -39,6 +37,10 @@ void sched_init(){
 
 void switch_to(struct task_struct *new_task){
 
+    if(!(__current->state & ~TASK_RUNNING)){
+        __current->state = TASK_STOPPED;
+    }
+
     new_task->state  = TASK_RUNNING;
 
     tss_update_esp(new_task->regs.esp);
@@ -49,6 +51,7 @@ void switch_to(struct task_struct *new_task){
             "pushl %0\n"
             "jmp __do_switch_to\n"
             ::"r"(new_task)
+            :"memory"
     );
 
 }
@@ -57,48 +60,6 @@ uint32_t __schedule_algorithm() {
     return 1;
 }
 
-int can_schedule(struct task_struct *task){
-
-    if(__SIGTEST(task->sig_pending, _SIGCONT)){
-        __SIGCLEAR(task->sig_pending, _SIGSTOP);
-    }else if(__SIGTEST(task->sig_pending, _SIGSTOP)){
-        return 0;
-    }
-    return 1;
-}
-
-void check_sleepers(){
-
-    struct task_struct *init_task = sched_ctx.tasks + 1;
-    struct task_struct *pos, *n;
-    time_t now = clock_systime();
-
-    list_for_each(pos, n, &init_task->timer.sleepers, timer.sleepers){
-
-        if(TASK_TERMINATED(pos->state)){
-            goto __delete_slp;
-        }
-
-        time_t *wtim = &pos->timer.wakeup;
-        time_t *atim = &pos->timer.alarm;
-
-        if(*wtim && now >= *wtim){
-            *wtim      = 0;
-            pos->state = TASK_STOPPED;
-        }
-
-        if(*atim && now >= *atim){
-            *atim = 0;
-            __SIGTEST(pos->sig_pending, _SIGALRM);
-        }
-
-        if(!*wtim && !*atim){
-    __delete_slp:
-            list_delete(&pos->timer.sleepers);
-        }
-    }
-
-}
 void schedule(){
 
     if (!sched_ctx.task_len) {
@@ -107,27 +68,17 @@ void schedule(){
 
     cpu_disable_interrupt();
 
-    if(!(__current->state & ~TASK_RUNNING)){
-        __current->state = TASK_STOPPED;
-    }
-
     int p_task  = sched_ctx.current_index;
     int i       = p_task;
     struct task_struct *n_task;
 
-    check_sleepers();
+    do {
 
-    do{
+        i = (i + 1);
+        if(i > sched_ctx.task_len) i = 1;
+        n_task = (sched_ctx.tasks + i);
 
-        do {
-
-            i = (i + 1);
-            if(i > sched_ctx.task_len) i = 1;
-            n_task = (sched_ctx.tasks + i);
-
-        }while((n_task->state != TASK_STOPPED) && (i != p_task));
-
-    }while(!can_schedule(n_task));
+    }while((n_task->state != TASK_STOPPED) && (i != p_task));
 
     sched_ctx.current_index = i;
 
@@ -144,11 +95,11 @@ void commit_task(struct task_struct *task){
         return ;
     }
 
-    if(!task->parent){
-        task->parent = (sched_ctx.tasks + 1);
+    if(task->parent){
+        list_append(&task->parent->children, &task->siblings);
+    }else{
+        task->parent = &sched_ctx.tasks[1];
     }
-
-    list_append(&task->parent->children, &task->siblings);
 
     task->state = TASK_STOPPED;
 
@@ -160,20 +111,17 @@ struct task_struct *alloc_task(){
     assert_msg(pid!=-1, "Task alloc failed \n");
 
     struct task_struct *new_task = get_task(pid);
+    memset(new_task, 0, sizeof(struct task_struct));
 
-    memset(new_task, 0, sizeof(*new_task));
-
-    new_task->pid               = pid;
-    new_task->pgid              = pid;
-    new_task->state             = TASK_CREATED;
-    new_task->timer.created     = clock_systime();
-    new_task->user_stack_top    = U_STACK_TOP;
+    new_task->pid     = pid;
+    new_task->pgid    = pid;
+    new_task->state   = TASK_CREATED;
+    new_task->created = clock_systime();
 
 
     list_init_head(&new_task->mm.regions.head);
     list_init_head(&new_task->children);
     list_init_head(&new_task->group);
-    list_init_head(&new_task->timer.sleepers);
 
     return new_task;
 }
@@ -198,6 +146,23 @@ pid_t alloc_pid(){
     return i;
 }
 
+void push_task(struct task_struct *task){
+
+    int index = task->pid;
+    if(index <= 0 || index > sched_ctx.task_len + 1){
+        __current->k_status = INVLDPID;
+        return;
+    }
+
+    task->parent           = __current;
+    task->state            = TASK_STOPPED;
+    sched_ctx.tasks[index] = *task;
+
+    if(index == sched_ctx.task_len + 1){
+        ++sched_ctx.task_len;
+    }
+
+}
 
 pid_t destroy_task(pid_t pid){
 
@@ -211,11 +176,13 @@ pid_t destroy_task(pid_t pid){
 
     list_delete(&task->siblings);
 
-    struct mm_region *pos, *n;
-    list_for_each(pos, n, &task->mm.regions.head, head){
+    if(!list_empty(&task->mm.regions.head)){
+        struct mm_region *pos, *n;
+        list_for_each(pos, n, &task->mm.regions.head, head){
 
-        kfree(pos);
+            kfree(pos);
 
+        }
     }
 
     vmm_mount_pg_dir(PD_MOUNT_2, task->page_table);
@@ -233,7 +200,7 @@ void terminate_task(int exit_code){
 
     __current->exit_code = exit_code;
 
-    __SIGSET(__current->parent->sig_pending, _SIGCHLD);
+    schedule();
 
 }
 
@@ -253,27 +220,26 @@ int orphaned_task(pid_t pid){
     struct task_struct *task   = sched_ctx.tasks + pid;
     struct task_struct *parent = task->parent;
 
-    return (parent->state & TASK_TERMNAT) || parent->timer.created > task->timer.created;
+    return (parent->state & TASK_TERMNAT) || parent->created > task->created;
 
 }
 
+static void task_timer_callback(struct task_struct *task){
+    task->timer = 0;
+    task->state = TASK_STOPPED;
+}
 
 __DEFINE_SYSTEMCALL_1(unsigned int, sleep, unsigned int, seconds){
 
     if(!seconds)return 0;
 
-
-    if(__current->pid == 1)return 0;
-
-
-    if(__current->timer.wakeup){
-        return (__current->timer.wakeup - clock_systime()) / 1000U;
+    if(__current->timer){
+        return __current->timer->counter / timer_context()->running_frequency;
     }
 
-    __current->timer.wakeup = clock_systime() + seconds * 1000U;
+    struct timer *timer = timer_run_second(seconds, task_timer_callback, __current, 0);
 
-    list_append(&sched_ctx.tasks[1].timer.sleepers, &__current->timer.sleepers);
-
+    __current->timer    = timer;
     __current->regs.eax = seconds;
     __current->state    = TASK_BLOCKED;
 
@@ -281,46 +247,44 @@ __DEFINE_SYSTEMCALL_1(unsigned int, sleep, unsigned int, seconds){
 
 }
 
-pid_t _wait(pid_t wpid, int *status, int options){
+pid_t _wait(pid_t wp, int *state, int options){
 
-    pid_t cur = __current->pid;
-    int status_flags = 0;
-    struct task_struct *proc, *n;
-
-    if (list_empty(&__current->children)) {
+    if(list_empty(&__current->children)){
         return -1;
     }
 
-    wpid = wpid ? wpid : -__current->pgid;
+    if(!wp)wp = -__current->pgid;
     cpu_enable_interrupt();
-repeat:
-    list_for_each(proc, n, &__current->children, siblings) {
 
-        if (!~wpid || proc->pid == wpid || proc->pgid == -wpid) {
+    while(1){
 
-            if (proc->state == TASK_TERMNAT && !options) {
-                status_flags |= TEXITTERM;
-                goto done;
-            }
-            if (proc->state == TASK_STOPPED && (options & WUNTRACED)) {
-                status_flags |= TEXITSTOP;
-                goto done;
+        struct task_struct *pos, *n;
+        list_for_each(pos, n, &__current->children, siblings){
+
+            if(!~wp || wp == pos->pid || pos->pgid==-wp){
+
+                if(pos->state == TASK_TERMNAT && !options){
+                    cpu_disable_interrupt();
+                    *state = (pos->exit_code & 0xFFFF) | TASKTERM;
+                    return destroy_task(pos->pid);
+                }
+
+                if(pos->state == TASK_STOPPED && (options & WUNTRACED)){
+                    cpu_disable_interrupt();
+                    *state = (pos->exit_code & 0xFFFF) | TASKSTOP;
+                    return destroy_task(pos->pid);
+                }
+
             }
         }
-    }
-    if ((options & WNOHANG)) {
-        return 0;
-    }
-    // 放弃当前的运行机会
-    sched_yield();
-    goto repeat;
 
-done:
+        if((options & WNOHANG))return 0;
 
-    cpu_disable_interrupt();
-    status_flags |= TEXITSIG * !!proc->sig_doing;
-    *status = proc->exit_code | status_flags;
-    return destroy_task(proc->pid);
+        sched_yield();
+    }
+
+    /* never reach here */
+    return  0;
 }
 
 __DEFINE_SYSTEMCALL_0(void, yield){
@@ -328,11 +292,7 @@ __DEFINE_SYSTEMCALL_0(void, yield){
 }
 
 __DEFINE_SYSTEMCALL_1(void, _exit, int, exit_code){
-
     terminate_task(exit_code);
-
-    schedule();
-
 }
 
 __DEFINE_SYSTEMCALL_3(pid_t, waitpid, pid_t, wp, int, *state, int, options){
@@ -343,21 +303,7 @@ __DEFINE_SYSTEMCALL_1(pid_t, wait, int, *state){
     return _wait(-1, state, 0);
 }
 
-__DEFINE_SYSTEMCALL_1(unsigned int, alarm, unsigned int, seconds){
 
-    time_t patim = __current->timer.alarm;
-    time_t now   = clock_systime();
-
-    __current->timer.alarm = seconds ? (now + seconds * 1000) : 0;
-
-    if(list_empty(&__current->timer.sleepers)){
-        list_append(&(sched_ctx.tasks+1)->timer.sleepers,
-                    &__current->timer.sleepers);
-    }
-
-    return patim ? (patim - now )/1000 : 0;
-
-}
 
 
 

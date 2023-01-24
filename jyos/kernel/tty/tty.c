@@ -102,12 +102,6 @@ void _tty_init(void *addr){
 
   tty_set_theme(VGA_COLOR_BLUE, VGA_COLOR_BLACK);
 
-  io_outb(0x3D4, 0x0A);
-  io_outb(0x3D5, (io_inb(0x3D5) & 0xC0) | 13);
-
-  io_outb(0x3D4, 0x0B);
-  io_outb(0x3D5, (io_inb(0x3D5) & 0xE0) | 15);
-
 }
 
 void tty_scroll_up(){

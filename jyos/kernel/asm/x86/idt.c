@@ -15,11 +15,9 @@ uint16_t _idt_limit = sizeof(_idt) - 1;
 
 
 void _init_idt(){
-
   _set_idt_entry(FAULT_DIVISION_ERROR, 0x08, _asm_isr0,      0, INT);
   _set_idt_entry(FAULT_GENERAL_PROTECTION, 0x08, _asm_isr13, 0, INT);
   _set_idt_entry(FAULT_PAGE_FAULT, 0x08, _asm_isr14,         0, INT);
-  _set_idt_entry(FAULT_STACK_SEG_FAULT, 0x08, _asm_isr12,    0, INT);
 
   _set_idt_entry(APIC_ERROR_IV, 0x08, _asm_isr250, 0, INT);
   _set_idt_entry(APIC_LINT0_IV, 0x08, _asm_isr251, 0, INT);

@@ -39,8 +39,8 @@
 
 #define USER_START              0x400000
 #define U_STACK_SIZE            0x100000
-#define U_STACK_TOP             0x9ffffff0
-#define U_STACK_END             (0x9fffffff - U_STACK_SIZE + 1)
+#define U_STACK_TOP             0x9fffffff
+#define U_STACK_END             (U_STACK_TOP - U_STACK_SIZE + 1)
 
 #define U_MMAP_AREA             0x4D000000
 

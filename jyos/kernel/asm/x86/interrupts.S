@@ -28,7 +28,6 @@
   isr_template      FAULT_DIVISION_ERROR
   isr_template      FAULT_GENERAL_PROTECTION, no_error_code=0
   isr_template      FAULT_PAGE_FAULT, no_error_code=0
-  isr_template      FAULT_STACK_SEG_FAULT, no_error_code=0
 
   isr_template      JYOS_SYS_PANIC
   isr_template      JYOS_SYS_CALL
@@ -59,21 +58,20 @@
 __check_ring:
     cld
     movl REGS_CS(%esp), %eax
-    andl $0x3,          %eax
+    andl $0x03, %eax
 
     jz   __after_change_seg
 
-    movl $K_DATA_SEG, %eax
-    movw %ax, %ds
-    movw %ax, %es
-    movw %ax, %fs
-    movw %ax, %gs
+    movl $K_DATA_SEG, %edx
+    movw %dx, %ds
+    movw %dx, %es
+    movw %dx, %fs
+    movw %dx, %gs
 
     /* save user stack pointer */
-save_pointer:
-    movl (__current),       %eax
-    movl REGS_UESP(%esp),   %ebx
-    movl %ebx,              TASK_OFF_USTACK(%eax)
+    movl REGS_UESP(%esp), %edx
+    movl __current,       %eax
+    movl %edx,            TASK_OFF_USTACK(%eax)
 
 __after_change_seg:
     movl %esp, %eax
@@ -83,6 +81,7 @@ __after_change_seg:
 
     /* call _interrupts_handler */
     call _intr_handler
+
 
     movl (%esp), %eax   /* param -> eax */
 
@@ -125,21 +124,19 @@ soft_iret:
 .global __do_switch_to
 __do_switch_to:
 
-    popl %ebx   /*new_task -> ebx*/
+    popl %ecx   /*new_task -> ecx*/
 
     movl __current, %eax
-    movl TASK_OFF_PAGETABLE(%eax), %ecx
-    movl TASK_OFF_PAGETABLE(%ebx), %eax
-
-    cmpl %ecx, %eax
-
+    movl TASK_OFF_PAGETABLE(%eax), %edx
+    movl TASK_OFF_PAGETABLE(%ecx), %ebx
+    cmpl %edx, %ebx
     jz  __after_change_pgtable
 
-    movl %eax, %cr3
+    movl %ebx, %cr3
 
 __after_change_pgtable:
 
-    movl %ebx, __current
+    movl %ecx, __current
     movl $tmp_stack, %esp /* use a temp task */
 
     call signal_dispatch
@@ -151,9 +148,10 @@ __after_change_pgtable:
 
  __after_process_signal:
 
-    movl __current, %eax /* param -> eax */
+    movl  %ecx, %eax /* param -> eax */
 
     jmp soft_iret
+
 
 
 handle_signal:

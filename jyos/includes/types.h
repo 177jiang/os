@@ -3,11 +3,8 @@
 
 #include <stdint.h>
 
-#define TEXITTERM 0x100
-#define TEXITSTOP 0x200
-#define TEXITSIG  0x400
-
-#define TEXITNUM(flag, code) (flag | (code & 0xff))
+#define TASKTERM 0x10000
+#define TASKSTOP 0x20000
 
 #define WNOHANG 1
 
@@ -15,12 +12,11 @@
 
 #define WEXITSTATUS(wstatus) ((wstatus & 0xFFFF))
 
-#define WIFSTOPPED(wstatus)  ((wstatus & TEXITSTOP))
+#define WIFSTOPPED(wstatus)  ((wstatus & TASKSTOP))
 
 #define WIFEXITED(wstatus)             \
-    ((wstatus & TEXITTERM) && ((short)WEXITSTATUS(wstatus) >= 0))
+    ((wstatus & TASKTERM) && ((short)WEXITSTATUS(wstatus) >= 0))
 
-#define WIFSIGNALED(wstatus) ((wstatus & TEXITSIG))
 
 
 typedef int32_t pid;
