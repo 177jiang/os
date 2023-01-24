@@ -35,7 +35,7 @@ void test_timer(void *paylod){
   static datetime_t datetime;
   time_getdatetime(&datetime);
 
-  char buf[128];
+  char buf[128 << 1];
   sprintf_(buf, "local time: %u/%02u/%02u %02u:%02u:%02u\r",
            datetime.year,
            datetime.month,
