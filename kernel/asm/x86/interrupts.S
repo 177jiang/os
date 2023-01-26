@@ -70,7 +70,7 @@ __check_ring:
     movw %ax, %gs
 
     /* save user stack pointer */
-save_pointer:
+__save_pointer:
     movl (__current),       %eax
     movl REGS_UESP(%esp),   %ebx
     movl %ebx,              TASK_OFF_USTACK(%eax)

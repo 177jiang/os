@@ -53,7 +53,9 @@ Pysical(void *) __dup_page_table(pid_t pid, uint32_t mount_point){
         for(uint32_t j=0; j<PG_MAX_ENTRIES; ++j){
 
             x86_pte_t pte          = page_table->entry[j];
+
             pmm_ref_page(pid, PG_ENTRY_ADDR(pte));
+
             new_pt_vaddr->entry[j] = pte;
         }
 
@@ -129,7 +131,8 @@ void setup_task_page_table(struct task_struct *task, uintptr_t mount){
 }
 
 void setup_task_mem_region(struct mm_region *from,
-                           struct mm_region *to){
+                           struct mm_region *to,
+                           uintptr_t mount){
 
     region_copy(from, to);
 
@@ -142,9 +145,11 @@ void setup_task_mem_region(struct mm_region *from,
 
         uintptr_t start_p = PG_ALIGN(pos->start);
         uintptr_t end_p   = PG_ALIGN(pos->end);
+
         for(uint32_t i=start_p; i<=end_p; i+=PG_SIZE){
+
             x86_pte_t *c_pte = __MOUNTED_PTE(PD_REFERENCED, i);
-            x86_pte_t *n_pte = __MOUNTED_PTE(PD_MOUNT_2, i);
+            x86_pte_t *n_pte = __MOUNTED_PTE(mount, i);
             cpu_invplg(n_pte);
 
             if( (pos->attr & REGION_MODE_MASK) == REGION_RSHARED){
@@ -173,39 +178,11 @@ pid_t dup_proc(){
     new_task->regs               = __current->regs;
     new_task->parent             = __current;
 
-    region_copy(&__current->mm.regions, &new_task->mm.regions);
-
     setup_task_page_table(new_task, PD_REFERENCED);
 
-    struct mm_region *pos, *n;
-    list_for_each(pos, n, &new_task->mm.regions.head, head){
-
-        if( (pos->attr & REGION_WSHARED) ){
-            continue;
-        }
-
-        uintptr_t start_p = PG_ALIGN(pos->start);
-        uintptr_t end_p   = PG_ALIGN(pos->end);
-        for(uint32_t i=start_p; i<=end_p; i+=PG_SIZE){
-            x86_pte_t *c_pte = __MOUNTED_PTE(PD_REFERENCED, i);
-            x86_pte_t *n_pte = __MOUNTED_PTE(PD_MOUNT_2, i);
-            cpu_invplg(n_pte);
-
-            if( (pos->attr & REGION_MODE_MASK) == REGION_RSHARED){
-
-                cpu_invplg(c_pte);
-
-                cpu_invplg(i);
-
-                *c_pte = *c_pte & ~PG_WRITE;
-                *n_pte = *n_pte & ~PG_WRITE;
-            }else{
-                *n_pte = 0;
-            }
-
-        }
-    }
-    // setup_task_mem_region(&__current->mm.regions, &new_task->mm.regions);
+    setup_task_mem_region(&__current->mm.regions,
+                          &new_task->mm.regions,
+                          PD_MOUNT_2);
 
     vmm_unmount_pg_dir(PD_MOUNT_2);
 

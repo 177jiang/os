@@ -139,7 +139,7 @@ int pmm_ref_page(pid_t owner, void *p_addr){
   return 1;
 }
 
-struct p_page  *pmm_query(void *p_addr){
+struct p_page *pmm_query(uintptr_t p_addr){
 
   uint32_t n = ((uint32_t)p_addr >> 12);
   if(n >= MAX_PAGE)return 0;

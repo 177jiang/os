@@ -2,6 +2,7 @@
 #include <libc/string.h>
 #include <stdint.h>
 #include <types.h>
+#include <libc/stdio.h>
 #include <hal/io.h>
 
 #define JYOS_TEST_CXK
@@ -225,7 +226,7 @@ static uint16_t inline get_fc(uint16_t c){
 
 static struct {
 
-  uint16_t buf[256];
+  uint16_t buf[4096];
   uint16_t pos;
 
   uint16_t cmd[16];
@@ -324,14 +325,21 @@ int  tty_flush_buffer(char *buffer, int pos,
                   tty_buf.buf[tty_buf.pos++] = (THEME(Fc, Bc) | c);
                   break;
               }
+
+              if(tty_buf.pos == TTY_WIDTH-1){
+                tty_put_buf(&x, &y);
+              }
+
               if(x >= TTY_WIDTH){
                 x = 0, ++y;
               }
               if(y >= TTY_HEIGHT){
                 --y;
+                return pos;
               }
               break;
           }
+
           case ESCAPE:
           {
               tty_buf.cmd[tty_buf.cpos++] = (THEME(Fc, Bc) | c);
@@ -375,9 +383,9 @@ int  tty_flush_buffer(char *buffer, int pos,
                   ERROR_CMD;
                   //Todo A B C D
               }
-
               break;
           }
+
       }
 
     ++pos;

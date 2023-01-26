@@ -61,6 +61,7 @@ void _kernel_pre_init(){
   _tty_init((void *)VGA_BUFFER_PADDR);
 
   uint32_t map_size = _init_mb_info->mmap_length / sizeof (multiboot_memory_map_t);
+
   setup_mem((multiboot_memory_map_t *)_init_mb_info->mmap_addr, map_size);
 
 }

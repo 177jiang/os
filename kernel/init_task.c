@@ -41,9 +41,7 @@ void __USER_SPACE__ __move_to_user_mode(){
   tty_sync_cursor();
 
   if(!fork()){
-
     asm("jmp _kernel_main");
-
   }else{
     while(1){
       yield();
@@ -59,7 +57,6 @@ void task_1_work(){
   _kernel_post_init();
 
   init_task_user_space(__current);
-
 
   asm volatile(
 
@@ -102,6 +99,7 @@ void _kernel_post_init(){
   pmm_mark_page_occupied(KERNEL_PID, FLOOR(__APIC_BASE_PADDR, PG_SIZE_BITS), 0);
   pmm_mark_page_occupied(KERNEL_PID, FLOOR(ioapic_addr, PG_SIZE_BITS), 0);
   /* APIC_BASE_VADDR = 0xC0000000 , IOAPIC_BASE_VADDR  = oxC0000000 + 2*/
+
   vmm_set_mapping(PD_REFERENCED, APIC_BASE_VADDR, __APIC_BASE_PADDR, PG_PREM_RW, VMAP_NULL);
   vmm_set_mapping(PD_REFERENCED, IOAPIC_BASE_VADDR, ioapic_addr, PG_PREM_RW, VMAP_NULL);
 
@@ -114,7 +112,6 @@ void _kernel_post_init(){
   ps2_kbd_init();
 
   pci_init();
-
   pci_print_device();
 
   syscall_init();

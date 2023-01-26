@@ -6,7 +6,7 @@
 #include <sched.h>
 #include <status.h>
 
-#define COW_MASK (REGION_RSHARED | REGION_READ | REGION_WRITE)
+#define COW_MASK (REGION_RSHARED | REGION_RW )
 
 extern void _intr_print_msg(const char *fmt, ...);
 
@@ -46,7 +46,9 @@ void intr_routine_page_fault(const isr_param *param){
             if((region->attr & COW_MASK) != COW_MASK){
                 break;
             }
+
             cpu_invplg(pte);
+
             uintptr_t page = vmm_dup_page(__current->pid, PG_ENTRY_ADDR(*pte));
 
             pmm_free_page(__current->pid, PG_ENTRY_ADDR(*pte));
@@ -57,7 +59,7 @@ void intr_routine_page_fault(const isr_param *param){
 
         }
 
-
+        // alloc
         uintptr_t cache = *pte & ~0xFFF;
         if((region->attr & REGION_WRITE) &&
            (*pte & 0xFFF) && (!cache) ){

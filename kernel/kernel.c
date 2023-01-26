@@ -71,44 +71,45 @@ void __USER_SPACE__ sigsegv_handler(int signum) {
 
 int __USER_SPACE__ _kernel_main() {
 
+
+  // int state = 0;
+  //
+  // if(!fork()){
+  //   kprintf_live("This is a test for wait\n");
+  //   sleep(3);
+  //   _exit(3);
+  // }
+  //
+  //
+  // pid_t pid = 0;
+  // for(int i=0; i<7; ++i){
+  //   if(!(pid=fork())){
+  //     while(1){
+  //       signal(_SIG_USER, test_signal_kill);
+  //       sleep(1);
+  //       state = 1;
+  //       kprintf_("%d\n", getpid());
+  //       if(i !=6 )_exit(i);
+  //     }
+  //   }
+  // }
+  //
+  //
+  // signal(_SIGCHLD, test_signal_handler);
+  // state = 0;
+  // int a = waitpid(-1, &state, 0);
+  //
+  // kprintf_("task %d exit with code %d\n", a, WEXITSTATUS(state));
+  // kill(pid, _SIG_USER);
+  //
+  // state = 0;
+  // for(int i=0; i<5; ++i){
+  //   pid = waitpid(-1, &state, 0);
+  //   kprintf_error("task %d exit with code %d\n", pid, WEXITSTATUS(state));
+  // }
+
   _console_main();
 
-
- //  int state = 0;
- //
- //  if(!fork()){
- //    kprintf_live("This is a test for wait\n");
- //    sleep(3);
- //    _exit(3);
- //  }
- //
- //
- //  pid_t pid = 0;
- //  for(int i=0; i<7; ++i){
- //    if(!(pid=fork())){
- //      while(1){
- //        signal(_SIG_USER, test_signal_kill);
- //        sleep(1);
- //        kprintf_("%d\n", getpid());
- //        if(i !=6 )_exit(i);
- //      }
- //    }
- //  }
- //
- //
- //  signal(_SIGCHLD, test_signal_handler);
- //  state = 0;
- //  int a = waitpid(-1, &state, 0);
- //
- //  kprintf_("task %d exit with code %d\n", a, WEXITSTATUS(state));
- //  kill(pid, _SIG_USER);
- //
- //  state = 0;
- //  for(int i=0; i<5; ++i){
- //    pid = waitpid(-1, &state, 0);
- //    kprintf_error("task %d exit with code %d\n", pid, WEXITSTATUS(state));
- //  }
- //
  // // 
  // //    pid_t p = 0;
  // //

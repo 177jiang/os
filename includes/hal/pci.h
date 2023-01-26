@@ -5,17 +5,17 @@
 #include <datastructs/jlist.h>
 #include <hal/io.h>
 
-#define PCI_CONFIG_ADDR 0xcf8
-#define PCI_CONFIG_DATA 0xcfc
+#define PCI_CONFIG_ADDR             0xcf8
+#define PCI_CONFIG_DATA             0xcfc
 
-#define PCI_TDEV 0x0
-#define PCI_TPCIBRIDGE 0x1
-#define PCI_TCARDBRIDGE 0x2
+#define PCI_TDEV                    0x0
+#define PCI_TPCIBRIDGE              0x1
+#define PCI_TCARDBRIDGE             0x2
 
-#define PCI_VENDOR_INVLD 0xffff
+#define PCI_VENDOR_INVLD            0xffff
 
-#define PCI_REG_VENDOR_DEV 0
-#define PCI_REG_STATUS_CMD 0x4
+#define PCI_REG_VENDOR_DEV          0
+#define PCI_REG_STATUS_CMD          0x4
 #define PCI_REG_BAR(num)            (0x10 + (num - 1) * 4)
 
 #define PCI_DEV_VENDOR(x)           ((x)&0xffff)
@@ -61,6 +61,7 @@ struct pci_device {
 inline pci_reg_t pci_read_cspace(uint32_t base, int offset) {
 
     io_outl(PCI_CONFIG_ADDR, base | (offset & ~0x3));
+
     return io_inl(PCI_CONFIG_DATA);
 
 }

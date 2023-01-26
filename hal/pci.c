@@ -127,7 +127,7 @@ void pci_print_device() {
         }
 #endif
         if (pos->msi_loc) {
-            kprintf_live("\t MSI supported (@%xh)\n", pos->msi_loc);
+            kprintf_warn("\t MSI supported (@%xh)\n", pos->msi_loc);
         }
     }
 }

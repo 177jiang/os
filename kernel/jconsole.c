@@ -66,11 +66,17 @@ void console_view_up(){
 
 size_t __console_next_line(size_t pos){
 
+    if(pos == k_console.buffer.wpos){
+        return pos;
+    }
+
     while(pos != k_console.buffer.wpos &&
             ((char*)k_console.buffer.data)[pos] != '\n'){
-        ++pos;
+
+        pos = (pos + 1) % k_console.buffer.size;
+
     }
-    return ++pos;
+    return (pos + 1) % k_console.buffer.size;
 
 }
 

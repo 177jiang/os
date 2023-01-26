@@ -95,7 +95,6 @@ extern void __pg_mount_point;
 extern void __pd_mount_point;
 
 
-
 #define MEM_4MB             (MEM_1MB << 2)
 #define MNT_PG_BASE         ((uint32_t)sym_vaddr(__pg_mount_point))
 #define MNT_PD_BASE         ((uint32_t)sym_vaddr(__pd_mount_point))
@@ -118,10 +117,10 @@ extern void __pd_mount_point;
 #define PG_MID(vaddr) (PG_MID_MSk & vaddr)
 
 #define __CURRENT_PTE(vaddr) \
-  ((x86_page_t *)(PD_MOUNT_1 | (PG_HIG(vaddr)>>10)))->entry + ((PG_MID(vaddr)) >> 12)
+  ((x86_pte_t *)(PD_MOUNT_1 | (PG_HIG(vaddr)>>10))) + ((PG_MID(vaddr)) >> 12)
 
 #define __MOUNTED_PTE(mnt, vaddr) \
-  ((x86_page_t *)((mnt) | (PG_HIG(vaddr)>>10)))->entry + ((PG_MID(vaddr)) >> 12)
+  ((x86_pte_t *)((mnt) | (PG_HIG(vaddr)>>10))) + ((PG_MID(vaddr)) >> 12)
 
 #define __MOUNTED_PGDIR(mnt)  \
   ((x86_page_t*)( (mnt) | (1023 << 12) ))

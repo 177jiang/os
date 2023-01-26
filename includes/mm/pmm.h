@@ -43,7 +43,7 @@ int pmm_free_page(pid_t, void *pg);
 
 int pmm_ref_page(pid_t owner, void *page);
 
-struct p_page  *pmm_query(void *p_addr);
+struct p_page *pmm_query(uintptr_t p_addr);
 
 
 

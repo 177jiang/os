@@ -106,7 +106,7 @@ void task_init(struct task_struct *task);
 
 void setup_task_page_table(struct task_struct *task, uintptr_t mount);
 
-void setup_task_mem_region(struct mm_region *from, struct mm_region *to);
+void setup_task_mem_region(struct mm_region *from, struct mm_region *to, uintptr_t mount);
 
 void new_task();
 
