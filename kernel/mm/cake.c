@@ -15,6 +15,7 @@ struct list_header piles = {
 void *__cake_alloc(unsigned int pg_count){
 
     uintptr_t paddr = pmm_alloc_pages(KERNEL_PID, pg_count, 0);
+
     return vmm_vmap(paddr, pg_count * PG_SIZE, PG_PREM_RW);
 
 }
@@ -29,15 +30,12 @@ struct _cake * __cake_new(struct cake_pile *pile){
     cake->next_piece  =  0;
     cake->used_piece  =  0;
 
-    cpiece_index_t *pieces_free = &cake->free_pieces;
 
     for(size_t i=0; i<pile->piece_per_cake-1; ++i){
-
-        pieces_free[i] = i + 1;
-
+        cake->free_pieces[i] = i + 1;
     }
 
-    pieces_free[pile->piece_per_cake-1] = END_FREE_PIECE;
+    cake->free_pieces[pile->piece_per_cake-1] = END_FREE_PIECE;
 
     list_append(&pile->free, &cake->cakes);
 
@@ -85,12 +83,44 @@ void __cake_pile_init(
 }
 
 void cake_init(){
-
     __cake_pile_init(&master_pile, "pinkamina", sizeof(master_pile), 1, 0);
-
 }
 
+void* cake_piece_grub(struct cake_pile *pile){
 
+    if(!pile)return 0;
+
+    struct _cake *pos, *n;
+    list_for_each(pos, n, &pile->partial, cakes){
+        if(pos->next_piece != END_FREE_PIECE){
+            goto __found;
+        }
+    }
+
+    if(list_empty(&pile->free)){
+        pos = __cake_new(pile);
+    }else{
+        pos = list_entry(pile->free.next, typeof(*pos), cakes);
+    }
+
+__found:
+
+    cpiece_index_t found =  pos->next_piece;
+    pos->next_piece      =  pos->free_pieces[found];
+    ++pos->used_piece;
+    ++pile->piece_alloced;
+
+    list_delete(&pos->cakes);
+
+    if(pos->next_piece == END_FREE_PIECE){
+        list_append(&pile->full, &pos->cakes);
+    }else{
+        list_append(&pile->partial, &pos->cakes);
+    }
+
+    return (void*)(pos->first_piece + found * pile->piece_size);
+
+}
 
 struct cake_pile * cake_pile_create(
     char *name,
@@ -107,43 +137,6 @@ struct cake_pile * cake_pile_create(
 
 }
 
-void* cake_piece_grub(struct cake_pile *pile){
-
-    if(!pile)return 0;
-
-    struct _cake *pos, *n;
-
-    list_for_each(pos, n, &pile->partial, cakes){
-        if(pos->next_piece != END_FREE_PIECE){
-            goto __found;
-        }
-    }
-
-    if(list_empty(&pile->free)){
-        pos = __cake_new(pile);
-    }else{
-        pos = list_entry(&pile->free.next, typeof(*pos), cakes);
-    }
-
-__found:
-
-    cpiece_index_t found = pos->next_piece;
-    pos->next_piece = pos->free_pieces[found];
-    ++pos->used_piece;
-    ++pile->piece_alloced;
-
-    list_delete(&pos->cakes);
-
-    if(pos->next_piece == END_FREE_PIECE){
-        list_append(&pile->full, &pos->cakes);
-    }else{
-        list_append(&pile->partial, &pos->cakes);
-    }
-
-    return (void*)(pos->first_piece + found * pile->piece_size);
-
-}
-
 int cake_piece_release(struct cake_pile *pile, void *vaddr){
 
     struct list_header *hs[2] = {
@@ -153,7 +146,7 @@ int cake_piece_release(struct cake_pile *pile, void *vaddr){
 
     cpiece_index_t found = 0;
     struct _cake *pos, *n;
-    for(int i=0; i<2; ++i) {
+    for(size_t i=0; i<2; ++i) {
 
         list_for_each(pos, n, hs[i], cakes){
             if(pos->first_piece > vaddr){
@@ -193,6 +186,7 @@ void cake_stats(){
     kprintf_live("<name>   <cake>    <pg/c>   <p/c>   <alloced>\n");
 
     struct cake_pile *pos, *n;
+
     list_for_each(pos, n, &piles, piles) {
 
         kprintf_warn("%s %d %d %d %d\n",

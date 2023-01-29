@@ -3,7 +3,7 @@
 
 #include <datastructs/jlist.h>
 
-#define PNAME_MAX_LEN       32
+#define PNAME_MAX_LEN       16
 #define END_FREE_PIECE      (-1)
 #define PILE_CACHELINE      1
 #define CACHE_LINE_SIZE     128
@@ -36,7 +36,7 @@ struct _cake{
     unsigned int        next_piece;
     unsigned int        used_piece;
 
-    char                free_pieces[0];
+    cpiece_index_t      free_pieces[0];
 
 };
 

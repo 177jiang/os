@@ -18,6 +18,8 @@
 #include <spike.h>
 #include <jconsole.h>
 #include <mm/vmm.h>
+#include <mm/valloc.h>
+#include <mm/cake.h>
 #include <constant.h>
 #include <tty/tty.h>
 #include <timer.h>
@@ -25,7 +27,6 @@
 #include <proc.h>
 #include <junistd.h>
 #include <syscall.h>
-
 
 #include <stdint.h>
 #include <stddef.h>
@@ -88,10 +89,14 @@ void task_1_work(){
 extern multiboot_info_t* _init_mb_info; /* k_init.c */
 void _kernel_post_init(){
 
+  _lock_reserved_memory();
+
   /*set malloc heap*/
   assert_msg(kalloc_init() , "heap alloc failed !!\n");
 
-  _lock_reserved_memory();
+  cake_init();
+  valloc_init();
+
 
   acpi_init(_init_mb_info);
   uintptr_t ioapic_addr = acpi_get_context()->madt.ioapic->ioapic_addr;
@@ -117,6 +122,8 @@ void _kernel_post_init(){
 
   console_start_flushing();
 
+  cake_stats();
+
   _unlock_reserved_memory();
 
   /*release  hhk_init_code*/ /* save 1mb */
@@ -124,6 +131,7 @@ void _kernel_post_init(){
     vmm_unset_mapping(PD_REFERENCED, (void*)i);
     pmm_free_page(KERNEL_PID, i);
   }
+
 
 }
 

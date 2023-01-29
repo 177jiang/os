@@ -39,6 +39,7 @@ void valloc_init(){
       );
 
   }
+
   for(size_t i=0; i<MAX_CLASS; ++i){
 
     int size = 1 << (i + 7);
