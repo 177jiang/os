@@ -13,7 +13,6 @@ void madt_parse(acpi_madt_t* madt, acpi_context* toc) {
     toc->madt.irq_exception =
       (acpi_intso_t*)kcalloc(24 * sizeof(acpi_intso_t*));
 
-    size_t so_idx = 0;
     while (ics_start < ics_end) {
         acpi_ics_hdr_t* entry = (acpi_ics_hdr_t*)ics_start;
         switch (entry->type) {

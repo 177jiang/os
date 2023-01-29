@@ -33,5 +33,7 @@ void *vmm_mount_pg_dir(uintptr_t mount, void *pde);
 
 void vmm_unmount_pg_dir(uintptr_t mount);
 
+void * vmm_vmap(uintptr_t paddr, size_t n, page_attr attr);
+
 
 #endif

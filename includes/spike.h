@@ -35,6 +35,8 @@ void __assert_fail(const char* expr, const char* file, unsigned int line) __attr
 
 #define spin() while(1);
 
+void panick(const char * msg);
+
 
 #define wait_until(cond)   while(!(cond))
 #define loop_until(cond)   while(!(cond))

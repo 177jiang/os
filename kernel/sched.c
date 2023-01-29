@@ -219,11 +219,11 @@ pid_t destroy_task(pid_t pid){
 
     }
 
-    vmm_mount_pg_dir(PD_MOUNT_2, task->page_table);
+    vmm_mount_pg_dir(PD_MOUNT_1, task->page_table);
 
-    __del_page_table(pid, PD_MOUNT_2);
+    __del_page_table(pid, PD_MOUNT_1);
 
-    vmm_unmount_pg_dir(PD_MOUNT_2);
+    vmm_unmount_pg_dir(PD_MOUNT_1);
 
     return pid;
 }

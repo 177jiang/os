@@ -59,8 +59,4 @@ SECTIONS {
         build/obj/arch/x86/*.o (.kpg)
     }
     __kernel_end     = ALIGN(4K);
-    __pg_mount_point = ALIGN(4K);
-    . += 20K;
-    __pd_mount_point = ALIGN(4M);
-    . += 4M;
 }

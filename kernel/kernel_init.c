@@ -104,7 +104,7 @@ void task_1_init(){
 
   setup_task_page_table(init_task, PD_REFERENCED);
 
-  vmm_unmount_pg_dir(PD_MOUNT_2);
+  vmm_unmount_pg_dir(PD_MOUNT_1);
 
   cpu_lcr3(init_task->page_table);
 

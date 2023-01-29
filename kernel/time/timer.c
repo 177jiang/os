@@ -105,7 +105,7 @@ void timer_init(uint32_t frequency){
     kprintf_("Base frequency: %u Hz\n", timer_ctx->base_frequency);
 
     timer_ctx->running_frequency = frequency;
-    timer_ctx-> tick_interval= timer_ctx->base_frequency / frequency;
+    timer_ctx->tick_interval= timer_ctx->base_frequency / frequency;
 
     // cleanup
     intr_unsetvector(APIC_TIMER_IV, temp_intr_routine_apic_timer);
@@ -115,7 +115,7 @@ void timer_init(uint32_t frequency){
                    LVT_ENTRY_TIMER(APIC_TIMER_IV, LVT_TIMER_PERIODIC));
     intr_setvector(APIC_TIMER_IV,do_timer_interrupt);
 
-    apic_write_reg(APIC_TIMER_ICR, timer_ctx-> tick_interval);
+    apic_write_reg(APIC_TIMER_ICR, timer_ctx->tick_interval);
 
     sched_ticks = timer_ctx->running_frequency / 1000 * SCHED_TIME_SLICE;
     sched_ticks_counter = 0;
@@ -131,6 +131,7 @@ struct timer *timer_run_ms(uint32_t millisecond, void (*callback)(void*), void* 
 }
 
 struct timer *timer_run(uint32_t ticks, void (*callback)(void*), void* payload, uint8_t flags) {
+
     struct timer *timer = (struct timer*)kmalloc(sizeof(struct timer));
 
     if (!timer) return 0;

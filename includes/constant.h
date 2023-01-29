@@ -30,7 +30,6 @@
 #define TASK_TABLE_START        (K_HEAP_START + (K_HEAP_SIZE_MB * MEM_1MB))
 
 
-
 #define K_CODE_SEG              0x08
 #define K_DATA_SEG              0x10
 #define U_CODE_SEG              0x1B

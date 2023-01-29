@@ -12,16 +12,16 @@
 
 void init_task_user_space(struct task_struct *task){
 
-    vmm_mount_pg_dir(PD_MOUNT_2, task->page_table);
+    vmm_mount_pg_dir(PD_MOUNT_1, task->page_table);
 
     /* user stack */
     region_add(&task->mm.regions, U_STACK_END, U_STACK_TOP, (REGION_RW | REGION_RSHARED));
     /* user stack in page_table just set 0 , if used will alloc in page_fault*/
     for(uint32_t i=PG_ALIGN(U_STACK_END); i<=PG_ALIGN(U_STACK_TOP); i+=PG_SIZE){
-        vmm_set_mapping(PD_MOUNT_2, i, 0, (PG_ALLOW_USER | PG_WRITE), VMAP_NULL);
+        vmm_set_mapping(PD_MOUNT_1, i, 0, (PG_ALLOW_USER | PG_WRITE), VMAP_NULL);
     }
 
-    vmm_unmount_pg_dir(PD_MOUNT_2);
+    vmm_unmount_pg_dir(PD_MOUNT_1);
 
 }
 
@@ -108,11 +108,11 @@ void setup_task_page_table(struct task_struct *task, uintptr_t mount){
         return ;
     }
 
-    vmm_mount_pg_dir(PD_MOUNT_2, new_dir);
+    vmm_mount_pg_dir(PD_MOUNT_1, new_dir);
 
     for(uint32_t i=K_STACK_START; i <= K_STACK_TOP; i+=PG_SIZE){
 
-        volatile x86_pte_t *pte = __MOUNTED_PTE(PD_MOUNT_2, i);
+        volatile x86_pte_t *pte = __MOUNTED_PTE(PD_MOUNT_1, i);
 
         cpu_invplg(pte);
 
@@ -182,9 +182,9 @@ pid_t dup_proc(){
 
     setup_task_mem_region(&__current->mm.regions,
                           &new_task->mm.regions,
-                          PD_MOUNT_2);
+                          PD_MOUNT_1);
 
-    vmm_unmount_pg_dir(PD_MOUNT_2);
+    vmm_unmount_pg_dir(PD_MOUNT_1);
 
     new_task->regs.eax   = 0;
 

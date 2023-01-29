@@ -100,7 +100,7 @@ Pysical (void *) pmm_alloc_pages(pid_t owner, size_t n, p_page_attr attr){
 
   }
 
-  if(r == MAX_PAGE)return NULL;
+  if(r == MAX_PAGE && r - l < n)return NULL;
 
   pmm_mark_pages_occupied(owner, l, n, attr);
 

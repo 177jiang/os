@@ -94,14 +94,14 @@ typedef  struct {
 extern void __pg_mount_point;
 extern void __pd_mount_point;
 
+#define page_attr uint32_t
 
 #define MEM_4MB             (MEM_1MB << 2)
-#define MNT_PG_BASE         ((uint32_t)sym_vaddr(__pg_mount_point))
-#define MNT_PD_BASE         ((uint32_t)sym_vaddr(__pd_mount_point))
 
-#define PD_MOUNT_2      (MNT_PD_BASE)
-#define PD_MOUNT_1      (PD_MOUNT_2 + MEM_4MB)
+#define MNT_PD_BASE         ((uint32_t)(TASK_TABLE_START + TASK_TABLE_SIZE_MB * MEM_1MB))
+#define MNT_PG_BASE         ((uint32_t)(MNT_PD_BASE + MEM_4MB))
 
+#define PD_MOUNT_1      (MNT_PD_BASE)
 
 #define PG_MOUNT_1      (MNT_PG_BASE)
 #define PG_MOUNT_2      (MNT_PG_BASE + PG_SIZE)
@@ -115,6 +115,11 @@ extern void __pd_mount_point;
 
 #define PG_MID_MSk    0x003FF000
 #define PG_MID(vaddr) (PG_MID_MSk & vaddr)
+
+#define VMAP_START  (MNT_PG_BASE + MEM_4MB)
+#define VMAP_END    (PD_REFERENCED)
+
+
 
 #define __CURRENT_PTE(vaddr) \
   ((x86_pte_t *)(PD_MOUNT_1 | (PG_HIG(vaddr)>>10))) + ((PG_MID(vaddr)) >> 12)

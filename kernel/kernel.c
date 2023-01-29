@@ -111,7 +111,7 @@ int __USER_SPACE__ _kernel_main() {
   _console_main();
 
  // // 
- // //    pid_t p = 0;
+ // //    pid_t p =  0;
  // //
  // //    if (!fork()) {
  // //        printf_live("Test no hang!\n");

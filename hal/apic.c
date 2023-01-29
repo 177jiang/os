@@ -30,7 +30,7 @@ void apic_init() {
     assert_msg(cpu_has_apic(), "No APIC detected!");
 
     // As we are going to use APIC, disable the old 8259 PIC
-    pic_disable();
+    pic_disable();  // 8259
 
     // Hardware enable the APIC
     // By setting bit 11 of IA32_APIC_BASE register
