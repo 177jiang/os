@@ -118,6 +118,8 @@ void _kernel_post_init(){
   pci_init();
   pci_print_device();
 
+  ahci_init();
+
   syscall_init();
 
   console_start_flushing();

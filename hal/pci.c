@@ -147,6 +147,7 @@ size_t pci_bar_sizing(struct pci_device* dev, uint32_t* bar_out, uint32_t bar_nu
         sized = PCI_BAR_ADDR_MM(sized);
     }
     *bar_out = bar;
+    pci_write_cspace(dev->cspace_base, PCI_REG_BAR(bar_num), bar);
     return ~sized + 1;
 }
 

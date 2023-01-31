@@ -1,7 +1,7 @@
 QEMU_MON_TERM := gnome-terminal
 QEMU_MON_PORT := 45454
 
-QEMU_OPTIONS := -s -S -m 1G \
+QEMU_OPTIONS := -s -m 1G \
 				-rtc base=utc \
 				-no-reboot \
 				-no-shutdown \
