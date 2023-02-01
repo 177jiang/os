@@ -32,6 +32,8 @@
 
 // Keyboard
 #define PC_KBD_IV                       201
+// ahci
+#define AHCI_HBA_IV                     202
 
 #define RTC_TIMER_IV                    210
 
@@ -121,6 +123,7 @@ void _asm_isr32();
 void _asm_isr33();
 
 void _asm_isr201();
+void _asm_isr202();
 
 void _asm_isr210();
 

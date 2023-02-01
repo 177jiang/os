@@ -153,6 +153,26 @@ void vmm_unmount_pg_dir(uint32_t mount){
 
 }
 
+void *vmm_v2p(void *va){
+
+  uint32_t d_index = PD_INDEX(va);
+  uint32_t t_index = PT_INDEX(va);
+
+  x86_page_t *page_dir =  PD_BASE_VADDR;
+  x86_pte_t  pde       =  page_dir->entry[d_index];
+
+  if(pde){
+      x86_page_t *page_table =  PT_VADDR(d_index);
+      x86_pte_t  *pte        =  page_table->entry + t_index;
+      if(pte){
+        return PG_ENTRY_ADDR(*pte) | ((uintptr_t)va & 0xFFF);
+      }
+
+  }
+
+  return 0;
+}
+
 
 
 

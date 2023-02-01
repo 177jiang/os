@@ -8,6 +8,7 @@
 #include <hal/apic.h>
 #include <hal/ioapic.h>
 #include <hal/acpi/acpi.h>
+#include <hal/ahci/ahci.h>
 #include <hal/pci.h>
 
 #include <libc/stdio.h>

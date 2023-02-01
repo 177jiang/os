@@ -32,6 +32,9 @@ void _init_idt(){
   /* keyboard */
   _set_idt_entry(PC_KBD_IV, 0x08, _asm_isr201, 0, INT);
 
+  /* ahci */
+   _set_idt_entry(AHCI_HBA_IV, 0x08, _asm_isr202, 0, INT);
+
   _set_idt_entry(JYOS_SYS_PANIC, 0x08, _asm_isr32, 0, INT);
 
   /*system call */

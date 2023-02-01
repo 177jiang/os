@@ -34,36 +34,39 @@
   isr_template      JYOS_SYS_CALL
 
   isr_template      APIC_ERROR_IV
-  isr_template      APIC_LINT0_IV                                /* ... */  /*old_esp*/
-  isr_template      APIC_TIMER_IV                                /* eflag */
-  isr_template      APIC_SPIV_IV                                 /* cs */
-  isr_template      RTC_TIMER_IV                                 /* eip */
-  isr_template      PC_KBD_IV                                    /* err_code */
-                                                                 /* vector */
-  _interrupt_wrapper:                                            /* esp */
+  isr_template      APIC_LINT0_IV                                
+  isr_template      APIC_TIMER_IV                                
+  isr_template      APIC_SPIV_IV                                 
 
-    pushl %esp                                                   /* ebx */
-                                                                 /* ecx */
-    pushl %eax                                                   /* edx */
-    pushl %ebx                                                   /* edi */
-    pushl %ecx                                                   /* esi */
-    pushl %edx                                                   /* ebp */
-    pushl %edi                                                   /* ds */
-    pushl %esi                                                   /* es */
-    pushl %ebp                                                   /* fs         :esp_old */
-    push  %ds                                                    /*  . */
-    push  %es                                                    /*  . */
-    push  %fs                                                    /*  . */
-    push  %gs                                                    /* esp_pld    :esp_new */
-                                                                 /* eax */                                   
-__check_ring:
-    cld
-    movl REGS_CS(%esp), %eax
-    andl $0x3,          %eax
+  isr_template      RTC_TIMER_IV                                 
+  isr_template      PC_KBD_IV                                    
+  isr_template      AHCI_HBA_IV
 
-    jz   __after_change_seg
-
-    movl $K_DATA_SEG, %eax
+                                                                 
+  _interrupt_wrapper:                                            /* ... */  /*old_esp*/
+                                                                 /* eflag */
+    pushl %esp                                                   /* cs */
+                                                                                           
+    pushl %eax                                                   /* eip */
+    pushl %ebx                                                   /* err_code */
+    pushl %ecx                                                                             
+    pushl %edx                                                   /* vector */
+    pushl %edi                                                   /* esp */
+    pushl %esi                                                                             
+    pushl %ebp                                                   /* ebx */
+    push  %ds                                                    /* ecx */
+    push  %es                                                    /* edx */
+    push  %fs                                                    /* edi */
+    push  %gs                                                    /* esi */
+                                                                 /* ebp */                                   
+__check_ring:                                                    /* ds */
+    cld                                                          /* es */
+    movl REGS_CS(%esp), %eax                                     /* fs         :esp_old */
+    andl $0x3,          %eax                                     /*  . */
+                                                                 /*  . */
+    jz   __after_change_seg                                      /*  . */
+                                                                 /* esp_pld    :esp_new */
+    movl $K_DATA_SEG, %eax                                       /* eax */                 
     movw %ax, %ds
     movw %ax, %es
     movw %ax, %fs
