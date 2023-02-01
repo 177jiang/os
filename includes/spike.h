@@ -7,6 +7,8 @@
 // 除法向上取整
 #define CEIL(v, k)          (((v) + (1 << (k)) - 1) >> (k))
 
+#define ICEIL(v, k)        ( ((v) / (k)) + !!((v) % (k)) )
+
 // 除法向下取整
 #define FLOOR(v, k)         ((v) >> (k))
 
@@ -32,6 +34,14 @@ inline static void spin() {
     }
 void __assert_fail(const char* expr, const char* file, unsigned int line) __attribute__((noinline, noreturn));
 
+
+#define wait_until_expire(cond, max)                                           \
+    ({                                                                         \
+        unsigned int __wcounter__ = (max);                                     \
+        while (!(cond) && __wcounter__-- > 1)                                  \
+            ;                                                                  \
+        __wcounter__;                                                          \
+    })
 
 #define spin() while(1);
 

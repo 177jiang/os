@@ -42,8 +42,21 @@ scsi_create_packet12(struct scsi_cdb12* cdb,
 void
 scsi_create_packet16(struct scsi_cdb16* cdb,
                      uint8_t opcode,
-                     uint32_t lba_hi,
-                     uint32_t lba_lo,
+                     uint64_t lba,
                      uint32_t alloc_size);
+
+int scsi_read_buffer(
+    struct hba_device *dev,
+    uint64_t lba,
+    void *buffer,
+    uint32_t size
+);
+
+int scsi_write_buffer(
+    struct hba_device *dev,
+    uint64_t lba,
+    void *buffer,
+    uint32_t size
+);
 
 #endif

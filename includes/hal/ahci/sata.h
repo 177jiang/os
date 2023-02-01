@@ -8,8 +8,14 @@
 #define SATA_REG_FIS_D2H                0x34
 #define SATA_REG_FIS_H2D                0x27
 #define SATA_REG_FIS_COMMAND            0x80
-#define SATA_LBA_COMPONENT(lba, offset) ((((lba_lo) >> (offset)) & 0xff))
+#define SATA_LBA_COMPONENT(lba, offset) ((((lba) >> (offset)) & 0xff))
 
+#define ATA_READ_DMA_EXT        0x25
+#define ATA_READ_DMA            0xC8
+#define ATA_WRITE_DMA_EXT       0x35
+#define ATA_WRITE_DMA           0xCA
+
+#define MAX_RETRY       2
 
 struct sata_fis_head{
 
@@ -47,10 +53,23 @@ struct sata_data_fis{
 void sata_create_fis(
     struct sata_reg_fis *fis,
     uint8_t   command,
-    uint32_t  lba_lo,
-    uint32_t  lba_hi,
+    uint64_t  lba,
     uint16_t  sector_count
 );
 
+int sata_read_buffer(
+    struct hba_device* dev,
+    uint64_t lba,
+    void  *buffer,
+    uint32_t size
+);
+
+
+int sata_write_buffer(
+    struct hba_device *dev,
+    uint64_t lba,
+    void *buffer,
+    uint32_t size
+);
 
 #endif

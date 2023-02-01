@@ -10,6 +10,7 @@
 #include <mm/pmm.h>
 #include <mm/kalloc.h>
 
+#include <stdint.h>
 #include <spike.h>
 #include <libc/stdio.h>
 
@@ -27,6 +28,19 @@ void ahci_print_device();
 
 void __do_ahci_hba_intr(){
     kprintf_error("-----------------------------------------AHCI INT\n");
+}
+
+__hba_reset_port(hba_reg_t *port_base){
+
+    port_base[HBA_PxCMD] &= ~HBA_PxCMD_ST;
+    port_base[HBA_PxCMD] &= ~HBA_PxCMD_FRE;
+    int cnt = wait_until_expire(!(port_base[HBA_PxCMD] & HBA_PxCMD_CR), 500000);
+
+    if (cnt) return;
+    // 如果port未响应，则继续执行重置
+    port_base[HBA_PxSCTL] = (port_base[HBA_PxSCTL] & ~0xf) | 1;
+    io_delay(100000); //等待至少一毫秒，差不多就行了
+    port_base[HBA_PxSCTL] &= ~0xf;
 }
 
 void ahci_init(){
@@ -54,19 +68,20 @@ void ahci_init(){
     _ahci_hba.base = ioremap(PCI_BAR_ADDR_MM(bar6), size);
 
     //reset
-    _ahci_hba.base[HBA_GHC] |= HBA_GHC_RESET;
-    wait_until(!(_ahci_hba.base[HBA_GHC] & HBA_GHC_RESET));
+    // _ahci_hba.base[HBA_GHC] |= HBA_GHC_RESET;
+    // wait_until(!(_ahci_hba.base[HBA_GHC] & HBA_GHC_RESET));
 
     //enable
     _ahci_hba.base[HBA_GHC] |= (HBA_GHC_ACHI_EN | HBA_GHC_INTR_EN);
 
     hba_reg_t cap       =  _ahci_hba.base[HBA_CAP];
+    hba_reg_t port_map  =  _ahci_hba.base[HBA_PI];
     _ahci_hba.port_nums =  HBA_CAP_NP(cap) + 1;
     _ahci_hba.cmd_slots =  HBA_CAP_NCS(cap);
     _ahci_hba.version   =  _ahci_hba.base[HBA_VERSION];
+    _ahci_hba.port_map  = port_map;
 
     // set per port
-    hba_reg_t port_map  =  _ahci_hba.base[HBA_PI];
     uintptr_t clb_vaddr =  0, fis_vaddr =  0;
     uintptr_t clb_paddr =  0, fis_paddr =  0;
 
@@ -77,6 +92,8 @@ void ahci_init(){
               valloc(sizeof(struct hba_port));
             hba_reg_t *port_addr   =
               (_ahci_hba.base + HBA_PORT_BASE + i * HBA_PORT_SIZE);
+
+            __hba_reset_port(port_addr);
 
             if(!cn){
                 clb_paddr = pmm_alloc_page(KERNEL_PID,  PPG_LOCKED);
@@ -100,7 +117,9 @@ void ahci_init(){
 
             port_addr[HBA_PxCI]   = 0;
             port_addr[HBA_PxIE]   = -1;
-            port_addr[HBA_PxIE]  |= (HBA_PxIE_DMA | HBA_PxIE_D2HR);
+            port_addr[HBA_PxIE]  |= (HBA_PxIE_D2HR);
+
+            _ahci_hba.ports[i] = port;
 
             if(HBA_PxSSTS_SPD(port->ssts)){
 
@@ -112,8 +131,6 @@ void ahci_init(){
                 }
 
             }
-
-            _ahci_hba.ports[i] = port;
         }
 
 
@@ -146,9 +163,12 @@ void ahci_print_device(){
           continue;
       }
 
-      kprintf_warn("  capacity: %d KiB\n",
+      kprintf_warn("     capacity: %d KiB\n",
               (dev->max_lba * dev->block_size) >> 10);
-      kprintf_warn("     sector size: %dB\n", dev->block_size);
+      kprintf_warn("     block size: %dB\n", dev->block_size);
+      kprintf_warn("     block/sector: %d\n", dev->block_per_sec);
+      kprintf_warn("     alignment: %dB\n", dev->alignment_offset);
+      kprintf_warn("     capabilities: %x\n", dev->capabilities);
       kprintf_warn("     model: %s\n", &dev->model);
       kprintf_warn("     serial: %s\n", &dev->serial_num);
 
@@ -170,12 +190,10 @@ int __get_free_slot(struct hba_port *port){
     return i | -(i > _ahci_hba.cmd_slots) ;
 }
 
-void
-sata_create_fis(
+void sata_create_fis(
         struct sata_reg_fis *fis,
         uint8_t   command,
-        uint32_t  lba_lo,
-        uint32_t  lba_hi,
+        uint64_t  lba,
         uint16_t  sector_count){
 
     fis->head.type          =  SATA_REG_FIS_H2D;
@@ -184,37 +202,44 @@ sata_create_fis(
 
     fis->dev   =  0;
 
-    fis->lba0  = SATA_LBA_COMPONENT(lba_lo, 0);
-    fis->lba8  = SATA_LBA_COMPONENT(lba_lo, 8);
-    fis->lba16 = SATA_LBA_COMPONENT(lba_lo, 16);
-    fis->lba24 = SATA_LBA_COMPONENT(lba_lo, 24);
+    fis->lba0  = SATA_LBA_COMPONENT(lba, 0);
+    fis->lba8  = SATA_LBA_COMPONENT(lba, 8);
+    fis->lba16 = SATA_LBA_COMPONENT(lba, 16);
+    fis->lba24 = SATA_LBA_COMPONENT(lba, 24);
 
-    fis->lba32 = SATA_LBA_COMPONENT(lba_hi, 0);
-    fis->lba40 = SATA_LBA_COMPONENT(lba_hi, 8);
+    fis->lba32 = SATA_LBA_COMPONENT(lba, 32);
+    fis->lba40 = SATA_LBA_COMPONENT(lba, 40);
 
     fis->count = sector_count;
 }
 
-int hba_alloc_slot(
+int hba_prepare_cmd(
         struct hba_port *port,
         struct hba_cmd_table **cmdt,
         struct hba_cmd_header **cmdh,
-        uint16_t options){
+        void *buffer,
+        uint32_t size){
 
+    assert_msg(size <= 0x400000, "HBA: buffer too big\n");
     int slot = __get_free_slot(port);
-
-    assert_msg(slot >= 0, "HBA : No cmd slot");
+    assert_msg(slot >= 0, "HBA : no cmd slot\n");
 
 
     struct hba_cmd_header *ch = port->cmdlstv + slot;
     struct hba_cmd_table  *ct = valloc_dma(sizeof(struct hba_cmd_table));
-
     memset(ch, 0, sizeof(*ch));
     memset(ct, 0, sizeof(*ct));
 
-    ch->prdt_len       =  1;
     ch->cmd_table_base =  vmm_v2p(ct);
-    ch->prdt_len       =  HBA_CMDH_CLR_BUSY | (options & ~0x1F);
+    ch->options        = 
+      HBA_CMDH_FIS_LEN(sizeof(struct sata_reg_fis)) | HBA_CMDH_CLR_BUSY;
+    if(buffer){
+        ch->prdt_len   =  1;
+        ct->entries[0] = (struct hba_prdte){
+            .data_base  = vmm_v2p(buffer),
+            .byte_count = size - 1
+        };
+    }
 
     *cmdt = ct, *cmdh = ch;
 
@@ -227,57 +252,99 @@ int ahci_init_device(struct hba_port *port){
     struct hba_cmd_header *cmdh;
     struct hba_cmd_table  *cmdt;
 
-    int slot = hba_alloc_slot(port, &cmdt, &cmdh, 0);
-
-    port->base[HBA_PxIS]    = 0;
-    port->device            =  valloc(sizeof(struct hba_device));
-    port->device->signature =  port->base[HBA_PxSIG];
+    wait_until(!(port->base[HBA_PxTFD] & (HBA_TFD_BSY)));
 
     uint16_t *data = valloc_dma(512);
 
-    cmdt->entries[0] = (struct hba_prdte){
-        .data_base  = vmm_v2p(data),
-        .byte_count = 511
-    };
-    cmdh->prdt_len = 1;
+    int slot = hba_prepare_cmd(port, &cmdt, &cmdh, data, 512);
+
+    port->base[HBA_PxIS] = 0;
+    port->device         =  valloc(sizeof(struct hba_device));
+    memset(port->device, 0, sizeof(struct hba_device));
+
+    port->device->port   =  port;
 
     //fis
     struct sata_reg_fis *cfis = cmdt->CFIS;
 
-    if(port->device->signature == HBA_DEV_SIG_ATA){
+    if(port->base[HBA_PxSIG] == HBA_DEV_SIG_ATA){
 
-        sata_create_fis(cfis, ATA_IDENTIFY_DEVICE, 0, 0, 0);
+        sata_create_fis(cfis, ATA_IDENTIFY_DEVICE, 0, 0);
     }else{
-
-        sata_create_fis(cfis, ATA_IDENTIFY_PAKCET_DEVICE, 0, 0, 0);
+        port->device->signature |= HBA_DEV_FATAPI;
+        sata_create_fis(cfis, ATA_IDENTIFY_PAKCET_DEVICE, 0, 0);
     }
 
     port->base[HBA_PxCI] = (1 << slot);
     wait_until(!(port->base[HBA_PxCI] & (1 << slot)));
 
+    if((port->base[HBA_PxTFD] & HBA_TFD_ERR)){
+        goto fail;
+    }
+
     ahci_parse_dev_info(port->device, data);
 
-    if(port->device->signature != HBA_DEV_SIG_ATA){
+    if(port->device->signature & HBA_DEV_FATAPI){
 
-        sata_create_fis(cfis, ATA_PACKET, 512 << 8, 0, 0);
+        sata_create_fis(cfis, ATA_PACKET, 512 << 8, 0);
         struct scsi_cdb16 *cdb16 = cmdt->ACMD;
-        scsi_create_packet16(cdb16, SCSI_READ_BLOCKS_16, 0, 0, 512);
+        scsi_create_packet16(cdb16, SCSI_READ_BLOCKS_16, 0, 512);
         cdb16->misc1 = 0x10;
         cmdh->transferred_byte_size = 0;
-        cmdh->options = HBA_CMDH_ATAPI;
+        cmdh->options |= HBA_CMDH_ATAPI;
 
         port->base[HBA_PxCI] = (1 << slot);
         wait_until(!(port->base[HBA_PxCI] & (1 << slot)));
+
+        if((port->base[HBA_PxTFD] & HBA_TFD_ERR)){
+            goto fail;
+        }
 
         scsi_parse_capacity(port->device, data);
     }
 
 
+    ahci_register_ops(port);
     vfree_dma(data);
     vfree_dma(cmdt);
     return 1;
 
+fail:
+    vfree_dma(data);
+    vfree_dma(cmdt);
+    return 0;
 }
+int ahci_identify_device(struct hba_port *port){
+    vfree(port->device);
+    return ahci_init_device(port);
+}
+
+void ahci_register_ops(struct hba_port *port){
+
+    port->device->ops.identify = ahci_identify_device;
+
+    if(!(port->device->signature & HBA_DEV_FATAPI)){
+
+        port->device->ops.read_buffer  = sata_read_buffer;
+        port->device->ops.write_buffer = sata_write_buffer;
+
+    }else{
+
+        port->device->ops.read_buffer  = scsi_read_buffer;
+        port->device->ops.write_buffer = scsi_write_buffer;
+    }
+
+}
+
+struct hba_port * ahci_get_port(unsigned int i){
+
+    if(i >= 32)return NULL;
+
+    return _ahci_hba.ports[i];
+
+}
+
+
 
 
 

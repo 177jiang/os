@@ -15,5 +15,7 @@ void ahci_init();
 
 void ahci_print_device();
 
+struct hba_port * ahci_get_port(unsigned int i);
+
 
 #endif

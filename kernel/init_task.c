@@ -121,6 +121,8 @@ void _kernel_post_init(){
 
   ahci_init();
 
+  __test_disk_io();
+
   syscall_init();
 
   console_start_flushing();

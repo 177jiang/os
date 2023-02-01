@@ -865,14 +865,15 @@ int sprintf_(char* buffer, const char* format, ...) {
 }
 
 
-// int snprintf_(char* buffer, size_t count, const char* format, ...)
-// {
-//   va_list va;
-//   va_start(va, format);
-//   const int ret = _vsnprintf(_out_buffer, buffer, count, format, va);
-//   va_end(va);
-//   return ret;
-// }
+int snprintf_(char* buffer, size_t count, const char* format, ...)
+{
+  va_list va;
+  va_start(va, format);
+  const int ret = _vsnprintf(_out_buffer, buffer, count, format, va);
+  va_end(va);
+  return ret;
+}
+
 //
 //
 // int vprintf_(const char* format, va_list va)

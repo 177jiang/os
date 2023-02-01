@@ -46,6 +46,9 @@
 #define HBA_GHC_INTR_EN     (1 << 1)
 #define HBA_GHC_RESET       (1)
 
+#define HBA_TFD_ERR (1)
+#define HBA_TFD_BSY (1 << 7)
+#define HBA_TFD_DRQ (1 << 3)
 
 #define HBA_PxSSTS_IPM(x)        (((x) >> 8) & (0xF))
 #define HBA_PxSSTS_SPD(x)        (((x) >> 4) & (0xF))
@@ -67,6 +70,8 @@
 
 #define __HBA_PACKED__ __attribute__((packed))
 
+#define HBA_DEV_FEXTLBA     1
+#define HBA_DEV_FATAPI      (1 << 1)
 
 typedef unsigned int  hba_reg_t;
 
@@ -99,25 +104,50 @@ struct hba_cmd_table{
 
 struct hba_device{
 
-    char          serial_num[20];
-    char          model[40];
-    uint32_t      signature;
-    uint32_t      max_lba;
-    uint32_t      block_size;
-    uint8_t       wwn[8];
-    uint8_t       cbd_size;
+    char                serial_num[20];
+    char                model[40];
+    uint32_t            signature;
+    uint64_t            max_lba;
+    uint32_t            block_size;
+    uint64_t            wwn;
+    uint8_t             cbd_size;
+    uint8_t             last_error;
+    uint8_t             last_status;
+    uint32_t            alignment_offset;
+    uint32_t            block_per_sec;
+    uint32_t            capabilities;
+    struct hba_port *port;
+
+    struct {
+        int (*identify)(struct hba_device *dev);
+
+        int (*read_buffer)(
+                struct hba_device *dev,
+                uint64_t lba,
+                void *buffer,
+                uint32_t size
+            );
+
+        int (*write_buffer)(
+                struct hba_device *dev,
+                uint64_t lba,
+                void *buffer,
+                uint32_t size
+            );
+    }ops;
+
 
 };
 
 struct hba_port{
 
-  hba_reg_t     *base;
-  unsigned int  ssts;
+  volatile hba_reg_t    *base;
+  unsigned int          ssts;
 
-  char          *cmdlstv;
-  char          *fisv;
+  char                  *cmdlstv;
+  char                  *fisv;
 
-  struct hba_device *device;
+  struct hba_device     *device;
 
 };
 
@@ -125,10 +155,19 @@ struct ahci_hba{
 
     volatile hba_reg_t  *base;
     unsigned int        port_nums;
+    unsigned int        port_map;
     unsigned int        cmd_slots;
     unsigned int        version;
 
     struct hba_port *ports[32];
 };
+
+int hba_prepare_cmd(
+        struct hba_port *port,
+        struct hba_cmd_table **cmdt,
+        struct hba_cmd_header **cmdh,
+        void *buffer,
+        uint32_t size);
+
 #endif
 
