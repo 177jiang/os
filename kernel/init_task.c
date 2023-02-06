@@ -29,8 +29,12 @@
 #include <junistd.h>
 #include <syscall.h>
 
+#include <fs/fs.h>
+
 #include <stdint.h>
 #include <stddef.h>
+
+
 
 extern uint8_t __init_hhk_end;
 extern int _kernel_main();

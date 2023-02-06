@@ -73,4 +73,33 @@ static inline int list_empty(struct list_header *head){
 	     &pos->member != (head); 					            \
 	     pos = n, n = list_entry(n->member.next, typeof(*n), member))
 
+
+struct hash_list_node{
+
+    struct hash_list_node *next;
+    struct hash_list_node **pprev;
+    //pprev : addr of prev's next(addr)
+};
+
+static inline void hash_list_del(struct hash_list_node *node){
+
+    *node->pprev =  node->next;
+    node->next   =  0;
+    node->pprev  =  0;
+}
+
+static inline void hash_list_add(struct hash_list_node **head,
+                                 struct hash_list_node  *node){
+    node->next = *head;
+    if(*head){
+        (*head)->pprev = &node->next;
+    }
+    // node->pprev =  &(*head)->next = head;
+    node->pprev =  head;
+    *head       =  node;
+}
+
+
+
+
 #endif

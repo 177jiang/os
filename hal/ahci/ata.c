@@ -16,11 +16,11 @@ int __sata_buffer_io(
 
     assert_msg(((uintptr_t)buffer & 0x3) == 0, "HBA: Bad buffer alignment");
 
-    struct hba_cmd_header* header;
-    struct hba_cmd_table* table;
+    struct hba_cmd_header *cmdh;
+    struct hba_cmd_table  *cmdt;
 
     struct hba_port *port = dev->port;
-    int slot = hba_prepare_cmd(port, &table, &header, buffer, size);
+    int slot = hba_prepare_cmd(port, &cmdt, &cmdh, buffer, size);
 
     int bitmask = 1 << slot;
 
@@ -30,10 +30,10 @@ int __sata_buffer_io(
 
     port->base[HBA_PxIS] = 0;
 
-    header->options |= HBA_CMDH_WRITE * (write == 1);
+    cmdh->options |= HBA_CMDH_WRITE * !!(write);
 
     uint16_t count = ICEIL(size, port->device->block_size);
-    struct sata_reg_fis* fis = table->CFIS;
+    struct sata_reg_fis* fis = cmdt->CFIS;
 
     if ((port->device->signature & HBA_DEV_FEXTLBA)) {
         // 如果该设备支持48位LBA寻址
@@ -42,15 +42,7 @@ int __sata_buffer_io(
     } else {
         sata_create_fis(fis, write ? ATA_WRITE_DMA : ATA_READ_DMA, lba, count);
     }
-    /*
-          确保我们使用的是LBA寻址模式
-          注意：在ACS-3中（甚至在ACS-4），只有在(READ/WRITE)_DMA_EXT指令中明确注明了需要将这一位置位
-        而并没有在(READ/WRITE)_DMA注明。
-          但是这在ACS-2中是有的！于是这也就导致了先前的测试中，LBA=0根本无法访问，因为此时
-        的访问模式是在CHS下，也就是说LBA=0 => Sector=0，是非法的。
-          所以，我猜测，这要么是QEMU/VirtualBox根据ACS-2来编写的AHCI模拟，
-        要么是标准出错了（毕竟是working draft）
-    */
+
     fis->dev = (1 << 6);
 
     int retries = 0;
@@ -65,13 +57,13 @@ int __sata_buffer_io(
             sata_read_error(port);
             retries++;
         } else {
-            vfree_dma(table);
+            vfree_dma(cmdt);
             return 1;
         }
     }
 
 fail:
-    vfree_dma(table);
+    vfree_dma(cmdt);
     return 0;
 }
 

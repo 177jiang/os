@@ -116,7 +116,7 @@ struct hba_device{
     uint32_t            alignment_offset;
     uint32_t            block_per_sec;
     uint32_t            capabilities;
-    struct hba_port *port;
+    struct hba_port     *port;
 
     struct {
         int (*identify)(struct hba_device *dev);

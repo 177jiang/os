@@ -1,0 +1,1824 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/jy/Code/os/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20220828.0/
+$(BIN_DIR)	makefile	/^$(BIN_DIR):$/;"	t
+$(BIN_DIR)/$(OS_BIN)	makefile	/^$(BIN_DIR)\/$(OS_BIN): $(OBJECT_DIR) $(BIN_DIR) $(SRC)$/;"	t
+$(BUILD_DIR)/$(OS_ISO)	makefile	/^$(BUILD_DIR)\/$(OS_ISO): $(ISO_DIR) $(BIN_DIR)\/$(OS_BIN) GRUB_TEMPLATE$/;"	t
+$(ISO_DIR)	makefile	/^$(ISO_DIR):$/;"	t
+$(OBJECT_DIR)	makefile	/^$(OBJECT_DIR):$/;"	t
+$(OBJECT_DIR)/%.S.o	makefile	/^$(OBJECT_DIR)\/%.S.o: %.S$/;"	t
+$(OBJECT_DIR)/%.c.o	makefile	/^$(OBJECT_DIR)\/%.c.o: %.c $/;"	t
+ABORT_DOUBLE_FAULT	includes/arch/x86/interrupts.h	/^#define ABORT_DOUBLE_FAULT /;"	d
+ABORT_MACHINE_CHECK	includes/arch/x86/interrupts.h	/^#define ABORT_MACHINE_CHECK /;"	d
+ACMD	includes/hal/ahci/hba.h	/^    uint8_t ACMD[0x10];$/;"	m	struct:hba_cmd_table	typeref:typename:uint8_t[0x10]
+ACPI_FADT_SIG	includes/hal/acpi/acpi.h	/^#define ACPI_FADT_SIG /;"	d
+ACPI_MADT_INTSO	includes/hal/acpi/madt.h	/^#define ACPI_MADT_INTSO /;"	d
+ACPI_MADT_IOAPIC	includes/hal/acpi/madt.h	/^#define ACPI_MADT_IOAPIC /;"	d
+ACPI_MADT_LAPIC	includes/hal/acpi/madt.h	/^#define ACPI_MADT_LAPIC /;"	d
+ACPI_MADT_SIG	includes/hal/acpi/acpi.h	/^#define ACPI_MADT_SIG /;"	d
+ACPI_RSDP_SIG_H	includes/hal/acpi/acpi.h	/^#define ACPI_RSDP_SIG_H /;"	d
+ACPI_RSDP_SIG_L	includes/hal/acpi/acpi.h	/^#define ACPI_RSDP_SIG_L /;"	d
+ACPI_TABLE_PACKED	includes/hal/acpi/mcfg.h	/^} ACPI_TABLE_PACKED;$/;"	v	typeref:struct:acpi_mcfg_alloc
+ACPI_TABLE_PACKED	includes/hal/acpi/sdt.h	/^#define ACPI_TABLE_PACKED /;"	d
+AHCI_BAR_IN_PCI	hal/ahci/ahci.c	/^#define AHCI_BAR_IN_PCI /;"	d	file:
+AHCI_HBA_CLASS	includes/hal/ahci/ahci.h	/^#define AHCI_HBA_CLASS /;"	d
+AHCI_HBA_IV	includes/arch/x86/interrupts.h	/^#define AHCI_HBA_IV /;"	d
+APIC_APR	includes/hal/apic.h	/^#define APIC_APR /;"	d
+APIC_BASE_VADDR	includes/constant.h	/^#define APIC_BASE_VADDR /;"	d
+APIC_CALIBRATION_CONST	kernel/time/timer.c	/^#define APIC_CALIBRATION_CONST /;"	d	file:
+APIC_DFR	includes/hal/apic.h	/^#define APIC_DFR /;"	d
+APIC_EOI	includes/hal/apic.h	/^#define APIC_EOI /;"	d
+APIC_ERROR_IV	includes/arch/x86/interrupts.h	/^#define APIC_ERROR_IV /;"	d
+APIC_ESR	includes/hal/apic.h	/^#define APIC_ESR /;"	d
+APIC_ICR_BASE	includes/hal/apic.h	/^#define APIC_ICR_BASE /;"	d
+APIC_IDR	includes/hal/apic.h	/^#define APIC_IDR /;"	d
+APIC_IRR_BASE	includes/hal/apic.h	/^#define APIC_IRR_BASE /;"	d
+APIC_ISR_BASE	includes/hal/apic.h	/^#define APIC_ISR_BASE /;"	d
+APIC_LDR	includes/hal/apic.h	/^#define APIC_LDR /;"	d
+APIC_LINT0_IV	includes/arch/x86/interrupts.h	/^#define APIC_LINT0_IV /;"	d
+APIC_LVT_ERROR	includes/hal/apic.h	/^#define APIC_LVT_ERROR /;"	d
+APIC_LVT_LINT0	includes/hal/apic.h	/^#define APIC_LVT_LINT0 /;"	d
+APIC_LVT_LINT1	includes/hal/apic.h	/^#define APIC_LVT_LINT1 /;"	d
+APIC_PPR	includes/hal/apic.h	/^#define APIC_PPR /;"	d
+APIC_PRIORITY	includes/hal/apic.h	/^#define APIC_PRIORITY(/;"	d
+APIC_RRD	includes/hal/apic.h	/^#define APIC_RRD /;"	d
+APIC_SPIVR	includes/hal/apic.h	/^#define APIC_SPIVR /;"	d
+APIC_SPIV_APIC_ENABLE	includes/hal/apic.h	/^#define APIC_SPIV_APIC_ENABLE /;"	d
+APIC_SPIV_EOI_BROADCAST	includes/hal/apic.h	/^#define APIC_SPIV_EOI_BROADCAST /;"	d
+APIC_SPIV_FOCUS_DISABLE	includes/hal/apic.h	/^#define APIC_SPIV_FOCUS_DISABLE /;"	d
+APIC_SPIV_IV	includes/arch/x86/interrupts.h	/^#define APIC_SPIV_IV /;"	d
+APIC_TIMER_CCR	includes/hal/apic.h	/^#define APIC_TIMER_CCR /;"	d
+APIC_TIMER_DCR	includes/hal/apic.h	/^#define APIC_TIMER_DCR /;"	d
+APIC_TIMER_DIV1	includes/hal/apic.h	/^#define APIC_TIMER_DIV1 /;"	d
+APIC_TIMER_DIV128	includes/hal/apic.h	/^#define APIC_TIMER_DIV128 /;"	d
+APIC_TIMER_DIV16	includes/hal/apic.h	/^#define APIC_TIMER_DIV16 /;"	d
+APIC_TIMER_DIV2	includes/hal/apic.h	/^#define APIC_TIMER_DIV2 /;"	d
+APIC_TIMER_DIV32	includes/hal/apic.h	/^#define APIC_TIMER_DIV32 /;"	d
+APIC_TIMER_DIV4	includes/hal/apic.h	/^#define APIC_TIMER_DIV4 /;"	d
+APIC_TIMER_DIV64	includes/hal/apic.h	/^#define APIC_TIMER_DIV64 /;"	d
+APIC_TIMER_DIV8	includes/hal/apic.h	/^#define APIC_TIMER_DIV8 /;"	d
+APIC_TIMER_ICR	includes/hal/apic.h	/^#define APIC_TIMER_ICR /;"	d
+APIC_TIMER_IV	includes/arch/x86/interrupts.h	/^#define APIC_TIMER_IV /;"	d
+APIC_TIMER_LVT	includes/hal/apic.h	/^#define APIC_TIMER_LVT /;"	d
+APIC_TMR_BASE	includes/hal/apic.h	/^#define APIC_TMR_BASE /;"	d
+APIC_TPR	includes/hal/apic.h	/^#define APIC_TPR /;"	d
+APIC_VER	includes/hal/apic.h	/^#define APIC_VER /;"	d
+ATA_IDENTIFY_DEVICE	includes/hal/ahci/ahci.h	/^#define ATA_IDENTIFY_DEVICE /;"	d
+ATA_IDENTIFY_PAKCET_DEVICE	includes/hal/ahci/ahci.h	/^#define ATA_IDENTIFY_PAKCET_DEVICE /;"	d
+ATA_PACKET	includes/hal/ahci/ahci.h	/^#define ATA_PACKET /;"	d
+ATA_READ_DMA	includes/hal/ahci/sata.h	/^#define ATA_READ_DMA /;"	d
+ATA_READ_DMA_EXT	includes/hal/ahci/sata.h	/^#define ATA_READ_DMA_EXT /;"	d
+ATA_WRITE_DMA	includes/hal/ahci/sata.h	/^#define ATA_WRITE_DMA /;"	d
+ATA_WRITE_DMA_EXT	includes/hal/ahci/sata.h	/^#define ATA_WRITE_DMA_EXT /;"	d
+AppliancePC	includes/hal/acpi/fadt.h	/^    AppliancePC = 6,$/;"	e	enum:PMProfile
+BIT_FULL	includes/datastructs/bitmap.h	/^#define BIT_FULL /;"	d
+BIT_FULL	includes/libc/bitmap.h	/^#define BIT_FULL /;"	d
+BRAND_LEAF	hal/cpu.c	/^#define BRAND_LEAF /;"	d	file:
+B_BLACK	includes/tty/tty.h	/^#define B_BLACK /;"	d
+B_BLUE	includes/tty/tty.h	/^#define B_BLUE /;"	d
+B_DGREEN	includes/tty/tty.h	/^#define B_DGREEN /;"	d
+B_GREEN	includes/tty/tty.h	/^#define B_GREEN /;"	d
+B_PURPLE	includes/tty/tty.h	/^#define B_PURPLE /;"	d
+B_RED	includes/tty/tty.h	/^#define B_RED /;"	d
+B_RESTORE	includes/tty/tty.h	/^#define B_RESTORE /;"	d
+B_WHITE	includes/tty/tty.h	/^#define B_WHITE /;"	d
+B_YELLOW	includes/tty/tty.h	/^#define B_YELLOW /;"	d
+CACHE_LINE_SIZE	includes/mm/cake.h	/^#define CACHE_LINE_SIZE /;"	d
+CAST	includes/mm/dmm.h	/^#define CAST(/;"	d
+CEIL	includes/spike.h	/^#define CEIL(/;"	d
+CFIS	includes/hal/ahci/hba.h	/^    uint8_t CFIS[0x40];$/;"	m	struct:hba_cmd_table	typeref:typename:uint8_t[0x40]
+CFLAGS	makefile	/^all-debug: CFLAGS := -g -std=gnu99 -ffreestanding $(O) $(W) -D__JYOS_DEBUG__$/;"	m
+CHECKSUM	includes/arch/x86/boot/multiboot.h	/^#define CHECKSUM(/;"	d
+CONTAINS_FLAGS	includes/mm/page.h	/^#define CONTAINS_FLAGS(/;"	d
+COW_MASK	kernel/asm/x86/page_fault.c	/^#define COW_MASK /;"	d	file:
+CURSOR	includes/peripheral/keyboard.h	/^#define CURSOR /;"	d
+CXK_PAGE	kernel/tty/tty.c	/^  #define CXK_PAGE /;"	d	file:
+DMM_BOUNDRY	includes/mm/dmm.h	/^#define DMM_BOUNDRY /;"	d
+DMM_FLAGS_MSK	includes/mm/dmm.h	/^#define DMM_FLAGS_MSK /;"	d
+DMM_GET_HEADER	includes/mm/dmm.h	/^#define DMM_GET_HEADER(/;"	d
+DMM_GET_PREV	includes/mm/dmm.h	/^#define DMM_GET_PREV(/;"	d
+DMM_GET_PREV_HEADER	includes/mm/dmm.h	/^#define DMM_GET_PREV_HEADER(/;"	d
+DMM_GET_RET_ADDR	includes/mm/dmm.h	/^#define DMM_GET_RET_ADDR(/;"	d
+DMM_GET_SELF	includes/mm/dmm.h	/^#define DMM_GET_SELF(/;"	d
+DMM_GET_SIZE	includes/mm/dmm.h	/^#define DMM_GET_SIZE(/;"	d
+DMM_GET_TAIL	includes/mm/dmm.h	/^#define DMM_GET_TAIL(/;"	d
+DMM_HEADER_SIZE	includes/mm/dmm.h	/^#define DMM_HEADER_SIZE /;"	d
+DMM_MAKE	includes/mm/dmm.h	/^#define DMM_MAKE(/;"	d
+DMM_PREV_ALLOC	includes/mm/dmm.h	/^#define DMM_PREV_ALLOC /;"	d
+DMM_SELF_ALLOC	includes/mm/dmm.h	/^#define DMM_SELF_ALLOC /;"	d
+DMM_SET_HT	includes/mm/dmm.h	/^#define DMM_SET_HT(/;"	d
+Desktop	includes/hal/acpi/fadt.h	/^    Desktop = 1,$/;"	e	enum:PMProfile
+EINTR	includes/status.h	/^#define EINTR /;"	d
+END_FREE_PIECE	includes/mm/cake.h	/^#define END_FREE_PIECE /;"	d
+ERROR_CMD	kernel/tty/tty.c	/^#define ERROR_CMD /;"	d	file:
+ESCAPE	kernel/tty/tty.c	/^    enum { TEXT, ESCAPE, FORMAT, } _state = TEXT;$/;"	e	enum:tty_flush_buffer::__anonc046eab70203	file:
+EX_INTERRUPT_BEGIN	includes/arch/x86/interrupts.h	/^#define EX_INTERRUPT_BEGIN /;"	d
+EnterpriseServer	includes/hal/acpi/fadt.h	/^    EnterpriseServer = 4,$/;"	e	enum:PMProfile
+F	libs/libc/stdio/printf.c	/^    double   F;$/;"	m	union:_etoa::__anone6aa6f1d020a	typeref:typename:double	file:
+FAULT_ALIGNMENT_CHECK	includes/arch/x86/interrupts.h	/^#define FAULT_ALIGNMENT_CHECK /;"	d
+FAULT_BOUND_EXCEED	includes/arch/x86/interrupts.h	/^#define FAULT_BOUND_EXCEED /;"	d
+FAULT_CONTROL_PROTECTION	includes/arch/x86/interrupts.h	/^#define FAULT_CONTROL_PROTECTION /;"	d
+FAULT_DIVISION_ERROR	includes/arch/x86/interrupts.h	/^#define FAULT_DIVISION_ERROR /;"	d
+FAULT_GENERAL_PROTECTION	includes/arch/x86/interrupts.h	/^#define FAULT_GENERAL_PROTECTION /;"	d
+FAULT_INVALID_OPCODE	includes/arch/x86/interrupts.h	/^#define FAULT_INVALID_OPCODE /;"	d
+FAULT_INVALID_TSS	includes/arch/x86/interrupts.h	/^#define FAULT_INVALID_TSS /;"	d
+FAULT_NO_MATH_PROCESSOR	includes/arch/x86/interrupts.h	/^#define FAULT_NO_MATH_PROCESSOR /;"	d
+FAULT_PAGE_FAULT	includes/arch/x86/interrupts.h	/^#define FAULT_PAGE_FAULT /;"	d
+FAULT_RESERVED_0	includes/arch/x86/interrupts.h	/^#define FAULT_RESERVED_0 /;"	d
+FAULT_RESERVED_1	includes/arch/x86/interrupts.h	/^#define FAULT_RESERVED_1 /;"	d
+FAULT_SEG_NOT_PRESENT	includes/arch/x86/interrupts.h	/^#define FAULT_SEG_NOT_PRESENT /;"	d
+FAULT_SIMD_FP_EXCEPTION	includes/arch/x86/interrupts.h	/^#define FAULT_SIMD_FP_EXCEPTION /;"	d
+FAULT_STACK_SEG_FAULT	includes/arch/x86/interrupts.h	/^#define FAULT_STACK_SEG_FAULT /;"	d
+FAULT_TRAP_DEBUG_EXCEPTION	includes/arch/x86/interrupts.h	/^#define FAULT_TRAP_DEBUG_EXCEPTION /;"	d
+FAULT_VIRTUALIZATION_EXCEPTION	includes/arch/x86/interrupts.h	/^#define FAULT_VIRTUALIZATION_EXCEPTION /;"	d
+FAULT_X87_FAULT	includes/arch/x86/interrupts.h	/^#define FAULT_X87_FAULT /;"	d
+FIFO_DIRTY	includes/datastructs/fifobuf.h	/^#define FIFO_DIRTY /;"	d
+FLAGS_ADAPT_EXP	libs/libc/stdio/printf.c	/^#define FLAGS_ADAPT_EXP /;"	d	file:
+FLAGS_CHAR	libs/libc/stdio/printf.c	/^#define FLAGS_CHAR /;"	d	file:
+FLAGS_HASH	libs/libc/stdio/printf.c	/^#define FLAGS_HASH /;"	d	file:
+FLAGS_LEFT	libs/libc/stdio/printf.c	/^#define FLAGS_LEFT /;"	d	file:
+FLAGS_LONG	libs/libc/stdio/printf.c	/^#define FLAGS_LONG /;"	d	file:
+FLAGS_LONG_LONG	libs/libc/stdio/printf.c	/^#define FLAGS_LONG_LONG /;"	d	file:
+FLAGS_PLUS	libs/libc/stdio/printf.c	/^#define FLAGS_PLUS /;"	d	file:
+FLAGS_PRECISION	libs/libc/stdio/printf.c	/^#define FLAGS_PRECISION /;"	d	file:
+FLAGS_SHORT	libs/libc/stdio/printf.c	/^#define FLAGS_SHORT /;"	d	file:
+FLAGS_SPACE	libs/libc/stdio/printf.c	/^#define FLAGS_SPACE /;"	d	file:
+FLAGS_UPPERCASE	libs/libc/stdio/printf.c	/^#define FLAGS_UPPERCASE /;"	d	file:
+FLAGS_ZEROPAD	libs/libc/stdio/printf.c	/^#define FLAGS_ZEROPAD /;"	d	file:
+FLOOR	includes/spike.h	/^#define FLOOR(/;"	d
+FN_KEY	includes/peripheral/keyboard.h	/^#define FN_KEY /;"	d
+FORMAT	kernel/tty/tty.c	/^    enum { TEXT, ESCAPE, FORMAT, } _state = TEXT;$/;"	e	enum:tty_flush_buffer::__anonc046eab70203	file:
+F_BLACK	includes/tty/tty.h	/^#define F_BLACK /;"	d
+F_BLUE	includes/tty/tty.h	/^#define F_BLUE /;"	d
+F_DGREEN	includes/tty/tty.h	/^#define F_DGREEN /;"	d
+F_GREEN	includes/tty/tty.h	/^#define F_GREEN /;"	d
+F_PURPLE	includes/tty/tty.h	/^#define F_PURPLE /;"	d
+F_RED	includes/tty/tty.h	/^#define F_RED /;"	d
+F_RESTORE	includes/tty/tty.h	/^#define F_RESTORE /;"	d
+F_WHITE	includes/tty/tty.h	/^#define F_WHITE /;"	d
+F_YELLOW	includes/tty/tty.h	/^#define F_YELLOW /;"	d
+GDT_ENTRY	kernel/asm/x86/gdt.c	/^#define GDT_ENTRY /;"	d	file:
+GET_PG_ADDR	includes/mm/page.h	/^#define GET_PG_ADDR(/;"	d
+GET_PT_ADDR	includes/mm/page.h	/^#define GET_PT_ADDR(/;"	d
+HAS_FLAGS	includes/mm/page.h	/^#define HAS_FLAGS(/;"	d
+HBA_CAP	includes/hal/ahci/hba.h	/^#define HBA_CAP /;"	d
+HBA_CAP_NCS	includes/hal/ahci/hba.h	/^#define HBA_CAP_NCS(/;"	d
+HBA_CAP_NP	includes/hal/ahci/hba.h	/^#define HBA_CAP_NP(/;"	d
+HBA_CLB_SIZE	hal/ahci/ahci.c	/^#define HBA_CLB_SIZE /;"	d	file:
+HBA_CMDH_ATAPI	includes/hal/ahci/hba.h	/^#define HBA_CMDH_ATAPI /;"	d
+HBA_CMDH_CLR_BUSY	includes/hal/ahci/hba.h	/^#define HBA_CMDH_CLR_BUSY /;"	d
+HBA_CMDH_FIS_LEN	includes/hal/ahci/hba.h	/^#define HBA_CMDH_FIS_LEN(/;"	d
+HBA_CMDH_PRDT_LEN	includes/hal/ahci/hba.h	/^#define HBA_CMDH_PRDT_LEN(/;"	d
+HBA_CMDH_PREFETCH	includes/hal/ahci/hba.h	/^#define HBA_CMDH_PREFETCH /;"	d
+HBA_CMDH_R	includes/hal/ahci/hba.h	/^#define HBA_CMDH_R /;"	d
+HBA_CMDH_WRITE	includes/hal/ahci/hba.h	/^#define HBA_CMDH_WRITE /;"	d
+HBA_DEV_FATAPI	includes/hal/ahci/hba.h	/^#define HBA_DEV_FATAPI /;"	d
+HBA_DEV_FEXTLBA	includes/hal/ahci/hba.h	/^#define HBA_DEV_FEXTLBA /;"	d
+HBA_DEV_SIG_ATA	includes/hal/ahci/hba.h	/^#define HBA_DEV_SIG_ATA /;"	d
+HBA_DEV_SIG_ATAPI	includes/hal/ahci/hba.h	/^#define HBA_DEV_SIG_ATAPI /;"	d
+HBA_FIS_SIZE	hal/ahci/ahci.c	/^#define HBA_FIS_SIZE /;"	d	file:
+HBA_GHC	includes/hal/ahci/hba.h	/^#define HBA_GHC /;"	d
+HBA_GHC_ACHI_EN	includes/hal/ahci/hba.h	/^#define HBA_GHC_ACHI_EN /;"	d
+HBA_GHC_INTR_EN	includes/hal/ahci/hba.h	/^#define HBA_GHC_INTR_EN /;"	d
+HBA_GHC_RESET	includes/hal/ahci/hba.h	/^#define HBA_GHC_RESET /;"	d
+HBA_IS	includes/hal/ahci/hba.h	/^#define HBA_IS /;"	d
+HBA_PI	includes/hal/ahci/hba.h	/^#define HBA_PI /;"	d
+HBA_PORT_BASE	includes/hal/ahci/hba.h	/^#define HBA_PORT_BASE /;"	d
+HBA_PORT_SIZE	includes/hal/ahci/hba.h	/^#define HBA_PORT_SIZE /;"	d
+HBA_PxCI	includes/hal/ahci/hba.h	/^#define HBA_PxCI /;"	d
+HBA_PxCLB	includes/hal/ahci/hba.h	/^#define HBA_PxCLB /;"	d
+HBA_PxCMD	includes/hal/ahci/hba.h	/^#define HBA_PxCMD /;"	d
+HBA_PxCMD_CR	includes/hal/ahci/hba.h	/^#define HBA_PxCMD_CR /;"	d
+HBA_PxCMD_FR	includes/hal/ahci/hba.h	/^#define HBA_PxCMD_FR /;"	d
+HBA_PxCMD_FRE	includes/hal/ahci/hba.h	/^#define HBA_PxCMD_FRE /;"	d
+HBA_PxCMD_ST	includes/hal/ahci/hba.h	/^#define HBA_PxCMD_ST /;"	d
+HBA_PxDEVSLP	includes/hal/ahci/hba.h	/^#define HBA_PxDEVSLP /;"	d
+HBA_PxFB	includes/hal/ahci/hba.h	/^#define HBA_PxFB /;"	d
+HBA_PxFBS	includes/hal/ahci/hba.h	/^#define HBA_PxFBS /;"	d
+HBA_PxIE	includes/hal/ahci/hba.h	/^#define HBA_PxIE /;"	d
+HBA_PxIE_D2HR	includes/hal/ahci/hba.h	/^#define HBA_PxIE_D2HR /;"	d
+HBA_PxIE_DMA	includes/hal/ahci/hba.h	/^#define HBA_PxIE_DMA /;"	d
+HBA_PxIS	includes/hal/ahci/hba.h	/^#define HBA_PxIS /;"	d
+HBA_PxSACT	includes/hal/ahci/hba.h	/^#define HBA_PxSACT /;"	d
+HBA_PxSCTL	includes/hal/ahci/hba.h	/^#define HBA_PxSCTL /;"	d
+HBA_PxSERR	includes/hal/ahci/hba.h	/^#define HBA_PxSERR /;"	d
+HBA_PxSIG	includes/hal/ahci/hba.h	/^#define HBA_PxSIG /;"	d
+HBA_PxSNTF	includes/hal/ahci/hba.h	/^#define HBA_PxSNTF /;"	d
+HBA_PxSSTS	includes/hal/ahci/hba.h	/^#define HBA_PxSSTS /;"	d
+HBA_PxSSTS_DET	includes/hal/ahci/hba.h	/^#define HBA_PxSSTS_DET(/;"	d
+HBA_PxSSTS_IPM	includes/hal/ahci/hba.h	/^#define HBA_PxSSTS_IPM(/;"	d
+HBA_PxSSTS_SPD	includes/hal/ahci/hba.h	/^#define HBA_PxSSTS_SPD(/;"	d
+HBA_PxTFD	includes/hal/ahci/hba.h	/^#define HBA_PxTFD /;"	d
+HBA_PxVS	includes/hal/ahci/hba.h	/^#define HBA_PxVS /;"	d
+HBA_TFD_BSY	includes/hal/ahci/hba.h	/^#define HBA_TFD_BSY /;"	d
+HBA_TFD_DRQ	includes/hal/ahci/hba.h	/^#define HBA_TFD_DRQ /;"	d
+HBA_TFD_ERR	includes/hal/ahci/hba.h	/^#define HBA_TFD_ERR /;"	d
+HBA_VERSION	includes/hal/ahci/hba.h	/^#define HBA_VERSION /;"	d
+HEAPFULL	includes/status.h	/^#define HEAPFULL /;"	d
+HEAP_INIT_SIZE	includes/mm/dmm.h	/^#define HEAP_INIT_SIZE /;"	d
+HHK_PAGE_COUNT	arch/x86/hhk.c	/^#define HHK_PAGE_COUNT /;"	d	file:
+HIGHER_HLF_BASE	includes/constant.h	/^#define HIGHER_HLF_BASE /;"	d
+IA32_APIC_BASE_MSR	includes/hal/apic.h	/^#define IA32_APIC_BASE_MSR /;"	d
+IA32_APIC_ENABLE	includes/hal/apic.h	/^#define IA32_APIC_ENABLE /;"	d
+IAPC_ARCH_8042	includes/hal/acpi/fadt.h	/^#define IAPC_ARCH_8042 /;"	d
+IAPC_ARCH_ASPM	includes/hal/acpi/fadt.h	/^#define IAPC_ARCH_ASPM /;"	d
+IAPC_ARCH_LEGACY	includes/hal/acpi/fadt.h	/^#define IAPC_ARCH_LEGACY /;"	d
+IAPC_ARCH_NO_MSI	includes/hal/acpi/fadt.h	/^#define IAPC_ARCH_NO_MSI /;"	d
+IAPC_ARCH_NO_RTC	includes/hal/acpi/fadt.h	/^#define IAPC_ARCH_NO_RTC /;"	d
+IAPC_ARCH_NO_VGA	includes/hal/acpi/fadt.h	/^#define IAPC_ARCH_NO_VGA /;"	d
+ICEIL	includes/spike.h	/^#define ICEIL(/;"	d
+IDDEV_OFFADDSUPPORT	hal/ahci/utils.c	/^#define IDDEV_OFFADDSUPPORT /;"	d	file:
+IDDEV_OFFALIGN	hal/ahci/utils.c	/^#define IDDEV_OFFALIGN /;"	d	file:
+IDDEV_OFFCAPABILITIES	hal/ahci/utils.c	/^#define IDDEV_OFFCAPABILITIES /;"	d	file:
+IDDEV_OFFLPP	hal/ahci/utils.c	/^#define IDDEV_OFFLPP /;"	d	file:
+IDDEV_OFFLSECSIZE	hal/ahci/utils.c	/^#define IDDEV_OFFLSECSIZE /;"	d	file:
+IDDEV_OFFMAXLBA	hal/ahci/utils.c	/^#define IDDEV_OFFMAXLBA /;"	d	file:
+IDDEV_OFFMAXLBA_EXT	hal/ahci/utils.c	/^#define IDDEV_OFFMAXLBA_EXT /;"	d	file:
+IDDEV_OFFMODELNUM	hal/ahci/utils.c	/^#define IDDEV_OFFMODELNUM /;"	d	file:
+IDDEV_OFFSERIALNUM	hal/ahci/utils.c	/^#define IDDEV_OFFSERIALNUM /;"	d	file:
+IDDEV_OFFWWN	hal/ahci/utils.c	/^#define IDDEV_OFFWWN /;"	d	file:
+IDT_ENTRY	kernel/asm/x86/idt.c	/^#define IDT_ENTRY /;"	d	file:
+IDT_INT_GATE	includes/arch/x86/idt.h	/^#define IDT_INT_GATE(/;"	d
+IDT_TRAP_GATE	includes/arch/x86/idt.h	/^#define IDT_TRAP_GATE(/;"	d
+INCLUDES	makefile	/^INCLUDES := $(patsubst %, -I%, $(INCLUDES_DIR))$/;"	m
+INTERRUPTS_VECTOR_SIZE	includes/arch/x86/interrupts.h	/^#define INTERRUPTS_VECTOR_SIZE /;"	d
+INT_NMI	includes/arch/x86/interrupts.h	/^#define INT_NMI /;"	d
+INVL	includes/status.h	/^#define INVL /;"	d
+INVLDPID	includes/status.h	/^#define INVLDPID /;"	d
+INVLDPTR	includes/status.h	/^#define INVLDPTR /;"	d
+IOAPIC_BASE_VADDR	includes/constant.h	/^#define IOAPIC_BASE_VADDR /;"	d
+IOAPIC_DELMOD_FIXED	includes/hal/ioapic.h	/^#define IOAPIC_DELMOD_FIXED /;"	d
+IOAPIC_DELMOD_LPRIO	includes/hal/ioapic.h	/^#define IOAPIC_DELMOD_LPRIO /;"	d
+IOAPIC_DELMOD_NMI	includes/hal/ioapic.h	/^#define IOAPIC_DELMOD_NMI /;"	d
+IOAPIC_DESTMOD_LOGIC	includes/hal/ioapic.h	/^#define IOAPIC_DESTMOD_LOGIC /;"	d
+IOAPIC_INTPOL_L	includes/hal/ioapic.h	/^#define IOAPIC_INTPOL_L /;"	d
+IOAPIC_IOREDTBL_BASE	includes/hal/ioapic.h	/^#define IOAPIC_IOREDTBL_BASE /;"	d
+IOAPIC_IOREGSEL	includes/hal/ioapic.h	/^#define IOAPIC_IOREGSEL /;"	d
+IOAPIC_IOWIN	includes/hal/ioapic.h	/^#define IOAPIC_IOWIN /;"	d
+IOAPIC_MASKED	includes/hal/ioapic.h	/^#define IOAPIC_MASKED /;"	d
+IOAPIC_REG_ARB	includes/hal/ioapic.h	/^#define IOAPIC_REG_ARB /;"	d
+IOAPIC_REG_ID	includes/hal/ioapic.h	/^#define IOAPIC_REG_ID /;"	d
+IOAPIC_REG_SEL	hal/ioapic.c	/^#define IOAPIC_REG_SEL /;"	d	file:
+IOAPIC_REG_VER	includes/hal/ioapic.h	/^#define IOAPIC_REG_VER /;"	d
+IOAPIC_REG_WIN	hal/ioapic.c	/^#define IOAPIC_REG_WIN /;"	d	file:
+IOAPIC_TRIG_LEVEL	includes/hal/ioapic.h	/^#define IOAPIC_TRIG_LEVEL /;"	d
+IPM1ACNT_BLK_PORT	includes/hal/acpi/fadt.h	/^#define IPM1ACNT_BLK_PORT /;"	d
+IPM1AEVT_BLK_PORT	includes/hal/acpi/fadt.h	/^#define IPM1AEVT_BLK_PORT /;"	d
+IPM1BCNT_BLK_PORT	includes/hal/acpi/fadt.h	/^#define IPM1BCNT_BLK_PORT /;"	d
+IPM1BEVT_BLK_PORT	includes/hal/acpi/fadt.h	/^#define IPM1BEVT_BLK_PORT /;"	d
+IPM1CNT_BLK_LEN	includes/hal/acpi/fadt.h	/^#define IPM1CNT_BLK_LEN /;"	d
+IPM1EVT_BLK_LEN	includes/hal/acpi/fadt.h	/^#define IPM1EVT_BLK_LEN /;"	d
+IPM2CNT_BLK_LEN	includes/hal/acpi/fadt.h	/^#define IPM2CNT_BLK_LEN /;"	d
+IPM2CNT_BLK_PORT	includes/hal/acpi/fadt.h	/^#define IPM2CNT_BLK_PORT /;"	d
+IPMTMR_BLK_LEN	includes/hal/acpi/fadt.h	/^#define IPMTMR_BLK_LEN /;"	d
+IPMTMR_BLK_PORT	includes/hal/acpi/fadt.h	/^#define IPMTMR_BLK_PORT /;"	d
+IS_CACHED	includes/mm/page.h	/^#define IS_CACHED(/;"	d
+ITIME_CENTURY	includes/hal/acpi/fadt.h	/^#define ITIME_CENTURY /;"	d
+ITIME_DAY_ALARM	includes/hal/acpi/fadt.h	/^#define ITIME_DAY_ALARM /;"	d
+ITIME_MON_ALARM	includes/hal/acpi/fadt.h	/^#define ITIME_MON_ALARM /;"	d
+JYOS_SYS_CALL	includes/arch/x86/interrupts.h	/^#define JYOS_SYS_CALL /;"	d
+JYOS_SYS_PANIC	includes/arch/x86/interrupts.h	/^#define JYOS_SYS_PANIC /;"	d
+JYOS_TEST_CXK	kernel/tty/tty.c	/^#define JYOS_TEST_CXK$/;"	d	file:
+KBD_ENABLE_SPIRQ_FIX	kernel/peripheral/ps2kbd.c	/^#define KBD_ENABLE_SPIRQ_FIX$/;"	d	file:
+KBD_KEY_FCAPSLKED	includes/peripheral/keyboard.h	/^#define KBD_KEY_FCAPSLKED /;"	d
+KBD_KEY_FLALT_HELD	includes/peripheral/keyboard.h	/^#define KBD_KEY_FLALT_HELD /;"	d
+KBD_KEY_FLCTRL_HELD	includes/peripheral/keyboard.h	/^#define KBD_KEY_FLCTRL_HELD /;"	d
+KBD_KEY_FLSHIFT_HELD	includes/peripheral/keyboard.h	/^#define KBD_KEY_FLSHIFT_HELD /;"	d
+KBD_KEY_FNUMBLKED	includes/peripheral/keyboard.h	/^#define KBD_KEY_FNUMBLKED /;"	d
+KBD_KEY_FPRESSED	includes/peripheral/keyboard.h	/^#define KBD_KEY_FPRESSED /;"	d
+KBD_KEY_FRALT_HELD	includes/peripheral/keyboard.h	/^#define KBD_KEY_FRALT_HELD /;"	d
+KBD_KEY_FRCTRL_HELD	includes/peripheral/keyboard.h	/^#define KBD_KEY_FRCTRL_HELD /;"	d
+KBD_KEY_FRELEASED	includes/peripheral/keyboard.h	/^#define KBD_KEY_FRELEASED /;"	d
+KBD_KEY_FRSHIFT_HELD	includes/peripheral/keyboard.h	/^#define KBD_KEY_FRSHIFT_HELD /;"	d
+KBD_KEY_FSCRLLKED	includes/peripheral/keyboard.h	/^#define KBD_KEY_FSCRLLKED /;"	d
+KBD_STATE_CMDPROCS	kernel/peripheral/ps2kbd.c	/^#define KBD_STATE_CMDPROCS /;"	d	file:
+KBD_STATE_KRELEASED	kernel/peripheral/ps2kbd.c	/^#define KBD_STATE_KRELEASED /;"	d	file:
+KBD_STATE_KSPECIAL	kernel/peripheral/ps2kbd.c	/^#define KBD_STATE_KSPECIAL /;"	d	file:
+KBD_STATE_KWAIT	kernel/peripheral/ps2kbd.c	/^#define KBD_STATE_KWAIT /;"	d	file:
+KERNEL_PAGE_COUNT	arch/x86/hhk.c	/^#define KERNEL_PAGE_COUNT /;"	d	file:
+KERNEL_PID	includes/process.h	/^#define KERNEL_PID /;"	d
+KERNEL_VSTART	includes/constant.h	/^#define KERNEL_VSTART /;"	d
+KEYPAD	includes/peripheral/keyboard.h	/^#define KEYPAD /;"	d
+KEY_BS	includes/peripheral/keyboard.h	/^#define KEY_BS /;"	d
+KEY_CAPSLK	includes/peripheral/keyboard.h	/^#define KEY_CAPSLK /;"	d
+KEY_DELETE	includes/peripheral/keyboard.h	/^#define KEY_DELETE /;"	d
+KEY_DOWN	includes/peripheral/keyboard.h	/^#define KEY_DOWN /;"	d
+KEY_END	includes/peripheral/keyboard.h	/^#define KEY_END /;"	d
+KEY_ESC	includes/peripheral/keyboard.h	/^#define KEY_ESC /;"	d
+KEY_F1	includes/peripheral/keyboard.h	/^#define KEY_F1 /;"	d
+KEY_F10	includes/peripheral/keyboard.h	/^#define KEY_F10 /;"	d
+KEY_F11	includes/peripheral/keyboard.h	/^#define KEY_F11 /;"	d
+KEY_F12	includes/peripheral/keyboard.h	/^#define KEY_F12 /;"	d
+KEY_F2	includes/peripheral/keyboard.h	/^#define KEY_F2 /;"	d
+KEY_F3	includes/peripheral/keyboard.h	/^#define KEY_F3 /;"	d
+KEY_F4	includes/peripheral/keyboard.h	/^#define KEY_F4 /;"	d
+KEY_F5	includes/peripheral/keyboard.h	/^#define KEY_F5 /;"	d
+KEY_F6	includes/peripheral/keyboard.h	/^#define KEY_F6 /;"	d
+KEY_F7	includes/peripheral/keyboard.h	/^#define KEY_F7 /;"	d
+KEY_F8	includes/peripheral/keyboard.h	/^#define KEY_F8 /;"	d
+KEY_F9	includes/peripheral/keyboard.h	/^#define KEY_F9 /;"	d
+KEY_HOME	includes/peripheral/keyboard.h	/^#define KEY_HOME /;"	d
+KEY_HTAB	includes/peripheral/keyboard.h	/^#define KEY_HTAB /;"	d
+KEY_INSERT	includes/peripheral/keyboard.h	/^#define KEY_INSERT /;"	d
+KEY_LALT	includes/peripheral/keyboard.h	/^#define KEY_LALT /;"	d
+KEY_LCTRL	includes/peripheral/keyboard.h	/^#define KEY_LCTRL /;"	d
+KEY_LEFT	includes/peripheral/keyboard.h	/^#define KEY_LEFT /;"	d
+KEY_LF	includes/peripheral/keyboard.h	/^#define KEY_LF /;"	d
+KEY_LSHIFT	includes/peripheral/keyboard.h	/^#define KEY_LSHIFT /;"	d
+KEY_NPAD	kernel/peripheral/ps2kbd.c	/^#define KEY_NPAD(/;"	d	file:
+KEY_NUM	kernel/peripheral/ps2kbd.c	/^#define KEY_NUM(/;"	d	file:
+KEY_NUMSLK	includes/peripheral/keyboard.h	/^#define KEY_NUMSLK /;"	d
+KEY_PAUSE	includes/peripheral/keyboard.h	/^#define KEY_PAUSE /;"	d
+KEY_PG_DOWN	includes/peripheral/keyboard.h	/^#define KEY_PG_DOWN /;"	d
+KEY_PG_UP	includes/peripheral/keyboard.h	/^#define KEY_PG_UP /;"	d
+KEY_RALT	includes/peripheral/keyboard.h	/^#define KEY_RALT /;"	d
+KEY_RCTRL	includes/peripheral/keyboard.h	/^#define KEY_RCTRL /;"	d
+KEY_RIGHT	includes/peripheral/keyboard.h	/^#define KEY_RIGHT /;"	d
+KEY_RSHIFT	includes/peripheral/keyboard.h	/^#define KEY_RSHIFT /;"	d
+KEY_SCRLLK	includes/peripheral/keyboard.h	/^#define KEY_SCRLLK /;"	d
+KEY_SPACE	includes/peripheral/keyboard.h	/^#define KEY_SPACE /;"	d
+KEY_UP	includes/peripheral/keyboard.h	/^#define KEY_UP /;"	d
+KPG_SIZE	arch/x86/boot.S	/^#define KPG_SIZE /;"	d	file:
+K_CODE_MAX_SIZE	includes/constant.h	/^#define K_CODE_MAX_SIZE /;"	d
+K_CODE_SEG	includes/constant.h	/^#define K_CODE_SEG /;"	d
+K_DATA_SEG	includes/constant.h	/^#define K_DATA_SEG /;"	d
+K_HEAP_SIZE_MB	includes/constant.h	/^#define K_HEAP_SIZE_MB /;"	d
+K_HEAP_START	includes/constant.h	/^#define K_HEAP_START /;"	d
+K_STACK_SIZE	includes/constant.h	/^#define K_STACK_SIZE /;"	d
+K_STACK_START	includes/constant.h	/^#define K_STACK_START /;"	d
+K_STACK_TOP	includes/constant.h	/^#define K_STACK_TOP /;"	d
+LDFLAGS	makefile	/^all-debug: LDFLAGS := -ffreestanding $(O) -nostdlib -lgcc$/;"	m
+LVT_DELIVERY_FIXED	includes/hal/apic.h	/^#define LVT_DELIVERY_FIXED /;"	d
+LVT_DELIVERY_NMI	includes/hal/apic.h	/^#define LVT_DELIVERY_NMI /;"	d
+LVT_ENTRY_ERROR	hal/apic.c	/^#define LVT_ENTRY_ERROR(/;"	d	file:
+LVT_ENTRY_LINT0	hal/apic.c	/^#define LVT_ENTRY_LINT0(/;"	d	file:
+LVT_ENTRY_LINT1	hal/apic.c	/^#define LVT_ENTRY_LINT1 /;"	d	file:
+LVT_ENTRY_TIMER	kernel/time/timer.c	/^#define LVT_ENTRY_TIMER(/;"	d	file:
+LVT_MASKED	includes/hal/apic.h	/^#define LVT_MASKED /;"	d
+LVT_TIMER_ONESHOT	includes/hal/apic.h	/^#define LVT_TIMER_ONESHOT /;"	d
+LVT_TIMER_PERIODIC	includes/hal/apic.h	/^#define LVT_TIMER_PERIODIC /;"	d
+LVT_TRIGGER_EDGE	includes/hal/apic.h	/^#define LVT_TRIGGER_EDGE /;"	d
+LVT_TRIGGER_LEVEL	includes/hal/apic.h	/^#define LVT_TRIGGER_LEVEL /;"	d
+MAX_CLASS	kernel/mm/valloc.c	/^#define MAX_CLASS /;"	d	file:
+MAX_PAGE	kernel/mm/pmm.c	/^static uint32_t MAX_PAGE;$/;"	v	typeref:typename:uint32_t	file:
+MAX_RETRY	includes/hal/ahci/sata.h	/^#define MAX_RETRY /;"	d
+MAX_TASKS	kernel/sched.c	/^#define MAX_TASKS /;"	d	file:
+MB_ALIGNED_4K_MEM_MAP	includes/arch/x86/boot/multiboot.h	/^#define MB_ALIGNED_4K_MEM_MAP /;"	d
+MB_MAGIC	includes/arch/x86/boot/multiboot.h	/^#define MB_MAGIC /;"	d
+MEM_1MB	includes/constant.h	/^#define MEM_1MB /;"	d
+MEM_4MB	includes/constant.h	/^#define MEM_4MB /;"	d
+MEM_4MB	includes/mm/page.h	/^#define MEM_4MB /;"	d
+MEM_MEP_MAX_SIZE	includes/mm/pmm.h	/^#define MEM_MEP_MAX_SIZE /;"	d
+MNT_PD_BASE	includes/mm/page.h	/^#define MNT_PD_BASE /;"	d
+MNT_PG_BASE	includes/mm/page.h	/^#define MNT_PG_BASE /;"	d
+MODIFR	includes/peripheral/keyboard.h	/^#define MODIFR /;"	d
+MULTIBOOT_AOUT_KLUDGE	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_AOUT_KLUDGE /;"	d
+MULTIBOOT_BOOTLOADER_MAGIC	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_BOOTLOADER_MAGIC /;"	d
+MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT /;"	d
+MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED /;"	d
+MULTIBOOT_FRAMEBUFFER_TYPE_RGB	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_FRAMEBUFFER_TYPE_RGB /;"	d
+MULTIBOOT_INFO_ALIGN	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_ALIGN /;"	d
+MULTIBOOT_INFO_AOUT_SYMS	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_AOUT_SYMS /;"	d
+MULTIBOOT_INFO_APM_TABLE	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_APM_TABLE /;"	d
+MULTIBOOT_INFO_BOOTDEV	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_BOOTDEV /;"	d
+MULTIBOOT_INFO_BOOT_LOADER_NAME	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_BOOT_LOADER_NAME /;"	d
+MULTIBOOT_INFO_CMDLINE	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_CMDLINE /;"	d
+MULTIBOOT_INFO_CONFIG_TABLE	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_CONFIG_TABLE /;"	d
+MULTIBOOT_INFO_DRIVE_INFO	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_DRIVE_INFO /;"	d
+MULTIBOOT_INFO_ELF_SHDR	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_ELF_SHDR /;"	d
+MULTIBOOT_INFO_FRAMEBUFFER_INFO	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_FRAMEBUFFER_INFO /;"	d
+MULTIBOOT_INFO_MEMORY	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_MEMORY /;"	d
+MULTIBOOT_INFO_MEM_MAP	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_MEM_MAP /;"	d
+MULTIBOOT_INFO_MODS	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_MODS /;"	d
+MULTIBOOT_INFO_VBE_INFO	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_INFO_VBE_INFO /;"	d
+MULTIBOOT_MEMORY_ACPI_RECLAIMABLE	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE /;"	d
+MULTIBOOT_MEMORY_AVAILABLE	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_MEMORY_AVAILABLE /;"	d
+MULTIBOOT_MEMORY_BADRAM	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_MEMORY_BADRAM /;"	d
+MULTIBOOT_MEMORY_INFO	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_MEMORY_INFO /;"	d
+MULTIBOOT_MEMORY_NVS	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_MEMORY_NVS /;"	d
+MULTIBOOT_MEMORY_RESERVED	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_MEMORY_RESERVED /;"	d
+MULTIBOOT_MOD_ALIGN	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_MOD_ALIGN /;"	d
+MULTIBOOT_PAGE_ALIGN	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_PAGE_ALIGN /;"	d
+MULTIBOOT_VIDEO_MODE	includes/arch/x86/boot/multiboot.h	/^#define MULTIBOOT_VIDEO_MODE /;"	d
+Mobile	includes/hal/acpi/fadt.h	/^    Mobile = 2,$/;"	e	enum:PMProfile
+NEXT_PAGE	kernel/mm/pmm.c	/^size_t NEXT_PAGE;$/;"	v	typeref:typename:size_t
+O	makefile	/^all-debug: O := -O$/;"	m
+ON_KEYPAD	includes/peripheral/keyboard.h	/^#define ON_KEYPAD(/;"	d
+OTHERS	includes/peripheral/keyboard.h	/^#define OTHERS /;"	d
+OUTOFMEM	includes/status.h	/^#define OUTOFMEM /;"	d
+P2V	includes/mm/page.h	/^#define P2V(/;"	d
+PCI_ADDRESS	includes/hal/pci.h	/^#define PCI_ADDRESS(/;"	d
+PCI_BAR_ADDR_IO	includes/hal/pci.h	/^#define PCI_BAR_ADDR_IO(/;"	d
+PCI_BAR_ADDR_MM	includes/hal/pci.h	/^#define PCI_BAR_ADDR_MM(/;"	d
+PCI_BAR_CACHEABLE	includes/hal/pci.h	/^#define PCI_BAR_CACHEABLE(/;"	d
+PCI_BAR_MMIO	includes/hal/pci.h	/^#define PCI_BAR_MMIO(/;"	d
+PCI_BAR_TYPE	includes/hal/pci.h	/^#define PCI_BAR_TYPE(/;"	d
+PCI_BUS_NUM	includes/hal/pci.h	/^#define PCI_BUS_NUM(/;"	d
+PCI_CONFIG_ADDR	includes/hal/pci.h	/^#define PCI_CONFIG_ADDR /;"	d
+PCI_CONFIG_DATA	includes/hal/pci.h	/^#define PCI_CONFIG_DATA /;"	d
+PCI_DEV_CLASS	includes/hal/pci.h	/^#define PCI_DEV_CLASS(/;"	d
+PCI_DEV_DEVID	includes/hal/pci.h	/^#define PCI_DEV_DEVID(/;"	d
+PCI_DEV_REV	includes/hal/pci.h	/^#define PCI_DEV_REV(/;"	d
+PCI_DEV_VENDOR	includes/hal/pci.h	/^#define PCI_DEV_VENDOR(/;"	d
+PCI_FUNCT_NUM	includes/hal/pci.h	/^#define PCI_FUNCT_NUM(/;"	d
+PCI_INTR_IRQ	includes/hal/pci.h	/^#define PCI_INTR_IRQ(/;"	d
+PCI_INTR_PIN	includes/hal/pci.h	/^#define PCI_INTR_PIN(/;"	d
+PCI_MSI_ADDR	includes/hal/pci.h	/^#define PCI_MSI_ADDR(/;"	d
+PCI_MSI_DATA	includes/hal/pci.h	/^#define PCI_MSI_DATA(/;"	d
+PCI_PRINT_BAR_LISTING	hal/pci.c	/^#define PCI_PRINT_BAR_LISTING$/;"	d	file:
+PCI_RCMD_BUS_MASTER	includes/hal/pci.h	/^#define PCI_RCMD_BUS_MASTER /;"	d
+PCI_RCMD_DISABLE_INTR	includes/hal/pci.h	/^#define PCI_RCMD_DISABLE_INTR /;"	d
+PCI_RCMD_FAST_B2B	includes/hal/pci.h	/^#define PCI_RCMD_FAST_B2B /;"	d
+PCI_RCMD_IO_ACCESS	includes/hal/pci.h	/^#define PCI_RCMD_IO_ACCESS /;"	d
+PCI_RCMD_MM_ACCESS	includes/hal/pci.h	/^#define PCI_RCMD_MM_ACCESS /;"	d
+PCI_REG_BAR	includes/hal/pci.h	/^#define PCI_REG_BAR(/;"	d
+PCI_REG_STATUS_CMD	includes/hal/pci.h	/^#define PCI_REG_STATUS_CMD /;"	d
+PCI_REG_VENDOR_DEV	includes/hal/pci.h	/^#define PCI_REG_VENDOR_DEV /;"	d
+PCI_SLOT_NUM	includes/hal/pci.h	/^#define PCI_SLOT_NUM(/;"	d
+PCI_TCARDBRIDGE	includes/hal/pci.h	/^#define PCI_TCARDBRIDGE /;"	d
+PCI_TDEV	includes/hal/pci.h	/^#define PCI_TDEV /;"	d
+PCI_TPCIBRIDGE	includes/hal/pci.h	/^#define PCI_TPCIBRIDGE /;"	d
+PCI_VENDOR_INVLD	includes/hal/pci.h	/^#define PCI_VENDOR_INVLD /;"	d
+PC_AT_IRQ_KBD	includes/arch/x86/interrupts.h	/^#define PC_AT_IRQ_KBD /;"	d
+PC_AT_IRQ_RTC	includes/arch/x86/interrupts.h	/^#define PC_AT_IRQ_RTC /;"	d
+PC_KBD_IV	includes/arch/x86/interrupts.h	/^#define PC_KBD_IV /;"	d
+PDE	includes/mm/page.h	/^#define PDE(/;"	d
+PD_BASE_VADDR	includes/mm/page.h	/^#define PD_BASE_VADDR /;"	d
+PD_INDEX	includes/mm/page.h	/^#define PD_INDEX(/;"	d
+PD_LAST_INDEX	includes/mm/page.h	/^#define PD_LAST_INDEX /;"	d
+PD_MOUNT_1	includes/mm/page.h	/^#define PD_MOUNT_1 /;"	d
+PD_REFERENCED	includes/mm/page.h	/^#define PD_REFERENCED /;"	d
+PG_ACCESSED	includes/mm/page.h	/^#define PG_ACCESSED(/;"	d
+PG_ALIGN	includes/mm/page.h	/^#define PG_ALIGN(/;"	d
+PG_ALLOW_USER	includes/mm/page.h	/^#define PG_ALLOW_USER /;"	d
+PG_DIRTY	includes/mm/page.h	/^#define PG_DIRTY(/;"	d
+PG_DISABLE_CACHE	includes/mm/page.h	/^#define PG_DISABLE_CACHE /;"	d
+PG_ENTRY_ADDR	includes/mm/page.h	/^#define PG_ENTRY_ADDR(/;"	d
+PG_ENTRY_FLAGS	includes/mm/page.h	/^#define PG_ENTRY_FLAGS(/;"	d
+PG_FIRST_TABLE	includes/mm/page.h	/^#define PG_FIRST_TABLE /;"	d
+PG_HIG	includes/mm/page.h	/^#define PG_HIG(/;"	d
+PG_HIG_MSK	includes/mm/page.h	/^#define PG_HIG_MSK /;"	d
+PG_LAST_TABLE	includes/mm/page.h	/^#define PG_LAST_TABLE /;"	d
+PG_MAX_ENTRIES	includes/mm/page.h	/^#define PG_MAX_ENTRIES /;"	d
+PG_MID	includes/mm/page.h	/^#define PG_MID(/;"	d
+PG_MID_MSk	includes/mm/page.h	/^#define PG_MID_MSk /;"	d
+PG_MOUNT_1	includes/mm/page.h	/^#define PG_MOUNT_1 /;"	d
+PG_MOUNT_2	includes/mm/page.h	/^#define PG_MOUNT_2 /;"	d
+PG_MOUNT_3	includes/mm/page.h	/^#define PG_MOUNT_3 /;"	d
+PG_MOUNT_4	includes/mm/page.h	/^#define PG_MOUNT_4 /;"	d
+PG_OFFSET	includes/mm/page.h	/^#define PG_OFFSET(/;"	d
+PG_PDE_4MB	includes/mm/page.h	/^#define PG_PDE_4MB /;"	d
+PG_PREM_R	includes/mm/page.h	/^#define PG_PREM_R /;"	d
+PG_PREM_RW	includes/mm/page.h	/^#define PG_PREM_RW /;"	d
+PG_PREM_UR	includes/mm/page.h	/^#define PG_PREM_UR /;"	d
+PG_PREM_URW	includes/mm/page.h	/^#define PG_PREM_URW /;"	d
+PG_PRESENT	includes/mm/page.h	/^#define PG_PRESENT /;"	d
+PG_SIZE	includes/mm/page.h	/^#define PG_SIZE /;"	d
+PG_SIZE_BITS	includes/mm/page.h	/^#define PG_SIZE_BITS /;"	d
+PG_TABLE_IDENTITY_INDEX	arch/x86/hhk.c	/^#define PG_TABLE_IDENTITY_INDEX /;"	d	file:
+PG_TABLE_KERNEL_INDEX	arch/x86/hhk.c	/^#define PG_TABLE_KERNEL_INDEX /;"	d	file:
+PG_TABLE_STACK_INDEX	arch/x86/hhk.c	/^#define PG_TABLE_STACK_INDEX /;"	d	file:
+PG_WRITE	includes/mm/page.h	/^#define PG_WRITE /;"	d
+PG_WRITE_THROUGH	includes/mm/page.h	/^#define PG_WRITE_THROUGH /;"	d
+PILE_CACHELINE	includes/mm/cake.h	/^#define PILE_CACHELINE /;"	d
+PMProfile	includes/hal/acpi/fadt.h	/^enum PMProfile {$/;"	g
+PNAME_MAX_LEN	includes/mm/cake.h	/^#define PNAME_MAX_LEN /;"	d
+PPG_LOCKED	includes/mm/pmm.h	/^#define PPG_LOCKED /;"	d
+PPG_PERSIST	includes/mm/pmm.h	/^#define PPG_PERSIST /;"	d
+PP_FGPERSIST	includes/mm/pmm.h	/^#define PP_FGPERSIST /;"	d
+PRINTF_DEFAULT_FLOAT_PRECISION	libs/libc/stdio/printf.c	/^#define PRINTF_DEFAULT_FLOAT_PRECISION /;"	d	file:
+PRINTF_FTOA_BUFFER_SIZE	libs/libc/stdio/printf.c	/^#define PRINTF_FTOA_BUFFER_SIZE /;"	d	file:
+PRINTF_MAX_FLOAT	libs/libc/stdio/printf.c	/^#define PRINTF_MAX_FLOAT /;"	d	file:
+PRINTF_NTOA_BUFFER_SIZE	libs/libc/stdio/printf.c	/^#define PRINTF_NTOA_BUFFER_SIZE /;"	d	file:
+PRINTF_SUPPORT_EXPONENTIAL	libs/libc/stdio/printf.c	/^#define PRINTF_SUPPORT_EXPONENTIAL$/;"	d	file:
+PRINTF_SUPPORT_FLOAT	libs/libc/stdio/printf.c	/^#define PRINTF_SUPPORT_FLOAT$/;"	d	file:
+PRINTF_SUPPORT_LONG_LONG	libs/libc/stdio/printf.c	/^#define PRINTF_SUPPORT_LONG_LONG$/;"	d	file:
+PRINTF_SUPPORT_PTRDIFF_T	libs/libc/stdio/printf.c	/^#define PRINTF_SUPPORT_PTRDIFF_T$/;"	d	file:
+PS2_CFG_P1INT	includes/peripheral/ps2kbd.h	/^#define PS2_CFG_P1INT /;"	d
+PS2_CFG_P2INT	includes/peripheral/ps2kbd.h	/^#define PS2_CFG_P2INT /;"	d
+PS2_CFG_TRANSLATION	includes/peripheral/ps2kbd.h	/^#define PS2_CFG_TRANSLATION /;"	d
+PS2_CMD_PORT1_DISABLE	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_PORT1_DISABLE /;"	d
+PS2_CMD_PORT1_ENABLE	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_PORT1_ENABLE /;"	d
+PS2_CMD_PORT2_DISABLE	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_PORT2_DISABLE /;"	d
+PS2_CMD_PORT2_ENABLE	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_PORT2_ENABLE /;"	d
+PS2_CMD_QUEUE_SIZE	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_QUEUE_SIZE /;"	d
+PS2_CMD_READ_CFG	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_READ_CFG /;"	d
+PS2_CMD_SELFTEST	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_SELFTEST /;"	d
+PS2_CMD_SELFTEST_PORT1	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_SELFTEST_PORT1 /;"	d
+PS2_CMD_WRITE_CFG	includes/peripheral/ps2kbd.h	/^#define PS2_CMD_WRITE_CFG /;"	d
+PS2_DELAY	includes/peripheral/ps2kbd.h	/^#define PS2_DELAY /;"	d
+PS2_DEV_CMD_MAX_ATTEMPTS	kernel/peripheral/ps2kbd.c	/^#define PS2_DEV_CMD_MAX_ATTEMPTS /;"	d	file:
+PS2_KBD_CMD_ECHO	includes/peripheral/ps2kbd.h	/^#define PS2_KBD_CMD_ECHO /;"	d
+PS2_KBD_CMD_IDENTIFY	includes/peripheral/ps2kbd.h	/^#define PS2_KBD_CMD_IDENTIFY /;"	d
+PS2_KBD_CMD_SCANCODE_SET	includes/peripheral/ps2kbd.h	/^#define PS2_KBD_CMD_SCANCODE_SET /;"	d
+PS2_KBD_CMD_SCAN_DISABLE	includes/peripheral/ps2kbd.h	/^#define PS2_KBD_CMD_SCAN_DISABLE /;"	d
+PS2_KBD_CMD_SCAN_ENABLE	includes/peripheral/ps2kbd.h	/^#define PS2_KBD_CMD_SCAN_ENABLE /;"	d
+PS2_KBD_CMD_SETLED	includes/peripheral/ps2kbd.h	/^#define PS2_KBD_CMD_SETLED /;"	d
+PS2_KBD_RECV_BUFFER_SIZE	includes/peripheral/ps2kbd.h	/^#define PS2_KBD_RECV_BUFFER_SIZE /;"	d
+PS2_NO_ARG	includes/peripheral/ps2kbd.h	/^#define PS2_NO_ARG /;"	d
+PS2_PORT_CTRL_CMDREG	includes/peripheral/ps2kbd.h	/^#define PS2_PORT_CTRL_CMDREG /;"	d
+PS2_PORT_CTRL_STATUS	includes/peripheral/ps2kbd.h	/^#define PS2_PORT_CTRL_STATUS /;"	d
+PS2_PORT_ENC_CMDREG	includes/peripheral/ps2kbd.h	/^#define PS2_PORT_ENC_CMDREG /;"	d
+PS2_PORT_ENC_DATA	includes/peripheral/ps2kbd.h	/^#define PS2_PORT_ENC_DATA /;"	d
+PS2_RESULT_ACK	includes/peripheral/ps2kbd.h	/^#define PS2_RESULT_ACK /;"	d
+PS2_RESULT_ECHO	includes/peripheral/ps2kbd.h	/^#define PS2_RESULT_ECHO /;"	d
+PS2_RESULT_NAK	includes/peripheral/ps2kbd.h	/^#define PS2_RESULT_NAK /;"	d
+PS2_RESULT_TEST_OK	includes/peripheral/ps2kbd.h	/^#define PS2_RESULT_TEST_OK /;"	d
+PS2_STATUS_IFULL	includes/peripheral/ps2kbd.h	/^#define PS2_STATUS_IFULL /;"	d
+PS2_STATUS_OFULL	includes/peripheral/ps2kbd.h	/^#define PS2_STATUS_OFULL /;"	d
+PTE	includes/mm/page.h	/^#define PTE(/;"	d
+PTE_NULL	includes/mm/page.h	/^#define PTE_NULL /;"	d
+PT_ADDR	arch/x86/hhk.c	/^#define PT_ADDR(/;"	d	file:
+PT_BASE_VADDR	includes/mm/page.h	/^#define PT_BASE_VADDR /;"	d
+PT_INDEX	includes/mm/page.h	/^#define PT_INDEX(/;"	d
+PT_VADDR	includes/mm/page.h	/^#define PT_VADDR(/;"	d
+P_ADDR	includes/mm/page.h	/^#define P_ADDR(/;"	d
+PerformanceServer	includes/hal/acpi/fadt.h	/^    PerformanceServer = 7,$/;"	e	enum:PMProfile
+Pysical	includes/mm/page.h	/^#define Pysical(/;"	d
+QEMU_MEM_SIZE	includes/mm/pmm.h	/^#define QEMU_MEM_SIZE /;"	d
+RECURSION_MAP_INDEX	kernel/mm/vmm.c	/^#define RECURSION_MAP_INDEX /;"	d	file:
+REGION_EXEC	includes/mm/mm.h	/^#define REGION_EXEC /;"	d
+REGION_MODE_MASK	includes/mm/mm.h	/^#define REGION_MODE_MASK /;"	d
+REGION_PERM_MASK	includes/mm/mm.h	/^#define REGION_PERM_MASK /;"	d
+REGION_PRIVATE	includes/mm/mm.h	/^#define REGION_PRIVATE /;"	d
+REGION_READ	includes/mm/mm.h	/^#define REGION_READ /;"	d
+REGION_RSHARED	includes/mm/mm.h	/^#define REGION_RSHARED /;"	d
+REGION_RW	includes/mm/mm.h	/^#define REGION_RW /;"	d
+REGION_WRITE	includes/mm/mm.h	/^#define REGION_WRITE /;"	d
+REGION_WSHARED	includes/mm/mm.h	/^#define REGION_WSHARED /;"	d
+REGS_CS	includes/arch/x86/interrupts.h	/^#define REGS_CS /;"	d
+REGS_EAX	includes/arch/x86/interrupts.h	/^#define REGS_EAX /;"	d
+REGS_EBP	includes/arch/x86/interrupts.h	/^#define REGS_EBP /;"	d
+REGS_EBX	includes/arch/x86/interrupts.h	/^#define REGS_EBX /;"	d
+REGS_ECX	includes/arch/x86/interrupts.h	/^#define REGS_ECX /;"	d
+REGS_EDI	includes/arch/x86/interrupts.h	/^#define REGS_EDI /;"	d
+REGS_EDX	includes/arch/x86/interrupts.h	/^#define REGS_EDX /;"	d
+REGS_EFLAGS	includes/arch/x86/interrupts.h	/^#define REGS_EFLAGS /;"	d
+REGS_EIP	includes/arch/x86/interrupts.h	/^#define REGS_EIP /;"	d
+REGS_ERRCODE	includes/arch/x86/interrupts.h	/^#define REGS_ERRCODE /;"	d
+REGS_ESI	includes/arch/x86/interrupts.h	/^#define REGS_ESI /;"	d
+REGS_ESP	includes/arch/x86/interrupts.h	/^#define REGS_ESP /;"	d
+REGS_SS	includes/arch/x86/interrupts.h	/^#define REGS_SS /;"	d
+REGS_UESP	includes/arch/x86/interrupts.h	/^#define REGS_UESP /;"	d
+REGS_VECTOR	includes/arch/x86/interrupts.h	/^#define REGS_VECTOR /;"	d
+ROUNDDOWN	includes/spike.h	/^#define ROUNDDOWN(/;"	d
+ROUNDUP	includes/spike.h	/^#define ROUNDUP(/;"	d
+RTC_24HRS_ENCODED	includes/hal/rtc.h	/^#define RTC_24HRS_ENCODED(/;"	d
+RTC_BIN_ENCODED	includes/hal/rtc.h	/^#define RTC_BIN_ENCODED(/;"	d
+RTC_CURRENT_CENTRY	includes/hal/rtc.h	/^#define RTC_CURRENT_CENTRY /;"	d
+RTC_DIVIDER_33KHZ	includes/hal/rtc.h	/^#define RTC_DIVIDER_33KHZ /;"	d
+RTC_FREQUENCY_1024HZ	includes/hal/rtc.h	/^#define RTC_FREQUENCY_1024HZ /;"	d
+RTC_INDEX_PORT	includes/hal/rtc.h	/^#define RTC_INDEX_PORT /;"	d
+RTC_REG_A	includes/hal/rtc.h	/^#define RTC_REG_A /;"	d
+RTC_REG_B	includes/hal/rtc.h	/^#define RTC_REG_B /;"	d
+RTC_REG_C	includes/hal/rtc.h	/^#define RTC_REG_C /;"	d
+RTC_REG_D	includes/hal/rtc.h	/^#define RTC_REG_D /;"	d
+RTC_REG_DAY	includes/hal/rtc.h	/^#define RTC_REG_DAY /;"	d
+RTC_REG_HRS	includes/hal/rtc.h	/^#define RTC_REG_HRS /;"	d
+RTC_REG_MIN	includes/hal/rtc.h	/^#define RTC_REG_MIN /;"	d
+RTC_REG_MTH	includes/hal/rtc.h	/^#define RTC_REG_MTH /;"	d
+RTC_REG_SEC	includes/hal/rtc.h	/^#define RTC_REG_SEC /;"	d
+RTC_REG_WDY	includes/hal/rtc.h	/^#define RTC_REG_WDY /;"	d
+RTC_REG_YRS	includes/hal/rtc.h	/^#define RTC_REG_YRS /;"	d
+RTC_TARGET_PORT	includes/hal/rtc.h	/^#define RTC_TARGET_PORT /;"	d
+RTC_TIMER_BASE_FREQUENCY	includes/hal/rtc.h	/^#define RTC_TIMER_BASE_FREQUENCY /;"	d
+RTC_TIMER_IV	includes/arch/x86/interrupts.h	/^#define RTC_TIMER_IV /;"	d
+RTC_TIMER_ON	includes/hal/rtc.h	/^#define RTC_TIMER_ON /;"	d
+SATA_LBA_COMPONENT	includes/hal/ahci/sata.h	/^#define SATA_LBA_COMPONENT(/;"	d
+SATA_REG_FIS_COMMAND	includes/hal/ahci/sata.h	/^#define SATA_REG_FIS_COMMAND /;"	d
+SATA_REG_FIS_D2H	includes/hal/ahci/sata.h	/^#define SATA_REG_FIS_D2H /;"	d
+SATA_REG_FIS_H2D	includes/hal/ahci/sata.h	/^#define SATA_REG_FIS_H2D /;"	d
+SCHED_TIME_SLICE	includes/sched.h	/^#define SCHED_TIME_SLICE /;"	d
+SCSI_FLIP	includes/hal/ahci/scsi.h	/^#define SCSI_FLIP(/;"	d
+SCSI_READ_BLOCKS_12	includes/hal/ahci/scsi.h	/^#define SCSI_READ_BLOCKS_12 /;"	d
+SCSI_READ_BLOCKS_16	includes/hal/ahci/scsi.h	/^#define SCSI_READ_BLOCKS_16 /;"	d
+SCSI_READ_CAPACITY_10	includes/hal/ahci/scsi.h	/^#define SCSI_READ_CAPACITY_10 /;"	d
+SCSI_READ_CAPACITY_16	includes/hal/ahci/scsi.h	/^#define SCSI_READ_CAPACITY_16 /;"	d
+SCSI_WRITE_BLOCKS_12	includes/hal/ahci/scsi.h	/^#define SCSI_WRITE_BLOCKS_12 /;"	d
+SCSI_WRITE_BLOCKS_16	includes/hal/ahci/scsi.h	/^#define SCSI_WRITE_BLOCKS_16 /;"	d
+SD_32BITS	includes/arch/x86/gdt.h	/^#define SD_32BITS(/;"	d
+SD_4KB_GRAND	includes/arch/x86/gdt.h	/^#define SD_4KB_GRAND(/;"	d
+SD_AVL	includes/arch/x86/gdt.h	/^#define SD_AVL(/;"	d
+SD_CODE_DATA	includes/arch/x86/gdt.h	/^#define SD_CODE_DATA(/;"	d
+SD_DPL	includes/arch/x86/gdt.h	/^#define SD_DPL(/;"	d
+SD_PRESENT	includes/arch/x86/gdt.h	/^#define SD_PRESENT(/;"	d
+SD_TYPE	includes/arch/x86/gdt.h	/^#define SD_TYPE(/;"	d
+SD_X	includes/arch/x86/gdt.h	/^#define SD_X(/;"	d
+SEGFAULT	includes/status.h	/^#define SEGFAULT /;"	d
+SEG_BASE_H	includes/arch/x86/gdt.h	/^#define SEG_BASE_H(/;"	d
+SEG_BASE_L	includes/arch/x86/gdt.h	/^#define SEG_BASE_L(/;"	d
+SEG_BASE_M	includes/arch/x86/gdt.h	/^#define SEG_BASE_M(/;"	d
+SEG_CODE_EX	includes/arch/x86/gdt.h	/^#define SEG_CODE_EX /;"	d
+SEG_CODE_EXA	includes/arch/x86/gdt.h	/^#define SEG_CODE_EXA /;"	d
+SEG_CODE_EXC	includes/arch/x86/gdt.h	/^#define SEG_CODE_EXC /;"	d
+SEG_CODE_EXCA	includes/arch/x86/gdt.h	/^#define SEG_CODE_EXCA /;"	d
+SEG_CODE_EXRD	includes/arch/x86/gdt.h	/^#define SEG_CODE_EXRD /;"	d
+SEG_CODE_EXRDA	includes/arch/x86/gdt.h	/^#define SEG_CODE_EXRDA /;"	d
+SEG_CODE_EXRDC	includes/arch/x86/gdt.h	/^#define SEG_CODE_EXRDC /;"	d
+SEG_CODE_EXRDCA	includes/arch/x86/gdt.h	/^#define SEG_CODE_EXRDCA /;"	d
+SEG_DATA_RD	includes/arch/x86/gdt.h	/^#define SEG_DATA_RD /;"	d
+SEG_DATA_RDA	includes/arch/x86/gdt.h	/^#define SEG_DATA_RDA /;"	d
+SEG_DATA_RDEXPD	includes/arch/x86/gdt.h	/^#define SEG_DATA_RDEXPD /;"	d
+SEG_DATA_RDEXPDA	includes/arch/x86/gdt.h	/^#define SEG_DATA_RDEXPDA /;"	d
+SEG_DATA_RDWR	includes/arch/x86/gdt.h	/^#define SEG_DATA_RDWR /;"	d
+SEG_DATA_RDWRA	includes/arch/x86/gdt.h	/^#define SEG_DATA_RDWRA /;"	d
+SEG_DATA_RDWREXPD	includes/arch/x86/gdt.h	/^#define SEG_DATA_RDWREXPD /;"	d
+SEG_DATA_RDWREXPDA	includes/arch/x86/gdt.h	/^#define SEG_DATA_RDWREXPDA /;"	d
+SEG_LIMIT_H	includes/arch/x86/gdt.h	/^#define SEG_LIMIT_H(/;"	d
+SEG_LIMIT_L	includes/arch/x86/gdt.h	/^#define SEG_LIMIT_L(/;"	d
+SEG_R0_CODE	includes/arch/x86/gdt.h	/^#define SEG_R0_CODE /;"	d
+SEG_R0_DATA	includes/arch/x86/gdt.h	/^#define SEG_R0_DATA /;"	d
+SEG_R3_CODE	includes/arch/x86/gdt.h	/^#define SEG_R3_CODE /;"	d
+SEG_R3_DATA	includes/arch/x86/gdt.h	/^#define SEG_R3_DATA /;"	d
+SEG_TABLE	includes/tty/cxk.h	/^const char *SEG_TABLE = "#RMNHQODBWGPZ*@$C&98?32I1>!:-;. ";$/;"	v	typeref:typename:const char *
+SEG_TABLE	includes/tty/cxk2.h	/^char SEG_TABLE[] = "0123456789abcdefghigklmnopqrstuvwxyz";$/;"	v	typeref:typename:char[]
+SEG_TSS	includes/arch/x86/gdt.h	/^#define SEG_TSS /;"	d
+SEL_RPL	includes/hal/cpu.h	/^#define SEL_RPL(/;"	d
+SET_PDE	arch/x86/hhk.c	/^#define SET_PDE(/;"	d	file:
+SET_PTE	arch/x86/hhk.c	/^#define SET_PTE(/;"	d	file:
+SIG_OFF_HANDLER	includes/process.h	/^#define SIG_OFF_HANDLER /;"	d
+SIG_OFF_NUM	includes/process.h	/^#define SIG_OFF_NUM /;"	d
+SIZEOF_REGS	includes/process.h	/^#define SIZEOF_REGS /;"	d
+SOHOServer	includes/hal/acpi/fadt.h	/^    SOHOServer = 5,$/;"	e	enum:PMProfile
+SOURCE_FILES	makefile	/^SOURCE_FILES := $(shell find -name "*.[cS]")$/;"	m
+SRC	makefile	/^SRC := $(patsubst .\/%, $(OBJECT_DIR)\/%.o, $(SOURCE_FILES))$/;"	m
+START_PAGE	includes/mm/pmm.h	/^#define START_PAGE /;"	d
+SYS_TIMER_FREQUENCY_HZ	includes/timer.h	/^#define SYS_TIMER_FREQUENCY_HZ /;"	d
+TASKFULL	includes/status.h	/^#define TASKFULL /;"	d
+TASK_BLOCKED	includes/process.h	/^#define TASK_BLOCKED /;"	d
+TASK_CREATED	includes/process.h	/^#define TASK_CREATED /;"	d
+TASK_DESTROY	includes/process.h	/^#define TASK_DESTROY /;"	d
+TASK_FINPAUSE	includes/process.h	/^#define TASK_FINPAUSE /;"	d
+TASK_OFF_PAGETABLE	includes/process.h	/^#define TASK_OFF_PAGETABLE /;"	d
+TASK_OFF_USTACK	includes/process.h	/^#define TASK_OFF_USTACK /;"	d
+TASK_RUNNING	includes/process.h	/^#define TASK_RUNNING /;"	d
+TASK_STOPPED	includes/process.h	/^#define TASK_STOPPED /;"	d
+TASK_TABLE_SIZE_MB	includes/constant.h	/^#define TASK_TABLE_SIZE_MB /;"	d
+TASK_TABLE_START	includes/constant.h	/^#define TASK_TABLE_START /;"	d
+TASK_TERMINATED	includes/process.h	/^#define TASK_TERMINATED(/;"	d
+TASK_TERMMASK	includes/process.h	/^#define TASK_TERMMASK /;"	d
+TASK_TERMNAT	includes/process.h	/^#define TASK_TERMNAT /;"	d
+TEXITNUM	includes/types.h	/^#define TEXITNUM(/;"	d
+TEXITSIG	includes/types.h	/^#define TEXITSIG /;"	d
+TEXITSTOP	includes/types.h	/^#define TEXITSTOP /;"	d
+TEXITTERM	includes/types.h	/^#define TEXITTERM /;"	d
+TEXT	kernel/tty/tty.c	/^    enum { TEXT, ESCAPE, FORMAT, } _state = TEXT;$/;"	e	enum:tty_flush_buffer::__anonc046eab70203	file:
+THEME	kernel/tty/tty.c	/^#define THEME(/;"	d	file:
+TIMER_MODE_PERIODIC	includes/timer.h	/^#define TIMER_MODE_PERIODIC /;"	d
+TRAP_BREAKPOINT	includes/arch/x86/interrupts.h	/^#define TRAP_BREAKPOINT /;"	d
+TRAP_OVERFLOW	includes/arch/x86/interrupts.h	/^#define TRAP_OVERFLOW /;"	d
+TSS_SEG	includes/constant.h	/^#define TSS_SEG /;"	d
+TTY_COLUMN	kernel/tty/tty.c	/^uint32_t TTY_COLUMN = 0;$/;"	v	typeref:typename:uint32_t
+TTY_HEIGHT	includes/tty/tty.h	/^#define TTY_HEIGHT /;"	d
+TTY_ROW	kernel/tty/tty.c	/^uint32_t TTY_ROW = 0;$/;"	v	typeref:typename:uint32_t
+TTY_THEME_COLOR	kernel/tty/tty.c	/^uint16_t TTY_THEME_COLOR= 0x7500;$/;"	v	typeref:typename:uint16_t
+TTY_WIDTH	includes/tty/tty.h	/^#define TTY_WIDTH /;"	d
+T_SELF_REF_PERM	includes/mm/page.h	/^#define T_SELF_REF_PERM /;"	d
+Tablet	includes/hal/acpi/fadt.h	/^    Tablet = 8,$/;"	e	enum:PMProfile
+U	libs/libc/stdio/printf.c	/^    uint64_t U;$/;"	m	union:_etoa::__anone6aa6f1d020a	typeref:typename:uint64_t	file:
+USER_START	includes/constant.h	/^#define USER_START /;"	d
+U_CODE_SEG	includes/constant.h	/^#define U_CODE_SEG /;"	d
+U_DATA_SEG	includes/constant.h	/^#define U_DATA_SEG /;"	d
+U_MMAP_AREA	includes/constant.h	/^#define U_MMAP_AREA /;"	d
+U_STACK_END	includes/constant.h	/^#define U_STACK_END /;"	d
+U_STACK_SIZE	includes/constant.h	/^#define U_STACK_SIZE /;"	d
+U_STACK_TOP	includes/constant.h	/^#define U_STACK_TOP /;"	d
+V2P	includes/mm/page.h	/^#define V2P(/;"	d
+VGA_BUFFER_PADDR	includes/constant.h	/^#define VGA_BUFFER_PADDR /;"	d
+VGA_BUFFER_SIZE	includes/constant.h	/^#define VGA_BUFFER_SIZE /;"	d
+VGA_BUFFER_VADDR	includes/constant.h	/^#define VGA_BUFFER_VADDR /;"	d
+VGA_COLOR_BLACK	includes/tty/tty.h	/^#define VGA_COLOR_BLACK /;"	d
+VGA_COLOR_BLUE	includes/tty/tty.h	/^#define VGA_COLOR_BLUE /;"	d
+VGA_COLOR_BROWN	includes/tty/tty.h	/^#define VGA_COLOR_BROWN /;"	d
+VGA_COLOR_CYAN	includes/tty/tty.h	/^#define VGA_COLOR_CYAN /;"	d
+VGA_COLOR_DARK_GREY	includes/tty/tty.h	/^#define VGA_COLOR_DARK_GREY /;"	d
+VGA_COLOR_GREEN	includes/tty/tty.h	/^#define VGA_COLOR_GREEN /;"	d
+VGA_COLOR_LIGHT_BLUE	includes/tty/tty.h	/^#define VGA_COLOR_LIGHT_BLUE /;"	d
+VGA_COLOR_LIGHT_BROWN	includes/tty/tty.h	/^#define VGA_COLOR_LIGHT_BROWN /;"	d
+VGA_COLOR_LIGHT_CYAN	includes/tty/tty.h	/^#define VGA_COLOR_LIGHT_CYAN /;"	d
+VGA_COLOR_LIGHT_GREEN	includes/tty/tty.h	/^#define VGA_COLOR_LIGHT_GREEN /;"	d
+VGA_COLOR_LIGHT_GREY	includes/tty/tty.h	/^#define VGA_COLOR_LIGHT_GREY /;"	d
+VGA_COLOR_LIGHT_MAGENTA	includes/tty/tty.h	/^#define VGA_COLOR_LIGHT_MAGENTA /;"	d
+VGA_COLOR_LIGHT_RED	includes/tty/tty.h	/^#define VGA_COLOR_LIGHT_RED /;"	d
+VGA_COLOR_LIVE	includes/tty/tty.h	/^#define VGA_COLOR_LIVE /;"	d
+VGA_COLOR_MAGENTA	includes/tty/tty.h	/^#define VGA_COLOR_MAGENTA /;"	d
+VGA_COLOR_RED	includes/tty/tty.h	/^#define VGA_COLOR_RED /;"	d
+VGA_COLOR_WARN	includes/tty/tty.h	/^#define VGA_COLOR_WARN /;"	d
+VGA_COLOR_WHITE	includes/tty/tty.h	/^#define VGA_COLOR_WHITE /;"	d
+VGA_HIGHT_LIGHT	includes/tty/tty.h	/^#define VGA_HIGHT_LIGHT /;"	d
+VGA_TWINKLE	includes/tty/tty.h	/^#define VGA_TWINKLE /;"	d
+VIRTUAL_BOX_PROBLEM	hal/acpi/acpi.c	/^#define VIRTUAL_BOX_PROBLEM$/;"	d	file:
+VMAP_END	includes/mm/page.h	/^#define VMAP_END /;"	d
+VMAP_IGNORE	includes/mm/vmm.h	/^#define VMAP_IGNORE /;"	d
+VMAP_NOMAP	includes/mm/vmm.h	/^#define VMAP_NOMAP /;"	d
+VMAP_NULL	includes/mm/vmm.h	/^#define VMAP_NULL /;"	d
+VMAP_START	includes/mm/page.h	/^#define VMAP_START /;"	d
+VT100_COLOR	kernel/tty/tty.c	/^uint16_t VT100_COLOR [64] = {$/;"	v	typeref:typename:uint16_t[64]
+V_ADDR	includes/mm/page.h	/^#define V_ADDR(/;"	d
+WEXITSTATUS	includes/types.h	/^#define WEXITSTATUS(/;"	d
+WIFEXITED	includes/types.h	/^#define WIFEXITED(/;"	d
+WIFSIGNALED	includes/types.h	/^#define WIFSIGNALED(/;"	d
+WIFSTOPPED	includes/types.h	/^#define WIFSTOPPED(/;"	d
+WITH_NMI_DISABLED	includes/hal/rtc.h	/^#define WITH_NMI_DISABLED /;"	d
+WNOHANG	includes/types.h	/^#define WNOHANG /;"	d
+WUNTRACED	includes/types.h	/^#define WUNTRACED /;"	d
+Workstation	includes/hal/acpi/fadt.h	/^    Workstation = 3,$/;"	e	enum:PMProfile
+_SIGALRM	includes/signal.h	/^#define _SIGALRM /;"	d
+_SIGCHLD	includes/signal.h	/^#define _SIGCHLD /;"	d
+_SIGCLD	includes/signal.h	/^#define _SIGCLD /;"	d
+_SIGCONT	includes/signal.h	/^#define _SIGCONT /;"	d
+_SIGINT	includes/signal.h	/^#define _SIGINT /;"	d
+_SIGKILL	includes/signal.h	/^#define _SIGKILL /;"	d
+_SIGNAL_UNMASKABLE	includes/signal.h	/^#define _SIGNAL_UNMASKABLE /;"	d
+_SIGSEGV	includes/signal.h	/^#define _SIGSEGV /;"	d
+_SIGSTOP	includes/signal.h	/^#define _SIGSTOP /;"	d
+_SIGTERM	includes/signal.h	/^#define _SIGTERM /;"	d
+_SIG_BLOCK	includes/signal.h	/^#define _SIG_BLOCK /;"	d
+_SIG_MAX	includes/signal.h	/^#define _SIG_MAX /;"	d
+_SIG_PENDING	includes/signal.h	/^#define _SIG_PENDING(/;"	d
+_SIG_SETMASK	includes/signal.h	/^#define _SIG_SETMASK /;"	d
+_SIG_UNBLOCK	includes/signal.h	/^#define _SIG_UNBLOCK /;"	d
+_SIG_USER	includes/signal.h	/^#define _SIG_USER /;"	d
+__APIC_BASE_PADDR	includes/hal/apic.h	/^#define __APIC_BASE_PADDR /;"	d
+__ASM_S_	kernel/asm/x86/interrupts.S	/^#define  __ASM_S_$/;"	d	file:
+__ASM_S_	kernel/asm/x86/prologue.S	/^#define __ASM_S_$/;"	d	file:
+__ASM_S_	kernel/asm/x86/syscall.S	/^#define __ASM_S_$/;"	d	file:
+__ASM__	arch/x86/boot.S	/^#define __ASM__ /;"	d	file:
+__CURRENT_PTE	includes/mm/page.h	/^#define __CURRENT_PTE(/;"	d
+__DEFINE_SYSTEMCALL_0	includes/syscall.h	/^#define __DEFINE_SYSTEMCALL_0(/;"	d
+__DEFINE_SYSTEMCALL_0	kernel/process.c	/^ __DEFINE_SYSTEMCALL_0(pid_t, fork){$/;"	f
+__DEFINE_SYSTEMCALL_0	kernel/process.c	/^ __DEFINE_SYSTEMCALL_0(pid_t, getpid){$/;"	f
+__DEFINE_SYSTEMCALL_0	kernel/process.c	/^ __DEFINE_SYSTEMCALL_0(pid_t, getppid){$/;"	f
+__DEFINE_SYSTEMCALL_0	kernel/process.c	/^__DEFINE_SYSTEMCALL_0(pid_t, getpgid){$/;"	f
+__DEFINE_SYSTEMCALL_0	kernel/sched.c	/^__DEFINE_SYSTEMCALL_0(void, yield){$/;"	f
+__DEFINE_SYSTEMCALL_0	kernel/signal.c	/^__DEFINE_SYSTEMCALL_0(int, pause){$/;"	f
+__DEFINE_SYSTEMCALL_1	includes/syscall.h	/^#define __DEFINE_SYSTEMCALL_1(/;"	d
+__DEFINE_SYSTEMCALL_1	kernel/mm/dmm.c	/^__DEFINE_SYSTEMCALL_1(int, brk, void*, addr) {$/;"	f
+__DEFINE_SYSTEMCALL_1	kernel/mm/dmm.c	/^__DEFINE_SYSTEMCALL_1(void*, sbrk, size_t, size) {$/;"	f
+__DEFINE_SYSTEMCALL_1	kernel/sched.c	/^__DEFINE_SYSTEMCALL_1(unsigned int, alarm, unsigned int, seconds){$/;"	f
+__DEFINE_SYSTEMCALL_1	kernel/sched.c	/^__DEFINE_SYSTEMCALL_1(unsigned int, sleep, unsigned int, seconds){$/;"	f
+__DEFINE_SYSTEMCALL_1	kernel/sched.c	/^__DEFINE_SYSTEMCALL_1(void, _exit, int, exit_code){$/;"	f
+__DEFINE_SYSTEMCALL_2	includes/syscall.h	/^#define __DEFINE_SYSTEMCALL_2(/;"	d
+__DEFINE_SYSTEMCALL_2	kernel/process.c	/^__DEFINE_SYSTEMCALL_2(int, setpgid, pid_t, pid, pid_t, pgid){$/;"	f
+__DEFINE_SYSTEMCALL_2	kernel/signal.c	/^__DEFINE_SYSTEMCALL_2(int, kill, pid_t, pid, int, signum){$/;"	f
+__DEFINE_SYSTEMCALL_2	kernel/signal.c	/^__DEFINE_SYSTEMCALL_2(int, signal,$/;"	f
+__DEFINE_SYSTEMCALL_3	includes/syscall.h	/^#define __DEFINE_SYSTEMCALL_3(/;"	d
+__DEFINE_SYSTEMCALL_4	includes/syscall.h	/^#define __DEFINE_SYSTEMCALL_4(/;"	d
+__DO_INT_33	includes/syscall.h	/^#define __DO_INT_33(/;"	d
+__HBA_PACKED__	includes/hal/ahci/hba.h	/^#define __HBA_PACKED__ /;"	d
+__HBA_PACKED__	includes/hal/ahci/hba.h	/^}__HBA_PACKED__;$/;"	v	typeref:struct:hba_cmd_header
+__HBA_PACKED__	includes/hal/ahci/hba.h	/^}__HBA_PACKED__;$/;"	v	typeref:struct:hba_cmd_table
+__HBA_PACKED__	includes/hal/ahci/hba.h	/^}__HBA_PACKED__;$/;"	v	typeref:struct:hba_prdte
+__HBA_PACKED__	includes/hal/ahci/sata.h	/^}__HBA_PACKED__;$/;"	v	typeref:struct:sata_data_fis
+__HBA_PACKED__	includes/hal/ahci/sata.h	/^}__HBA_PACKED__;$/;"	v	typeref:struct:sata_fis_head
+__HBA_PACKED__	includes/hal/ahci/sata.h	/^}__HBA_PACKED__;$/;"	v	typeref:struct:sata_reg_fis
+__LUNAIX_ACPI_MADT_H	includes/hal/acpi/madt.h	/^#define __LUNAIX_ACPI_MADT_H$/;"	d
+__MOUNTED_PGDIR	includes/mm/page.h	/^#define __MOUNTED_PGDIR(/;"	d
+__MOUNTED_PGTABLE	includes/mm/page.h	/^#define __MOUNTED_PGTABLE(/;"	d
+__MOUNTED_PTE	includes/mm/page.h	/^#define __MOUNTED_PTE(/;"	d
+__PARAM_MAP1	includes/syscall.h	/^#define __PARAM_MAP1(/;"	d
+__PARAM_MAP2	includes/syscall.h	/^#define __PARAM_MAP2(/;"	d
+__PARAM_MAP3	includes/syscall.h	/^#define __PARAM_MAP3(/;"	d
+__PARAM_MAP4	includes/syscall.h	/^#define __PARAM_MAP4(/;"	d
+__PARAM_MAP5	includes/syscall.h	/^#define __PARAM_MAP5(/;"	d
+__PARAM_MAP6	includes/syscall.h	/^#define __PARAM_MAP6(/;"	d
+__SIGCLEAR	includes/signal.h	/^#define __SIGCLEAR(/;"	d
+__SIGNAL	includes/signal.h	/^#define __SIGNAL(/;"	d
+__SIGSET	includes/signal.h	/^#define __SIGSET(/;"	d
+__SIGTEST	includes/signal.h	/^#define __SIGTEST(/;"	d
+__SYSCALL_INTERRUPTIBLE	includes/syscall.h	/^#define __SYSCALL_INTERRUPTIBLE(/;"	d
+__SYSCALL_MAX	includes/syscall.h	/^#define __SYSCALL_MAX /;"	d
+__SYSCALL_MAX_PARAMETER	includes/syscall.h	/^#define __SYSCALL_MAX_PARAMETER /;"	d
+__SYSCALL__exit	includes/syscall.h	/^#define __SYSCALL__exit /;"	d
+__SYSCALL_alarm	includes/syscall.h	/^#define __SYSCALL_alarm /;"	d
+__SYSCALL_brk	includes/syscall.h	/^#define __SYSCALL_brk /;"	d
+__SYSCALL_fork	includes/syscall.h	/^#define __SYSCALL_fork /;"	d
+__SYSCALL_getpid	includes/syscall.h	/^#define __SYSCALL_getpid /;"	d
+__SYSCALL_getppid	includes/syscall.h	/^#define __SYSCALL_getppid /;"	d
+__SYSCALL_kill	includes/syscall.h	/^#define __SYSCALL_kill /;"	d
+__SYSCALL_pause	includes/syscall.h	/^#define __SYSCALL_pause /;"	d
+__SYSCALL_sbrk	includes/syscall.h	/^#define __SYSCALL_sbrk /;"	d
+__SYSCALL_signal	includes/syscall.h	/^#define __SYSCALL_signal /;"	d
+__SYSCALL_sigpending	includes/syscall.h	/^#define __SYSCALL_sigpending /;"	d
+__SYSCALL_sigprocmask	includes/syscall.h	/^#define __SYSCALL_sigprocmask /;"	d
+__SYSCALL_sigreturn	includes/syscall.h	/^#define __SYSCALL_sigreturn /;"	d
+__SYSCALL_sigsuspend	includes/syscall.h	/^#define __SYSCALL_sigsuspend /;"	d
+__SYSCALL_sleep	includes/syscall.h	/^#define __SYSCALL_sleep /;"	d
+__SYSCALL_wait	includes/syscall.h	/^#define __SYSCALL_wait /;"	d
+__SYSCALL_waitpid	includes/syscall.h	/^#define __SYSCALL_waitpid /;"	d
+__SYSCALL_yield	includes/syscall.h	/^#define __SYSCALL_yield /;"	d
+__SYSTEMCALL_0	includes/syscall.h	/^#define __SYSTEMCALL_0(/;"	d
+__SYSTEMCALL_1	includes/syscall.h	/^#define __SYSTEMCALL_1(/;"	d
+__SYSTEMCALL_2	includes/syscall.h	/^#define __SYSTEMCALL_2(/;"	d
+__SYSTEMCALL_3	includes/syscall.h	/^#define __SYSTEMCALL_3(/;"	d
+__SYSTEMCALL_4	includes/syscall.h	/^#define __SYSTEMCALL_4(/;"	d
+__USER_SPACE__	includes/spike.h	/^#define __USER_SPACE__ /;"	d
+___start_kernel	kernel/asm/x86/prologue.S	/^   ___start_kernel:$/;"	l
+__after_change_pgtable	kernel/asm/x86/interrupts.S	/^__after_change_pgtable:$/;"	l
+__after_change_seg	kernel/asm/x86/interrupts.S	/^__after_change_seg:$/;"	l
+__after_process_signal	kernel/asm/x86/interrupts.S	/^ __after_process_signal:$/;"	l
+__anon256a80270108	includes/mm/page.h	/^typedef struct {$/;"	s
+__anon256a80270208	includes/mm/page.h	/^typedef  struct {$/;"	s
+__anon391dcb830108	includes/arch/x86/interrupts.h	/^typedef struct {$/;"	s
+__anon40b44dc00108	includes/process.h	/^    struct {$/;"	s	struct:task_struct
+__anon89a37adc0108	includes/hal/acpi/sdt.h	/^typedef struct {$/;"	s
+__anon89a37adc0208	includes/hal/acpi/sdt.h	/^typedef struct {$/;"	s
+__anon8c10de2d0108	includes/hal/cpu.h	/^typedef struct {$/;"	s
+__anon8c10de2d0208	includes/hal/cpu.h	/^typedef struct {$/;"	s
+__anon9402a4ee0108	includes/hal/acpi/acpi.h	/^typedef struct {$/;"	s
+__anon9402a4ee0208	includes/hal/acpi/acpi.h	/^typedef struct {$/;"	s
+__anonafd5f5b70108	includes/hal/acpi/madt.h	/^typedef struct {$/;"	s
+__anonafd5f5b70208	includes/hal/acpi/madt.h	/^typedef struct {$/;"	s
+__anonafd5f5b70308	includes/hal/acpi/madt.h	/^typedef struct {$/;"	s
+__anonafd5f5b70408	includes/hal/acpi/madt.h	/^typedef struct {$/;"	s
+__anonafd5f5b70508	includes/hal/acpi/madt.h	/^typedef struct {$/;"	s
+__anonafd5f5b70608	includes/hal/acpi/madt.h	/^typedef struct {$/;"	s
+__anonc046eab70108	kernel/tty/tty.c	/^static struct {$/;"	s	file:
+__anonc046eab70203	kernel/tty/tty.c	/^    enum { TEXT, ESCAPE, FORMAT, } _state = TEXT;$/;"	g	function:tty_flush_buffer	file:
+__anoncff169540108	includes/hal/ahci/hba.h	/^    struct {$/;"	s	struct:hba_device
+__anonda2e58240108	includes/mm/mm.h	/^typedef struct {$/;"	s
+__anonda936bed0108	includes/clock.h	/^typedef struct {$/;"	s
+__anone6aa6f1d0108	libs/libc/stdio/printf.c	/^typedef struct {$/;"	s	file:
+__anone6aa6f1d020a	libs/libc/stdio/printf.c	/^  union {$/;"	u	function:_etoa	file:
+__anonea4247e5010a	includes/arch/x86/boot/multiboot.h	/^    {$/;"	u	struct:multiboot_info
+__anonea4247e5020a	includes/arch/x86/boot/multiboot.h	/^    {$/;"	u	struct:multiboot_info
+__anonea4247e50308	includes/arch/x86/boot/multiboot.h	/^        {$/;"	s	union:multiboot_info::__anonea4247e5020a
+__anonea4247e50408	includes/arch/x86/boot/multiboot.h	/^        {$/;"	s	union:multiboot_info::__anonea4247e5020a
+__assert_fail	kernel/spike.c	/^void __assert_fail(const char *msg, const char *file, unsigned int line) {$/;"	f	typeref:typename:void
+__bad_call	kernel/asm/x86/syscall.S	/^__bad_call:$/;"	l
+__cake_alloc	kernel/mm/cake.c	/^void *__cake_alloc(unsigned int pg_count){$/;"	f	typeref:typename:void *
+__cake_new	kernel/mm/cake.c	/^struct _cake * __cake_new(struct cake_pile *pile){$/;"	f	typeref:struct:_cake *
+__cake_pile_init	kernel/mm/cake.c	/^void __cake_pile_init($/;"	f	typeref:typename:void
+__check_ring	kernel/asm/x86/interrupts.S	/^__check_ring:                                                    \/* ds *\/$/;"	l
+__console_next_line	kernel/jconsole.c	/^size_t __console_next_line(size_t pos) {$/;"	f	typeref:typename:size_t
+__current	kernel/sched.c	/^volatile struct task_struct *__current;$/;"	v	typeref:typename:volatile struct task_struct *
+__del_page_table	kernel/process.c	/^void __del_page_table(pid_t pid, uintptr_t mount_point){$/;"	f	typeref:typename:void
+__do_ahci_hba_intr	hal/ahci/ahci.c	/^void __do_ahci_hba_intr(){$/;"	f	typeref:typename:void
+__do_kernel_pg_fault	kernel/asm/x86/page_fault.c	/^int __do_kernel_pg_fault(v_mapping *mapping){$/;"	f	typeref:typename:int
+__do_reserved_memory	kernel/init_task.c	/^void __do_reserved_memory(int lock){$/;"	f	typeref:typename:void
+__do_switch_to	kernel/asm/x86/interrupts.S	/^__do_switch_to:$/;"	l
+__dup_page_table	kernel/process.c	/^Pysical(void *) __dup_page_table(pid_t pid, uint32_t mount_point){$/;"	f	typeref:typename:void *
+__end_call	kernel/asm/x86/syscall.S	/^__end_call:$/;"	l
+__flush_to_tty	kernel/jconsole.c	/^void __flush_to_tty(void *arg){$/;"	f	typeref:typename:void
+__get_free_slot	hal/ahci/ahci.c	/^int __get_free_slot(struct hba_port *port){$/;"	f	typeref:typename:int
+__hba_reset_port	hal/ahci/ahci.c	/^__hba_reset_port(hba_reg_t *port_base){$/;"	f
+__init_hhk_start	link/linker.ld	/^    __init_hhk_start = . ;$/;"	s
+__init_hhk_start	linker.ld	/^    __init_hhk_start = . ;$/;"	s
+__itoa_internal	libs/libc/stdlib/itoa.c	/^char *__itoa_internal$/;"	f	typeref:typename:char *
+__jyos_acpi_h_	includes/hal/acpi/acpi.h	/^#define __jyos_acpi_h_$/;"	d
+__jyos_ahci_h_	includes/hal/ahci/ahci.h	/^#define __jyos_ahci_h_$/;"	d
+__jyos_apic_h_	includes/hal/apic.h	/^#define __jyos_apic_h_$/;"	d
+__jyos_bitmap_h_	includes/datastructs/bitmap.h	/^#define __jyos_bitmap_h_$/;"	d
+__jyos_bitmap_h_	includes/libc/bitmap.h	/^#define __jyos_bitmap_h_$/;"	d
+__jyos_cake_h_	includes/mm/cake.h	/^#define __jyos_cake_h_$/;"	d
+__jyos_clock_h_	includes/clock.h	/^#define __jyos_clock_h_$/;"	d
+__jyos_console_h_	includes/tty/console.h	/^#define __jyos_console_h_$/;"	d
+__jyos_constant_h_	includes/constant.h	/^#define __jyos_constant_h_$/;"	d
+__jyos_cpu_h_	includes/hal/cpu.h	/^#define __jyos_cpu_h_$/;"	d
+__jyos_dmm_h_	includes/mm/dmm.h	/^#define __jyos_dmm_h_$/;"	d
+__jyos_fadt_h_	includes/hal/acpi/fadt.h	/^#define __jyos_fadt_h_$/;"	d
+__jyos_fifobuf_h_	includes/datastructs/fifobuf.h	/^#define __jyos_fifobuf_h_$/;"	d
+__jyos_gdt_h_	includes/arch/x86/gdt.h	/^#define __jyos_gdt_h_$/;"	d
+__jyos_hba_h_	includes/hal/ahci/hba.h	/^#define __jyos_hba_h_$/;"	d
+__jyos_idt_h_	includes/arch/x86/idt.h	/^#define __jyos_idt_h_$/;"	d
+__jyos_interrupts_h_	includes/arch/x86/interrupts.h	/^#define  __jyos_interrupts_h_$/;"	d
+__jyos_io_h_	includes/hal/io.h	/^#define __jyos_io_h_$/;"	d
+__jyos_ioapic_h_	includes/hal/ioapic.h	/^#define __jyos_ioapic_h_$/;"	d
+__jyos_jconsole_h_	includes/jconsole.h	/^#define __jyos_jconsole_h_$/;"	d
+__jyos_jlist_h_	includes/datastructs/jlist.h	/^#define __jyos_jlist_h_$/;"	d
+__jyos_kerboard_h_	includes/peripheral/keyboard.h	/^#define __jyos_kerboard_h_$/;"	d
+__jyos_kmalloc_h_	includes/mm/kalloc.h	/^#define __jyos_kmalloc_h_$/;"	d
+__jyos_madt_parser_h_	hal/acpi/parser/madt_parser.h	/^#define __jyos_madt_parser_h_$/;"	d
+__jyos_mcfg_h_	includes/hal/acpi/mcfg.h	/^#define __jyos_mcfg_h_$/;"	d
+__jyos_mm_h_	includes/mm/mm.h	/^#define __jyos_mm_h_$/;"	d
+__jyos_mmio_h_	includes/mm/mmio.h	/^#define __jyos_mmio_h_$/;"	d
+__jyos_multiboot_h_	includes/arch/x86/boot/multiboot.h	/^#define __jyos_multiboot_h_$/;"	d
+__jyos_mutex_h_	includes/datastructs/mutex.h	/^#define __jyos_mutex_h_$/;"	d
+__jyos_page_h_	includes/mm/page.h	/^#define __jyos_page_h_$/;"	d
+__jyos_pci_h_	includes/hal/pci.h	/^#define __jyos_pci_h_$/;"	d
+__jyos_pic_h_	includes/hal/pic.h	/^#define __jyos_pic_h_$/;"	d
+__jyos_pmm_h_	includes/mm/pmm.h	/^#define __jyos_pmm_h_$/;"	d
+__jyos_proc_h_	includes/proc.h	/^#define __jyos_proc_h_$/;"	d
+__jyos_process_h_	includes/process.h	/^#define __jyos_process_h_$/;"	d
+__jyos_ps2kbd_h_	includes/peripheral/ps2kbd.h	/^#define __jyos_ps2kbd_h_$/;"	d
+__jyos_region_h_	includes/mm/region.h	/^#define __jyos_region_h_$/;"	d
+__jyos_rtc_h_	includes/hal/rtc.h	/^#define __jyos_rtc_h_$/;"	d
+__jyos_sata_h_	includes/hal/ahci/sata.h	/^#define __jyos_sata_h_$/;"	d
+__jyos_sched_h_	includes/sched.h	/^#define __jyos_sched_h_$/;"	d
+__jyos_scsi_h_	includes/hal/ahci/scsi.h	/^#define __jyos_scsi_h_$/;"	d
+__jyos_sdt_h_	includes/hal/acpi/sdt.h	/^#define __jyos_sdt_h_$/;"	d
+__jyos_semaphore_h_	includes/datastructs/semaphore.h	/^#define __jyos_semaphore_h_$/;"	d
+__jyos_signal_h_	includes/signal.h	/^#define __jyos_signal_h_$/;"	d
+__jyos_spike_h_	includes/spike.h	/^#define __jyos_spike_h_$/;"	d
+__jyos_status_h_	includes/status.h	/^#define __jyos_status_h_$/;"	d
+__jyos_stdio_h_	includes/libc/stdio.h	/^#define __jyos_stdio_h_$/;"	d
+__jyos_stdlib_h_	includes/libc/stdlib.h	/^#define __jyos_stdlib_h_$/;"	d
+__jyos_string_h_	includes/libc/string.h	/^#define __jyos_string_h_$/;"	d
+__jyos_syscall_h_	includes/syscall.h	/^#define __jyos_syscall_h_$/;"	d
+__jyos_timer_h_	includes/timer.h	/^#define __jyos_timer_h_$/;"	d
+__jyos_tss_h_	includes/arch/x86/tss.h	/^#define __jyos_tss_h_$/;"	d
+__jyos_tty_h_	includes/tty/tty.h	/^#define __jyos_tty_h_$/;"	d
+__jyos_types_h_	includes/types.h	/^#define __jyos_types_h_$/;"	d
+__jyos_unistd_h_	includes/junistd.h	/^#define __jyos_unistd_h_$/;"	d
+__jyos_utils_h_	includes/hal/ahci/utils.h	/^#define __jyos_utils_h_$/;"	d
+__jyos_valloc_h_	includes/mm/valloc.h	/^#define __jyos_valloc_h_$/;"	d
+__jyos_vmm_h_	includes/mm/vmm.h	/^#define __jyos_vmm_h_$/;"	d
+__kernel_pg_dir	kernel/kernel_init.c	/^x86_page_t        *__kernel_pg_dir;$/;"	v	typeref:typename:x86_page_t *
+__kernel_start	link/linker.ld	/^        __kernel_start = .;$/;"	s
+__kernel_start	linker.ld	/^        __kernel_start = .;$/;"	s
+__list_add	includes/datastructs/jlist.h	/^__list_add( struct list_header* elem,$/;"	f	typeref:typename:void
+__move_to_user_mode	kernel/init_task.c	/^void __USER_SPACE__ __move_to_user_mode(){$/;"	f	typeref:typename:void __USER_SPACE__
+__movw	kernel/tty/tty.c	/^static inline __movw(uint32_t s, uint32_t d, uint32_t c){$/;"	f	file:
+__padding	includes/arch/x86/tss.h	/^    char     *__padding[94];$/;"	m	struct:x86_tss	typeref:typename:char * [94]
+__pause_interior	kernel/signal.c	/^static  void __pause_interior(){$/;"	f	typeref:typename:void	file:
+__pos	kernel/asm/x86/syscall.S	/^    __pos:$/;"	l
+__proper_call	kernel/asm/x86/syscall.S	/^__proper_call:$/;"	l
+__sata_buffer_io	hal/ahci/ata.c	/^int __sata_buffer_io($/;"	f	typeref:typename:int
+__save_pointer	kernel/asm/x86/interrupts.S	/^__save_pointer:$/;"	l
+__schedule_algorithm	kernel/sched.c	/^uint32_t __schedule_algorithm() {$/;"	f	typeref:typename:uint32_t
+__scsi_buffer_io	hal/ahci/atapi.c	/^__scsi_buffer_io(struct hba_device* dev,$/;"	f
+__test_disk_io	kernel/test/test_disk_io.c	/^void __test_disk_io() {$/;"	f	typeref:typename:void
+__uitoa_internal	libs/libc/stdlib/itoa.c	/^char * __uitoa_internal$/;"	f	typeref:typename:char *
+__valloc	kernel/mm/valloc.c	/^void *__valloc(unsigned int size, struct cake_pile **piles){$/;"	f	typeref:typename:void *
+__vfree	kernel/mm/valloc.c	/^void __vfree(void *vaddr, struct cake_pile **piles){$/;"	f	typeref:typename:void
+_ahci_hba	hal/ahci/ahci.c	/^static struct ahci_hba   _ahci_hba;$/;"	v	typeref:struct:ahci_hba	file:
+_atoi	libs/libc/stdio/printf.c	/^static unsigned int _atoi(const char** str)$/;"	f	typeref:typename:unsigned int	file:
+_cake	includes/mm/cake.h	/^struct _cake{$/;"	s
+_coalesce	kernel/mm/kalloc.c	/^void *_coalesce(uint8_t * addr){$/;"	f	typeref:typename:void *
+_console_main	kernel/service/console.c	/^void _console_main(){$/;"	f	typeref:typename:void
+_etoa	libs/libc/stdio/printf.c	/^static size_t _etoa(out_fct_type out, char* buffer, size_t idx, size_t maxlen, double value, uns/;"	f	typeref:typename:size_t	file:
+_ftoa	libs/libc/stdio/printf.c	/^static size_t _ftoa(out_fct_type out, char* buffer, size_t idx, size_t maxlen, double value, uns/;"	f	typeref:typename:size_t	file:
+_gdt	arch/x86/boot.S	/^  _gdt:$/;"	l
+_gdt	kernel/asm/x86/gdt.c	/^uint64_t _gdt[GDT_ENTRY];$/;"	v	typeref:typename:uint64_t[]
+_gdt_limit	kernel/asm/x86/gdt.c	/^uint16_t _gdt_limit = sizeof(_gdt) - 1;$/;"	v	typeref:typename:uint16_t
+_grow_heap	kernel/mm/kalloc.c	/^void *_grow_heap(heap_context_t *heap, size_t size){$/;"	f	typeref:typename:void *
+_hhk_init	arch/x86/hhk.c	/^void _hhk_init(ptd_t *ptd, uint32_t kpg_size){$/;"	f	typeref:typename:void
+_idt	kernel/asm/x86/idt.c	/^uint64_t _idt[IDT_ENTRY];$/;"	v	typeref:typename:uint64_t[]
+_idt_limit	kernel/asm/x86/idt.c	/^uint16_t _idt_limit = sizeof(_idt) - 1;$/;"	v	typeref:typename:uint16_t
+_init_gdt	kernel/asm/x86/gdt.c	/^void _init_gdt() {$/;"	f	typeref:typename:void
+_init_idt	kernel/asm/x86/idt.c	/^void _init_idt(){$/;"	f	typeref:typename:void
+_init_mb_info	kernel/kernel_init.c	/^multiboot_info_t  *_init_mb_info;$/;"	v	typeref:typename:multiboot_info_t *
+_init_page_table	arch/x86/hhk.c	/^void _init_page_table(ptd_t *ptd){$/;"	f	typeref:typename:void
+_interrupt_wrapper	kernel/asm/x86/interrupts.S	/^  _interrupt_wrapper:                                            \/* ... *\/  \/*old_esp*\/$/;"	l
+_interrupts_handler	kernel/asm/x86/interrupts.c	/^void _interrupts_handler(isr_param *param){$/;"	f	typeref:typename:void
+_intr_handler	kernel/asm/x86/interrupts.c	/^void _intr_handler(isr_param* param){$/;"	f	typeref:typename:void
+_intr_print_msg	kernel/asm/x86/intr_routines.c	/^void _intr_print_msg(const char *msg, const isr_param *param){$/;"	f	typeref:typename:void
+_is_digit	libs/libc/stdio/printf.c	/^static inline bool _is_digit(char ch)$/;"	f	typeref:typename:bool	file:
+_k_ptd	arch/x86/boot.S	/^    _k_ptd:$/;"	l
+_kernel_init	kernel/kernel_init.c	/^void _kernel_init() {$/;"	f	typeref:typename:void
+_kernel_main	kernel/kernel.c	/^int __USER_SPACE__ _kernel_main() {$/;"	f	typeref:typename:int __USER_SPACE__
+_kernel_post_init	kernel/init_task.c	/^void _kernel_post_init(){$/;"	f	typeref:typename:void
+_kernel_pre_init	kernel/kernel_init.c	/^void _kernel_pre_init(){$/;"	f	typeref:typename:void
+_load_32bit_selector	arch/x86/boot.S	/^  _load_32bit_selector:$/;"	l
+_lock_reserved_memory	kernel/init_task.c	/^void _lock_reserved_memory(){$/;"	f	typeref:typename:void
+_msg_panic	kernel/asm/x86/interrupts.c	/^void _msg_panic (const char *msg, isr_param* param){$/;"	f	typeref:typename:void
+_ntoa_format	libs/libc/stdio/printf.c	/^static size_t _ntoa_format(out_fct_type out, char* buffer, size_t idx, size_t maxlen, char* buf,/;"	f	typeref:typename:size_t	file:
+_ntoa_long	libs/libc/stdio/printf.c	/^static size_t _ntoa_long(out_fct_type out, char* buffer, size_t idx, size_t maxlen, unsigned lon/;"	f	typeref:typename:size_t	file:
+_ntoa_long_long	libs/libc/stdio/printf.c	/^static size_t _ntoa_long_long(out_fct_type out, char* buffer, size_t idx, size_t maxlen, unsigne/;"	f	typeref:typename:size_t	file:
+_out_buffer	kernel/kprintf.c	/^static inline void _out_buffer(char character, void* buffer, size_t idx, size_t maxlen) {$/;"	f	typeref:typename:void	file:
+_out_buffer	libs/libc/stdio/printf.c	/^static inline void _out_buffer(char character, void* buffer, size_t idx, size_t maxlen)$/;"	f	typeref:typename:void	file:
+_out_char	libs/libc/stdio/printf.c	/^static inline void _out_char(char character, void* buffer, size_t idx, size_t maxlen) {$/;"	f	typeref:typename:void	file:
+_out_fct	libs/libc/stdio/printf.c	/^static inline void _out_fct(char character, void* buffer, size_t idx, size_t maxlen)$/;"	f	typeref:typename:void	file:
+_out_null	libs/libc/stdio/printf.c	/^static inline void _out_null(char character, void* buffer, size_t idx, size_t maxlen)$/;"	f	typeref:typename:void	file:
+_out_rev	libs/libc/stdio/printf.c	/^static size_t _out_rev(out_fct_type out, char* buffer, size_t idx, size_t maxlen, const char* bu/;"	f	typeref:typename:size_t	file:
+_panic_msg	kernel/asm/x86/interrupts.c	/^void _panic_msg(const char *msg){$/;"	f	typeref:typename:void
+_place_chunk	kernel/mm/kalloc.c	/^void  _place_chunk(uint8_t *addr, size_t size){$/;"	f	typeref:typename:void
+_putchar	libs/libc/stdio/printf.c	/^void _putchar(char character){$/;"	f	typeref:typename:void
+_save_multiboot_info	arch/x86/hhk.c	/^void _save_multiboot_info(multiboot_info_t *info, char *dest){$/;"	f	typeref:typename:void
+_set_gdt_entry	kernel/asm/x86/gdt.c	/^void _set_gdt_entry(uint16_t index, uint32_t base, uint32_t limit, uint32_t flags) {$/;"	f	typeref:typename:void
+_set_idt_entry	kernel/asm/x86/idt.c	/^#define _set_idt_entry(/;"	d	file:
+_strnlen_s	libs/libc/stdio/printf.c	/^static inline unsigned int _strnlen_s(const char* str, size_t maxsize)$/;"	f	typeref:typename:unsigned int	file:
+_tss	kernel/asm/x86/tss.c	/^struct x86_tss _tss = {$/;"	v	typeref:struct:x86_tss
+_tty_init	kernel/tty/tty.c	/^void _tty_init(void *addr){$/;"	f	typeref:typename:void
+_unlock_reserved_memory	kernel/init_task.c	/^void _unlock_reserved_memory(){$/;"	f	typeref:typename:void
+_vmap_start	kernel/mm/vmap.c	/^static uintptr_t _vmap_start = VMAP_START;$/;"	v	typeref:typename:uintptr_t	file:
+_vsnprintf	libs/libc/stdio/printf.c	/^int _vsnprintf(out_fct_type out, char* buffer, const size_t maxlen, const char* format, va_list /;"	f	typeref:typename:int
+_wait	kernel/sched.c	/^pid_t _wait(pid_t wpid, int *status, int options){$/;"	f	typeref:typename:pid_t
+acpi_apic_t	includes/hal/acpi/madt.h	/^} __attribute__((packed)) acpi_apic_t;$/;"	t	typeref:struct:__anonafd5f5b70208
+acpi_context	includes/hal/acpi/acpi.h	/^} acpi_context;$/;"	t	typeref:struct:__anon9402a4ee0208
+acpi_fadt	includes/hal/acpi/fadt.h	/^typedef struct acpi_fadt {$/;"	s
+acpi_fadt_t	includes/hal/acpi/fadt.h	/^} ACPI_TABLE_PACKED acpi_fadt_t;$/;"	t	typeref:struct:acpi_fadt ACPI_TABLE_PACKED
+acpi_get_context	hal/acpi/acpi.c	/^acpi_get_context()$/;"	f	typeref:typename:acpi_context *
+acpi_ics_hdr_t	includes/hal/acpi/madt.h	/^} __attribute__((packed)) acpi_ics_hdr_t;$/;"	t	typeref:struct:__anonafd5f5b70108
+acpi_init	hal/acpi/acpi.c	/^int acpi_init(multiboot_info_t* mb_info) {$/;"	f	typeref:typename:int
+acpi_intso_t	includes/hal/acpi/madt.h	/^} __attribute__((packed)) acpi_intso_t;$/;"	t	typeref:struct:__anonafd5f5b70408
+acpi_ioapic_t	includes/hal/acpi/madt.h	/^} __attribute__((packed)) acpi_ioapic_t;$/;"	t	typeref:struct:__anonafd5f5b70308
+acpi_locate_rsdp	hal/acpi/acpi.c	/^acpi_locate_rsdp(multiboot_info_t* mb_info)$/;"	f	typeref:typename:acpi_rsdp_t *
+acpi_madt_t	includes/hal/acpi/madt.h	/^} __attribute__((packed)) acpi_madt_t;$/;"	t	typeref:struct:__anonafd5f5b70508
+acpi_madt_toc_t	includes/hal/acpi/madt.h	/^} __attribute__((packed)) acpi_madt_toc_t;$/;"	t	typeref:struct:__anonafd5f5b70608
+acpi_mcfg_alloc	includes/hal/acpi/mcfg.h	/^struct acpi_mcfg_alloc{$/;"	s
+acpi_mcfg_toc	includes/hal/acpi/mcfg.h	/^struct acpi_mcfg_toc{$/;"	s
+acpi_rsdp_t	includes/hal/acpi/acpi.h	/^} __attribute__((packed)) acpi_rsdp_t;$/;"	t	typeref:struct:__anon9402a4ee0108
+acpi_rsdp_validate	hal/acpi/acpi.c	/^acpi_rsdp_validate(acpi_rsdp_t* rsdp)$/;"	f	typeref:typename:int
+acpi_rsdt_t	includes/hal/acpi/sdt.h	/^} __attribute__((packed)) acpi_rsdt_t;$/;"	t	typeref:struct:__anon89a37adc0208
+acpi_sdthdr_t	includes/hal/acpi/sdt.h	/^} __attribute__((packed)) acpi_sdthdr_t;$/;"	t	typeref:struct:__anon89a37adc0108
+active_timers	includes/timer.h	/^    struct timer *active_timers;$/;"	m	struct:timer_context	typeref:struct:timer *
+addr	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t addr;$/;"	m	struct:multiboot_elf_section_header_table	typeref:typename:multiboot_uint32_t
+addr	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t addr;$/;"	m	struct:multiboot_symbol_table	typeref:typename:multiboot_uint32_t
+addr_high	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t addr_high;$/;"	m	struct:multiboot_mmap_entry	typeref:typename:multiboot_uint32_t
+addr_low	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t addr_low;$/;"	m	struct:multiboot_mmap_entry	typeref:typename:multiboot_uint32_t
+ahci_get_port	hal/ahci/ahci.c	/^struct hba_port * ahci_get_port(unsigned int i){$/;"	f	typeref:struct:hba_port *
+ahci_hba	includes/hal/ahci/hba.h	/^struct ahci_hba{$/;"	s
+ahci_identify_device	hal/ahci/ahci.c	/^int ahci_identify_device(struct hba_port *port){$/;"	f	typeref:typename:int
+ahci_init	hal/ahci/ahci.c	/^void ahci_init(){$/;"	f	typeref:typename:void
+ahci_init_device	hal/ahci/ahci.c	/^int ahci_init_device(struct hba_port *port){$/;"	f	typeref:typename:int
+ahci_parse_dev_info	hal/ahci/utils.c	/^void ahci_parse_dev_info(struct hba_device *dev, uint16_t *data){$/;"	f	typeref:typename:void
+ahci_parse_str	hal/ahci/utils.c	/^void ahci_parse_str(char *str, uint16_t *start, int size_word){$/;"	f	typeref:typename:void
+ahci_print_device	hal/ahci/ahci.c	/^void ahci_print_device(){$/;"	f	typeref:typename:void
+ahci_register_ops	hal/ahci/ahci.c	/^void ahci_register_ops(struct hba_port *port){$/;"	f	typeref:typename:void
+alarm	includes/process.h	/^        time_t             alarm;$/;"	m	struct:task_struct::__anon40b44dc00108	typeref:typename:time_t
+alignment_offset	includes/hal/ahci/hba.h	/^    uint32_t            alignment_offset;$/;"	m	struct:hba_device	typeref:typename:uint32_t
+all	makefile	/^all: clean $(BUILD_DIR)\/$(OS_ISO)$/;"	t
+all-debug	makefile	/^all-debug: CFLAGS := -g -std=gnu99 -ffreestanding $(O) $(W) -D__JYOS_DEBUG__$/;"	t
+all-debug	makefile	/^all-debug: LDFLAGS := -ffreestanding $(O) -nostdlib -lgcc$/;"	t
+all-debug	makefile	/^all-debug: O := -O$/;"	t
+all-debug	makefile	/^all-debug: clean $(BUILD_DIR)\/$(OS_ISO)$/;"	t
+alloc_num	includes/hal/acpi/mcfg.h	/^    size_t alloc_num;$/;"	m	struct:acpi_mcfg_toc	typeref:typename:size_t
+alloc_pid	kernel/sched.c	/^pid_t alloc_pid(){$/;"	f	typeref:typename:pid_t
+alloc_task	kernel/sched.c	/^struct task_struct *alloc_task(){$/;"	f	typeref:struct:task_struct *
+allocations	includes/hal/acpi/mcfg.h	/^    struct mcfg_alloc_info *allocations;$/;"	m	struct:acpi_mcfg_toc	typeref:struct:mcfg_alloc_info *
+aout_sym	includes/arch/x86/boot/multiboot.h	/^        multiboot_symbol_table_t aout_sym;$/;"	m	union:multiboot_info::__anonea4247e5010a	typeref:typename:multiboot_symbol_table_t
+apic	includes/hal/acpi/madt.h	/^    acpi_apic_t* apic;$/;"	m	struct:__anonafd5f5b70608	typeref:typename:acpi_apic_t *
+apic_addr	includes/hal/acpi/madt.h	/^    void* apic_addr;$/;"	m	struct:__anonafd5f5b70508	typeref:typename:void *
+apic_addr	includes/hal/acpi/madt.h	/^    void* apic_addr;$/;"	m	struct:__anonafd5f5b70608	typeref:typename:void *
+apic_done_servicing	includes/hal/apic.h	/^inline static void apic_done_servicing() {$/;"	f	typeref:typename:void
+apic_id	includes/hal/acpi/madt.h	/^    uint8_t apic_id;$/;"	m	struct:__anonafd5f5b70208	typeref:typename:uint8_t
+apic_init	hal/apic.c	/^void apic_init() {$/;"	f	typeref:typename:void
+apic_read_reg	includes/hal/apic.h	/^#define apic_read_reg(/;"	d
+apic_setup_lvts	hal/apic.c	/^void apic_setup_lvts() {$/;"	f	typeref:typename:void
+apic_timer_done	kernel/time/timer.c	/^static volatile uint8_t apic_timer_done = 0;$/;"	v	typeref:typename:volatile uint8_t	file:
+apic_write_reg	includes/hal/apic.h	/^#define apic_write_reg(/;"	d
+apm_table	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t apm_table;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+arg	includes/peripheral/ps2kbd.h	/^    char arg;$/;"	m	struct:ps2_cmd	typeref:typename:char
+arg	libs/libc/stdio/printf.c	/^  void* arg;$/;"	m	struct:__anone6aa6f1d0108	typeref:typename:void *	file:
+asmlinkage	includes/syscall.h	/^#define asmlinkage /;"	d
+assert	includes/spike.h	/^#define assert(/;"	d
+assert_msg	includes/spike.h	/^#define assert_msg(/;"	d
+attr	includes/mm/mm.h	/^    unsigned int         attr;$/;"	m	struct:mm_region	typeref:typename:unsigned int
+attr	includes/mm/pmm.h	/^  p_page_attr attr;$/;"	m	struct:p_page	typeref:typename:p_page_attr
+base	includes/hal/ahci/hba.h	/^    volatile hba_reg_t  *base;$/;"	m	struct:ahci_hba	typeref:typename:volatile hba_reg_t *
+base	includes/hal/ahci/hba.h	/^  volatile hba_reg_t    *base;$/;"	m	struct:hba_port	typeref:typename:volatile hba_reg_t *
+base_addr	includes/hal/acpi/mcfg.h	/^    uint32_t    base_addr;$/;"	m	struct:mcfg_alloc_info	typeref:typename:uint32_t
+base_addr_hi	includes/hal/acpi/mcfg.h	/^    uint32_t    base_addr_hi;$/;"	m	struct:acpi_mcfg_alloc	typeref:typename:uint32_t
+base_addr_lo	includes/hal/acpi/mcfg.h	/^    uint32_t    base_addr_lo;$/;"	m	struct:acpi_mcfg_alloc	typeref:typename:uint32_t
+base_char	libs/libc/stdlib/itoa.c	/^char base_char[] = "0123456789abcdefghijklmnopqrstuvwxyz";$/;"	v	typeref:typename:char[]
+base_frequency	includes/timer.h	/^    uint32_t base_frequency;$/;"	m	struct:timer_context	typeref:typename:uint32_t
+bcd2dec	hal/rtc.c	/^uint8_t bcd2dec(uint8_t bcd) {$/;"	f	typeref:typename:uint8_t
+bit_array_type	includes/datastructs/bitmap.h	/^#define bit_array_type /;"	d
+bit_array_type	includes/libc/bitmap.h	/^#define bit_array_type /;"	d
+block_per_sec	includes/hal/ahci/hba.h	/^    uint32_t            block_per_sec;$/;"	m	struct:hba_device	typeref:typename:uint32_t
+block_size	includes/hal/ahci/hba.h	/^    uint32_t            block_size;$/;"	m	struct:hba_device	typeref:typename:uint32_t
+blue	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint8_t blue;$/;"	m	struct:multiboot_color	typeref:typename:multiboot_uint8_t
+boot_arch	includes/hal/acpi/fadt.h	/^    uint16_t boot_arch;$/;"	m	struct:acpi_fadt	typeref:typename:uint16_t
+boot_device	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t boot_device;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+boot_loader_name	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t boot_loader_name;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+buf	kernel/spike.c	/^static char buf[1024];$/;"	v	typeref:typename:char[1024]	file:
+buf	kernel/tty/tty.c	/^  uint16_t buf[4096];$/;"	m	struct:__anonc046eab70108	typeref:typename:uint16_t[4096]	file:
+buffer	includes/peripheral/ps2kbd.h	/^    struct kdb_keyinfo_pkt buffer[PS2_KBD_RECV_BUFFER_SIZE];$/;"	m	struct:ps2_key_buffer	typeref:struct:kdb_keyinfo_pkt[]
+buffer	includes/tty/console.h	/^    struct fifo_buffer buffer;$/;"	m	struct:console	typeref:struct:fifo_buffer
+buffer	kernel/kprintf.c	/^static char buffer[1024];$/;"	v	typeref:typename:char[1024]	file:
+buffered_len	includes/peripheral/ps2kbd.h	/^    int buffered_len;$/;"	m	struct:ps2_key_buffer	typeref:typename:int
+bus	includes/hal/acpi/madt.h	/^    uint8_t bus;$/;"	m	struct:__anonafd5f5b70408	typeref:typename:uint8_t
+byte_count	includes/hal/ahci/hba.h	/^  uint32_t byte_count;$/;"	m	struct:hba_prdte	typeref:typename:uint32_t
+cake_init	kernel/mm/cake.c	/^void cake_init(){$/;"	f	typeref:typename:void
+cake_piece_grub	kernel/mm/cake.c	/^void* cake_piece_grub(struct cake_pile *pile){$/;"	f	typeref:typename:void *
+cake_piece_release	kernel/mm/cake.c	/^int cake_piece_release(struct cake_pile *pile, void *vaddr){$/;"	f	typeref:typename:int
+cake_pile	includes/mm/cake.h	/^struct cake_pile{$/;"	s
+cake_pile_create	kernel/mm/cake.c	/^struct cake_pile * cake_pile_create($/;"	f	typeref:struct:cake_pile *
+cake_stats	kernel/mm/cake.c	/^void cake_stats(){$/;"	f	typeref:typename:void
+cakes	includes/mm/cake.h	/^    struct list_header  cakes;$/;"	m	struct:_cake	typeref:struct:list_header
+cakes_count	includes/mm/cake.h	/^    unsigned int        cakes_count;$/;"	m	struct:cake_pile	typeref:typename:unsigned int
+callback	includes/timer.h	/^    void (*callback)(void*);$/;"	m	struct:timer	typeref:typename:void (*)(void *)
+can_flush	kernel/jconsole.c	/^volatile int can_flush = 0;$/;"	v	typeref:typename:volatile int
+can_schedule	kernel/sched.c	/^int can_schedule(struct task_struct *task){$/;"	f	typeref:typename:int
+capabilities	includes/hal/ahci/hba.h	/^    uint32_t            capabilities;$/;"	m	struct:hba_device	typeref:typename:uint32_t
+cbd_size	includes/hal/ahci/hba.h	/^    uint8_t             cbd_size;$/;"	m	struct:hba_device	typeref:typename:uint8_t
+chars	includes/tty/console.h	/^    unsigned int chars;$/;"	m	struct:console	typeref:typename:unsigned int
+check_sleepers	kernel/sched.c	/^void check_sleepers(){$/;"	f	typeref:typename:void
+children	includes/process.h	/^    struct list_header      children;$/;"	m	struct:task_struct	typeref:struct:list_header
+chksum	includes/hal/acpi/acpi.h	/^    uint8_t             chksum;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:uint8_t
+chksum	includes/hal/acpi/sdt.h	/^    uint8_t chksum;$/;"	m	struct:__anon89a37adc0108	typeref:typename:uint8_t
+class_info	includes/hal/pci.h	/^    uint32_t            class_info;$/;"	m	struct:pci_device	typeref:typename:uint32_t
+clean	makefile	/^clean:$/;"	t
+clear_bit	libs/datastructs/bitmap.c	/^void clear_bit(bit_array_type *arr, uint32_t position){$/;"	f	typeref:typename:void
+clear_n_bits	libs/datastructs/bitmap.c	/^void clear_n_bits(bit_array_type *arr, uint32_t start, uint32_t n){$/;"	f	typeref:typename:void
+clear_screen	kernel/tty/tty.c	/^void clear_screen(){$/;"	f	typeref:typename:void
+clock_datatime_eq	kernel/time/clock.c	/^int clock_datatime_eq(datetime_t* a, datetime_t* b) {$/;"	f	typeref:typename:int
+clock_init	kernel/time/clock.c	/^void clock_init() {$/;"	f	typeref:typename:void
+clock_systime	kernel/time/clock.c	/^time_t clock_systime() {$/;"	f	typeref:typename:time_t
+clock_systime_counter	kernel/time/clock.c	/^void clock_systime_counter(void* arg) {$/;"	f	typeref:typename:void
+cmd	includes/peripheral/ps2kbd.h	/^    char cmd;$/;"	m	struct:ps2_cmd	typeref:typename:char
+cmd	kernel/tty/tty.c	/^  uint16_t cmd[16];$/;"	m	struct:__anonc046eab70108	typeref:typename:uint16_t[16]	file:
+cmd_q	kernel/peripheral/ps2kbd.c	/^static struct ps2_cmd_queue  cmd_q;$/;"	v	typeref:struct:ps2_cmd_queue	file:
+cmd_queue	includes/peripheral/ps2kbd.h	/^    struct ps2_cmd cmd_queue[PS2_CMD_QUEUE_SIZE];$/;"	m	struct:ps2_cmd_queue	typeref:struct:ps2_cmd[]
+cmd_slots	includes/hal/ahci/hba.h	/^    unsigned int        cmd_slots;$/;"	m	struct:ahci_hba	typeref:typename:unsigned int
+cmd_table_base	includes/hal/ahci/hba.h	/^    uint32_t cmd_table_base;$/;"	m	struct:hba_cmd_header	typeref:typename:uint32_t
+cmdline	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t cmdline;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+cmdline	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t cmdline;$/;"	m	struct:multiboot_mod_list	typeref:typename:multiboot_uint32_t
+cmdlstv	includes/hal/ahci/hba.h	/^  char                  *cmdlstv;$/;"	m	struct:hba_port	typeref:typename:char *
+commit_task	kernel/sched.c	/^void commit_task(struct task_struct *task){$/;"	f	typeref:typename:void
+config_table	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t config_table;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+console	includes/tty/console.h	/^struct console{$/;"	s
+console_init	kernel/jconsole.c	/^void console_init(){$/;"	f	typeref:typename:void
+console_start_flushing	kernel/jconsole.c	/^void console_start_flushing(){$/;"	f	typeref:typename:void
+console_view_down	kernel/jconsole.c	/^void console_view_down(){$/;"	f	typeref:typename:void
+console_view_up	kernel/jconsole.c	/^void console_view_up(){$/;"	f	typeref:typename:void
+console_write	kernel/jconsole.c	/^void console_write(struct console *console, char *data, size_t size){$/;"	f	typeref:typename:void
+console_write_char	kernel/jconsole.c	/^void console_write_char(const char c){$/;"	f	typeref:typename:void
+console_write_str	kernel/jconsole.c	/^void console_write_str(const char *str, size_t size){$/;"	f	typeref:typename:void
+container_of	includes/constant.h	/^#define container_of(/;"	d
+count	includes/hal/ahci/sata.h	/^    uint16_t count;$/;"	m	struct:sata_reg_fis	typeref:typename:uint16_t
+counter	includes/datastructs/semaphore.h	/^    _Atomic unsigned int counter;$/;"	m	struct:sem_t	typeref:typename:_Atomic unsigned int
+counter	includes/timer.h	/^    uint32_t counter;$/;"	m	struct:timer	typeref:typename:uint32_t
+cpiece_index_t	includes/mm/cake.h	/^typedef unsigned int cpiece_index_t;$/;"	t	typeref:typename:unsigned int
+cpos	kernel/tty/tty.c	/^  uint16_t cpos;$/;"	m	struct:__anonc046eab70108	typeref:typename:uint16_t	file:
+cpu_brand_string_supported	hal/cpu.c	/^int cpu_brand_string_supported() {$/;"	f	typeref:typename:int
+cpu_disable_interrupt	includes/hal/cpu.h	/^static inline void cpu_disable_interrupt() {$/;"	f	typeref:typename:void
+cpu_enable_interrupt	includes/hal/cpu.h	/^static inline void cpu_enable_interrupt() {$/;"	f	typeref:typename:void
+cpu_get_brand	hal/cpu.c	/^void cpu_get_brand(char* brand_out) {$/;"	f	typeref:typename:void
+cpu_get_model	hal/cpu.c	/^void cpu_get_model(char* model_out) {$/;"	f	typeref:typename:void
+cpu_has_apic	hal/cpu.c	/^cpu_has_apic() {$/;"	f	typeref:typename:int
+cpu_invplg	includes/hal/cpu.h	/^static inline void cpu_invplg(void* va) {$/;"	f	typeref:typename:void
+cpu_invtlb	includes/hal/cpu.h	/^static inline void cpu_invtlb() {$/;"	f	typeref:typename:void
+cpu_lcr0	includes/hal/cpu.h	/^static inline void cpu_lcr0(reg32 v) {$/;"	f	typeref:typename:void
+cpu_lcr2	includes/hal/cpu.h	/^static inline void cpu_lcr2(reg32 v) {$/;"	f	typeref:typename:void
+cpu_lcr3	includes/hal/cpu.h	/^static inline void cpu_lcr3(reg32 v) {$/;"	f	typeref:typename:void
+cpu_rcr0	includes/hal/cpu.h	/^cpu_rcr0() {$/;"	f	typeref:typename:reg32
+cpu_rcr2	includes/hal/cpu.h	/^static inline reg32 cpu_rcr2() {$/;"	f	typeref:typename:reg32
+cpu_rcr3	includes/hal/cpu.h	/^static inline reg32 cpu_rcr3() {$/;"	f	typeref:typename:reg32
+cpu_rdmsr	hal/cpu.c	/^cpu_rdmsr(uint32_t msr_idx, uint32_t* reg_high, uint32_t* reg_low)$/;"	f	typeref:typename:void
+cpu_reflags	includes/hal/cpu.h	/^static inline reg32 cpu_reflags() {$/;"	f	typeref:typename:reg32
+cpu_wrmsr	hal/cpu.c	/^cpu_wrmsr(uint32_t msr_idx, uint32_t reg_high, uint32_t reg_low)$/;"	f	typeref:typename:void
+created	includes/process.h	/^        time_t             created;$/;"	m	struct:task_struct::__anon40b44dc00108	typeref:typename:time_t
+cs	includes/arch/x86/interrupts.h	/^  unsigned int cs;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+cs	includes/hal/cpu.h	/^    reg16 cs;$/;"	m	struct:__anon8c10de2d0208	typeref:typename:reg16
+cseg	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t cseg;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+cseg_16	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t cseg_16;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+cseg_16_len	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t cseg_16_len;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+cseg_len	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t cseg_len;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+cspace_base	includes/hal/pci.h	/^    uint32_t            cspace_base;$/;"	m	struct:pci_device	typeref:typename:uint32_t
+cst_cnt	includes/hal/acpi/fadt.h	/^    uint8_t cst_cnt;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+ctrl	includes/hal/ahci/scsi.h	/^    uint8_t ctrl;$/;"	m	struct:scsi_cdb12	typeref:typename:uint8_t
+ctrl	includes/hal/ahci/scsi.h	/^    uint8_t ctrl;$/;"	m	struct:scsi_cdb16	typeref:typename:uint8_t
+ctx	hal/acpi/acpi.c	/^static acpi_context* ctx = NULL;$/;"	v	typeref:typename:acpi_context *	file:
+current_index	includes/sched.h	/^    int                 current_index;$/;"	m	struct:scheduler	typeref:typename:int
+cxk_map	includes/tty/cxk.h	/^const char cxk_map[][25][80] = {$/;"	v	typeref:typename:const char[][25][80]
+cxk_map	includes/tty/cxk2.h	/^char cxk_map[][25][80] = {$/;"	v	typeref:typename:char[][25][80]
+data	includes/datastructs/fifobuf.h	/^    void            *data;$/;"	m	struct:fifo_buffer	typeref:typename:void *
+data	includes/hal/ahci/sata.h	/^  uint8_t data[0];$/;"	m	struct:sata_data_fis	typeref:typename:uint8_t[0]
+data_base	includes/hal/ahci/hba.h	/^  uint32_t data_base;$/;"	m	struct:hba_prdte	typeref:typename:uint32_t
+data_base_upper_32	includes/hal/ahci/hba.h	/^  uint32_t data_base_upper_32;$/;"	m	struct:hba_prdte	typeref:typename:uint32_t
+datetime_t	includes/clock.h	/^} datetime_t;$/;"	t	typeref:struct:__anonda936bed0108
+day	includes/clock.h	/^    uint8_t  day;$/;"	m	struct:__anonda936bed0108	typeref:typename:uint8_t
+deadline	includes/timer.h	/^    uint32_t deadline;$/;"	m	struct:timer	typeref:typename:uint32_t
+debug-bochs	makefile	/^debug-bochs: all-debug$/;"	t
+debug-qemu	makefile	/^debug-qemu: all-debug$/;"	t
+default_signal_handlers	kernel/signal.c	/^void *default_signal_handlers[_SIG_MAX] = {$/;"	v	typeref:typename:void * []
+default_signal_hd	kernel/signal.c	/^void __USER_SPACE__ default_signal_hd(int sig){$/;"	f	typeref:typename:void __USER_SPACE__
+default_signal_user	kernel/signal.c	/^void __USER_SPACE__ default_signal_user(int sig){$/;"	f	typeref:typename:void __USER_SPACE__
+destroy_task	kernel/sched.c	/^pid_t destroy_task(pid_t pid){$/;"	f	typeref:typename:pid_t
+dev	includes/hal/ahci/sata.h	/^    uint8_t dev;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+dev_chain	includes/hal/pci.h	/^    struct list_header  dev_chain;$/;"	m	struct:pci_device	typeref:struct:list_header
+device	includes/hal/ahci/hba.h	/^  struct hba_device     *device;$/;"	m	struct:hba_port	typeref:struct:hba_device *
+device_info	includes/hal/pci.h	/^    uint32_t            device_info;$/;"	m	struct:pci_device	typeref:typename:uint32_t
+dmm_init	kernel/mm/dmm.c	/^int dmm_init(heap_context_t *heap){$/;"	f	typeref:typename:int
+do_timer_interrupt	kernel/time/timer.c	/^static void do_timer_interrupt(const isr_param* param) {$/;"	f	typeref:typename:void	file:
+drives_addr	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t drives_addr;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+drives_length	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t drives_length;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+ds	includes/arch/x86/interrupts.h	/^  unsigned int ds;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+ds	includes/hal/cpu.h	/^    reg16 ds;$/;"	m	struct:__anon8c10de2d0208	typeref:typename:reg16
+dsdt_addr	includes/hal/acpi/fadt.h	/^    uint32_t dsdt_addr;$/;"	m	struct:acpi_fadt	typeref:typename:uint32_t
+dseg	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t dseg;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+dseg_len	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t dseg_len;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+dup_page_table	kernel/process.c	/^void *dup_page_table(pid_t pid){$/;"	f	typeref:typename:void *
+dup_proc	kernel/process.c	/^pid_t dup_proc(){$/;"	f	typeref:typename:pid_t
+duty_offset	includes/hal/acpi/fadt.h	/^    uint8_t duty_offset;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+duty_width	includes/hal/acpi/fadt.h	/^    uint8_t duty_width;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+eax	includes/arch/x86/interrupts.h	/^  unsigned int eax;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+eax	includes/hal/cpu.h	/^    reg32 eax;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+ebp	includes/arch/x86/interrupts.h	/^  unsigned int ebp;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+ebp	includes/hal/cpu.h	/^    reg32 ebp;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+ebx	includes/arch/x86/interrupts.h	/^  unsigned int ebx;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+ebx	includes/hal/cpu.h	/^    reg32 ebx;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+ecx	includes/arch/x86/interrupts.h	/^  unsigned int ecx;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+ecx	includes/hal/cpu.h	/^    reg32 ecx;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+edi	includes/arch/x86/interrupts.h	/^  unsigned int edi;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+edi	includes/hal/cpu.h	/^    reg32 edi;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+edx	includes/arch/x86/interrupts.h	/^  unsigned int edx;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+edx	includes/hal/cpu.h	/^    reg32 edx;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+eflags	includes/arch/x86/interrupts.h	/^  unsigned int eflags;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+eip	includes/arch/x86/interrupts.h	/^  unsigned int eip;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+elf_sec	includes/arch/x86/boot/multiboot.h	/^        multiboot_elf_section_header_table_t elf_sec;$/;"	m	union:multiboot_info::__anonea4247e5010a	typeref:typename:multiboot_elf_section_header_table_t
+end	includes/mm/mm.h	/^    uint32_t             end;$/;"	m	struct:mm_region	typeref:typename:uint32_t
+end	includes/mm/mm.h	/^    uint8_t *end;$/;"	m	struct:__anonda2e58240108	typeref:typename:uint8_t *
+entries	includes/hal/ahci/hba.h	/^    struct hba_prdte entries[3];$/;"	m	struct:hba_cmd_table	typeref:struct:hba_prdte[3]
+entry	includes/hal/acpi/sdt.h	/^    acpi_sdthdr_t* entry;$/;"	m	struct:__anon89a37adc0208	typeref:typename:acpi_sdthdr_t *
+entry	includes/mm/page.h	/^  x86_pte_t entry[PG_MAX_ENTRIES];$/;"	m	struct:__anon256a80270108	typeref:typename:x86_pte_t[]
+erd_pos	includes/tty/console.h	/^    unsigned int erd_pos;$/;"	m	struct:console	typeref:typename:unsigned int
+err_code	includes/arch/x86/interrupts.h	/^  unsigned int err_code;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+es	includes/arch/x86/interrupts.h	/^  unsigned int es;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+es	includes/hal/cpu.h	/^    reg16 es;$/;"	m	struct:__anon8c10de2d0208	typeref:typename:reg16
+esi	includes/arch/x86/interrupts.h	/^  unsigned int esi;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+esi	includes/hal/cpu.h	/^    reg32 esi;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+esp	includes/arch/x86/interrupts.h	/^  unsigned int esp;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+esp	includes/hal/cpu.h	/^    reg32 esp;$/;"	m	struct:__anon8c10de2d0108	typeref:typename:reg32
+esp0	includes/arch/x86/tss.h	/^    uint32_t esp0;$/;"	m	struct:x86_tss	typeref:typename:uint32_t
+exit_code	includes/process.h	/^    int32_t                 exit_code;$/;"	m	struct:task_struct	typeref:typename:int32_t
+fadt	includes/hal/acpi/acpi.h	/^    acpi_fadt_t                 fadt;$/;"	m	struct:__anon9402a4ee0208	typeref:typename:acpi_fadt_t
+fallback	kernel/asm/x86/interrupts.c	/^static interrupt_function   fallback = (interrupt_function) 0;$/;"	v	typeref:typename:interrupt_function	file:
+fct	libs/libc/stdio/printf.c	/^  void  (*fct)(char character, void* arg);$/;"	m	struct:__anone6aa6f1d0108	typeref:typename:void (*)(char character,void * arg)	file:
+feat_or_err	includes/hal/ahci/sata.h	/^    uint8_t feat_or_err;$/;"	m	struct:sata_fis_head	typeref:typename:uint8_t
+features	includes/hal/ahci/sata.h	/^    uint8_t features;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+fifo_buffer	includes/datastructs/fifobuf.h	/^struct fifo_buffer{$/;"	s
+firmware_controller_addr	includes/hal/acpi/fadt.h	/^    uint32_t firmware_controller_addr;$/;"	m	struct:acpi_fadt	typeref:typename:uint32_t
+first_piece	includes/mm/cake.h	/^    char                *first_piece;$/;"	m	struct:_cake	typeref:typename:char *
+fisv	includes/hal/ahci/hba.h	/^  char                  *fisv;$/;"	m	struct:hba_port	typeref:typename:char *
+flags	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t flags;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+flags	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t flags;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+flags	includes/datastructs/fifobuf.h	/^    unsigned int    flags;$/;"	m	struct:fifo_buffer	typeref:typename:unsigned int
+flags	includes/hal/acpi/madt.h	/^    uint16_t flags;$/;"	m	struct:__anonafd5f5b70408	typeref:typename:uint16_t
+flags	includes/hal/acpi/madt.h	/^    uint32_t flags;$/;"	m	struct:__anonafd5f5b70208	typeref:typename:uint32_t
+flags	includes/hal/acpi/madt.h	/^    uint32_t flags;$/;"	m	struct:__anonafd5f5b70508	typeref:typename:uint32_t
+flags	includes/mm/page.h	/^  uint16_t    flags;$/;"	m	struct:__anon256a80270208	typeref:typename:uint16_t
+flags	includes/process.h	/^    int                     flags;$/;"	m	struct:task_struct	typeref:typename:int
+flags	includes/timer.h	/^    uint8_t flags;$/;"	m	struct:timer	typeref:typename:uint8_t
+flush_size	includes/hal/acpi/fadt.h	/^    uint16_t flush_size;$/;"	m	struct:acpi_fadt	typeref:typename:uint16_t
+flush_stride	includes/hal/acpi/fadt.h	/^    uint16_t flush_stride;$/;"	m	struct:acpi_fadt	typeref:typename:uint16_t
+flush_timer	includes/tty/console.h	/^    struct timer *flush_timer;$/;"	m	struct:console	typeref:struct:timer *
+framebuffer_addr	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint64_t framebuffer_addr;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint64_t
+framebuffer_blue_field_position	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint8_t framebuffer_blue_field_position;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50408	typeref:typename:multiboot_uint8_t
+framebuffer_blue_mask_size	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint8_t framebuffer_blue_mask_size;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50408	typeref:typename:multiboot_uint8_t
+framebuffer_bpp	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint8_t framebuffer_bpp;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint8_t
+framebuffer_green_field_position	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint8_t framebuffer_green_field_position;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50408	typeref:typename:multiboot_uint8_t
+framebuffer_green_mask_size	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint8_t framebuffer_green_mask_size;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50408	typeref:typename:multiboot_uint8_t
+framebuffer_height	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t framebuffer_height;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+framebuffer_palette_addr	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint32_t framebuffer_palette_addr;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50308	typeref:typename:multiboot_uint32_t
+framebuffer_palette_num_colors	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint16_t framebuffer_palette_num_colors;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50308	typeref:typename:multiboot_uint16_t
+framebuffer_pitch	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t framebuffer_pitch;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+framebuffer_red_field_position	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint8_t framebuffer_red_field_position;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50408	typeref:typename:multiboot_uint8_t
+framebuffer_red_mask_size	includes/arch/x86/boot/multiboot.h	/^            multiboot_uint8_t framebuffer_red_mask_size;$/;"	m	struct:multiboot_info::__anonea4247e5020a::__anonea4247e50408	typeref:typename:multiboot_uint8_t
+framebuffer_type	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint8_t framebuffer_type;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint8_t
+framebuffer_width	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t framebuffer_width;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+free	includes/mm/cake.h	/^    struct list_header  free;$/;"	m	struct:cake_pile	typeref:struct:list_header
+free_pieces	includes/mm/cake.h	/^    cpiece_index_t      free_pieces[0];$/;"	m	struct:_cake	typeref:typename:cpiece_index_t[0]
+fs	includes/arch/x86/interrupts.h	/^  unsigned int fs;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+fs	includes/hal/cpu.h	/^    reg16 fs;$/;"	m	struct:__anon8c10de2d0208	typeref:typename:reg16
+full	includes/mm/cake.h	/^    struct list_header  full;$/;"	m	struct:cake_pile	typeref:struct:list_header
+gdt_desc	arch/x86/boot.S	/^gdt_desc:$/;"	l
+get_bc	kernel/tty/tty.c	/^static uint16_t inline get_bc(uint16_t c){$/;"	f	typeref:typename:uint16_t	file:
+get_bit	libs/datastructs/bitmap.c	/^bit_array_type get_bit(bit_array_type *arr, uint32_t position){$/;"	f	typeref:typename:bit_array_type
+get_bit_message	libs/datastructs/bitmap.c	/^#define get_bit_message(/;"	d	file:
+get_chunk_message	libs/datastructs/bitmap.c	/^#define get_chunk_message(/;"	d	file:
+get_fc	kernel/tty/tty.c	/^static uint16_t inline get_fc(uint16_t c){$/;"	f	typeref:typename:uint16_t	file:
+get_region	kernel/mm/region.c	/^struct mm_region *get_region(struct task_struct *task, uint32_t vaddr){$/;"	f	typeref:struct:mm_region *
+get_task	kernel/sched.c	/^struct task_struct *get_task(pid_t pid){$/;"	f	typeref:struct:task_struct *
+gis_offset	includes/hal/acpi/madt.h	/^    uint32_t gis_offset;$/;"	m	struct:__anonafd5f5b70308	typeref:typename:uint32_t
+go_next_line	kernel/tty/tty.c	/^void go_next_line(){$/;"	f	typeref:typename:void
+gp_regs	includes/hal/cpu.h	/^} __attribute__((packed)) gp_regs;$/;"	t	typeref:struct:__anon8c10de2d0108
+gpe0_len	includes/hal/acpi/fadt.h	/^    uint8_t gpe0_len;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+gpe0_port_addr	includes/hal/acpi/fadt.h	/^    uint32_t gpe0_port_addr;$/;"	m	struct:acpi_fadt	typeref:typename:uint32_t
+gpe1_base	includes/hal/acpi/fadt.h	/^    uint8_t gpe1_base;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+gpe1_len	includes/hal/acpi/fadt.h	/^    uint8_t gpe1_len;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+gpe1_port_addr	includes/hal/acpi/fadt.h	/^    uint32_t gpe1_port_addr;$/;"	m	struct:acpi_fadt	typeref:typename:uint32_t
+green	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint8_t green;$/;"	m	struct:multiboot_color	typeref:typename:multiboot_uint8_t
+group	includes/process.h	/^    struct list_header      group;$/;"	m	struct:task_struct	typeref:struct:list_header
+gs	includes/arch/x86/interrupts.h	/^  unsigned int gs;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+gs	includes/hal/cpu.h	/^    reg16 gs;$/;"	m	struct:__anon8c10de2d0208	typeref:typename:reg16
+gsi	includes/hal/acpi/madt.h	/^    uint32_t gsi;$/;"	m	struct:__anonafd5f5b70408	typeref:typename:uint32_t
+handle_signal	kernel/asm/x86/interrupts.S	/^handle_signal:$/;"	l
+hba_cmd_header	includes/hal/ahci/hba.h	/^struct hba_cmd_header{$/;"	s
+hba_cmd_table	includes/hal/ahci/hba.h	/^struct hba_cmd_table{$/;"	s
+hba_device	includes/hal/ahci/hba.h	/^struct hba_device{$/;"	s
+hba_port	includes/hal/ahci/hba.h	/^struct hba_port{$/;"	s
+hba_prdte	includes/hal/ahci/hba.h	/^struct hba_prdte{$/;"	s
+hba_prepare_cmd	hal/ahci/ahci.c	/^int hba_prepare_cmd($/;"	f	typeref:typename:int
+hba_reg_t	includes/hal/ahci/hba.h	/^typedef unsigned int  hba_reg_t;$/;"	t	typeref:typename:unsigned int
+head	includes/hal/ahci/sata.h	/^    struct sata_fis_head head;$/;"	m	struct:sata_reg_fis	typeref:struct:sata_fis_head
+head	includes/hal/ahci/sata.h	/^  struct  sata_fis_head head;$/;"	m	struct:sata_data_fis	typeref:struct:sata_fis_head
+head	includes/mm/mm.h	/^    struct list_header   head;$/;"	m	struct:mm_region	typeref:struct:list_header
+header	includes/hal/acpi/fadt.h	/^    acpi_sdthdr_t header;$/;"	m	struct:acpi_fadt	typeref:typename:acpi_sdthdr_t
+header	includes/hal/acpi/madt.h	/^    acpi_ics_hdr_t header;$/;"	m	struct:__anonafd5f5b70208	typeref:typename:acpi_ics_hdr_t
+header	includes/hal/acpi/madt.h	/^    acpi_ics_hdr_t header;$/;"	m	struct:__anonafd5f5b70308	typeref:typename:acpi_ics_hdr_t
+header	includes/hal/acpi/madt.h	/^    acpi_ics_hdr_t header;$/;"	m	struct:__anonafd5f5b70408	typeref:typename:acpi_ics_hdr_t
+header	includes/hal/acpi/madt.h	/^    acpi_sdthdr_t header;$/;"	m	struct:__anonafd5f5b70508	typeref:typename:acpi_sdthdr_t
+header	includes/hal/acpi/sdt.h	/^    acpi_sdthdr_t header;$/;"	m	struct:__anon89a37adc0208	typeref:typename:acpi_sdthdr_t
+heap_context_t	includes/mm/mm.h	/^}heap_context_t;$/;"	t	typeref:struct:__anonda2e58240108
+hhk_entry_	kernel/asm/x86/prologue.S	/^  hhk_entry_:$/;"	l
+hour	includes/clock.h	/^    uint8_t  hour;$/;"	m	struct:__anonda936bed0108	typeref:typename:uint8_t
+identify	includes/hal/ahci/hba.h	/^        int (*identify)(struct hba_device *dev);$/;"	m	struct:hba_device::__anoncff169540108	typeref:typename:int (*)(struct hba_device * dev)
+init_task_user_space	kernel/process.c	/^void init_task_user_space(struct task_struct *task){$/;"	f	typeref:typename:void
+interrupt_function	includes/arch/x86/interrupts.h	/^typedef void (*interrupt_function)(const isr_param*) ;$/;"	t	typeref:typename:void (*)(const isr_param *)
+interrupt_vecotrs	kernel/asm/x86/interrupts.c	/^static interrupt_function interrupt_vecotrs[INTERRUPTS_VECTOR_SIZE];$/;"	v	typeref:typename:interrupt_function[]	file:
+intr_info	includes/hal/pci.h	/^    uint16_t            intr_info;$/;"	m	struct:pci_device	typeref:typename:uint16_t
+intr_ps2_kbd_handler	kernel/peripheral/ps2kbd.c	/^void intr_ps2_kbd_handler(const isr_param* param) {$/;"	f	typeref:typename:void
+intr_routine_apic_error	kernel/asm/x86/intr_routines.c	/^void intr_routine_apic_error(const isr_param *param){$/;"	f	typeref:typename:void
+intr_routine_apic_spi	kernel/asm/x86/intr_routines.c	/^void intr_routine_apic_spi(const isr_param *param){$/;"	f	typeref:typename:void
+intr_routine_divide_zero	kernel/asm/x86/intr_routines.c	/^void intr_routine_divide_zero(const isr_param *param){$/;"	f	typeref:typename:void
+intr_routine_fallback	kernel/asm/x86/intr_routines.c	/^void intr_routine_fallback(const isr_param *param){$/;"	f	typeref:typename:void
+intr_routine_general_protection	kernel/asm/x86/intr_routines.c	/^void intr_routine_general_protection(const isr_param *param){$/;"	f	typeref:typename:void
+intr_routine_init	kernel/asm/x86/intr_routines.c	/^void intr_routine_init(){$/;"	f	typeref:typename:void
+intr_routine_page_fault	kernel/asm/x86/page_fault.c	/^void intr_routine_page_fault(const isr_param *param){$/;"	f	typeref:typename:void
+intr_routine_sys_panic	kernel/asm/x86/intr_routines.c	/^void intr_routine_sys_panic(const isr_param *param){$/;"	f	typeref:typename:void
+intr_set_fallback_handler	kernel/asm/x86/interrupts.c	/^void intr_set_fallback_handler(interrupt_function fun){$/;"	f	typeref:typename:void
+intr_setvector	kernel/asm/x86/interrupts.c	/^void intr_setvector(const unsigned int vector, interrupt_function fun){$/;"	f	typeref:typename:void
+intr_unsetvector	kernel/asm/x86/interrupts.c	/^void intr_unsetvector(const unsigned int vector, interrupt_function fun){$/;"	f	typeref:typename:void
+io_delay	includes/hal/io.h	/^static inline void io_delay(int counter) {$/;"	f	typeref:typename:void
+io_inb	includes/hal/io.h	/^static inline uint8_t io_inb(int port) {$/;"	f	typeref:typename:uint8_t
+io_inl	includes/hal/io.h	/^static inline uint32_t io_inl(int port) {$/;"	f	typeref:typename:uint32_t
+io_insb	includes/hal/io.h	/^static inline void io_insb(int port, void* addr, int cnt) {$/;"	f	typeref:typename:void
+io_insl	includes/hal/io.h	/^static inline void io_insl(int port, void* addr, int cnt) {$/;"	f	typeref:typename:void
+io_insw	includes/hal/io.h	/^static inline void io_insw(int port, void* addr, int cnt) {$/;"	f	typeref:typename:void
+io_inw	includes/hal/io.h	/^static inline uint16_t io_inw(int port) {$/;"	f	typeref:typename:uint16_t
+io_outb	includes/hal/io.h	/^static inline void io_outb(int port, uint8_t data) {$/;"	f	typeref:typename:void
+io_outl	includes/hal/io.h	/^static inline void io_outl(int port, uint32_t data) {$/;"	f	typeref:typename:void
+io_outsb	includes/hal/io.h	/^static inline void io_outsb(int port, const void* addr, int cnt) {$/;"	f	typeref:typename:void
+io_outsl	includes/hal/io.h	/^static inline void io_outsl(int port, const void* addr, int cnt) {$/;"	f	typeref:typename:void
+io_outsw	includes/hal/io.h	/^static inline void io_outsw(int port, const void* addr, int cnt) {$/;"	f	typeref:typename:void
+io_outw	includes/hal/io.h	/^static inline void io_outw(int port, uint16_t data) {$/;"	f	typeref:typename:void
+ioapic	includes/hal/acpi/madt.h	/^    acpi_ioapic_t* ioapic;$/;"	m	struct:__anonafd5f5b70608	typeref:typename:acpi_ioapic_t *
+ioapic_addr	includes/hal/acpi/madt.h	/^    uint32_t ioapic_addr;$/;"	m	struct:__anonafd5f5b70308	typeref:typename:uint32_t
+ioapic_get_irq	hal/ioapic.c	/^uint8_t ioapic_get_irq(acpi_context* acpi_ctx, uint8_t old_irq) {$/;"	f	typeref:typename:uint8_t
+ioapic_id	includes/hal/acpi/madt.h	/^    uint8_t ioapic_id;$/;"	m	struct:__anonafd5f5b70308	typeref:typename:uint8_t
+ioapic_init	hal/ioapic.c	/^void ioapic_init() {$/;"	f	typeref:typename:void
+ioapic_read	hal/ioapic.c	/^uint32_t ioapic_read(uint8_t sel) {$/;"	f	typeref:typename:uint32_t
+ioapic_redirect	hal/ioapic.c	/^void ioapic_redirect(uint8_t irq, uint8_t vector, uint8_t dest, uint32_t flags) {$/;"	f	typeref:typename:void
+ioapic_write	hal/ioapic.c	/^void ioapic_write(uint8_t sel, uint32_t val) {$/;"	f	typeref:typename:void
+ioremap	kernel/mm/mmio.c	/^void *ioremap(uintptr_t paddr, unsigned int size){$/;"	f	typeref:typename:void *
+irq_exception	includes/hal/acpi/madt.h	/^    acpi_intso_t** irq_exception;$/;"	m	struct:__anonafd5f5b70608	typeref:typename:acpi_intso_t **
+is_number	includes/types.h	/^#define is_number(/;"	d
+isr0	kernel/asm/x86/interrupts.c	/^void isr0(isr_param *param){$/;"	f	typeref:typename:void
+isr_param	includes/arch/x86/interrupts.h	/^} __attribute__((packed)) isr_param;$/;"	t	typeref:struct:__anon391dcb830108
+isr_template	kernel/asm/x86/interrupts.S	/^.macro isr_template vector, no_error_code=1$/;"	m
+itoa	libs/libc/stdlib/itoa.c	/^char *itoa(int32_t value, char *str, uint32_t base){$/;"	f	typeref:typename:char *
+jbrk	kernel/mm/dmm.c	/^int jbrk(heap_context_t *heap, void *addr, int user){$/;"	f	typeref:typename:int
+jfree	kernel/mm/kalloc.c	/^void jfree(void *addr){$/;"	f	typeref:typename:void
+jmalloc	kernel/mm/kalloc.c	/^void *jmalloc(heap_context_t *heap, size_t size){$/;"	f	typeref:typename:void *
+jsbrk	kernel/mm/dmm.c	/^void *jsbrk(heap_context_t *heap, size_t size, int user){$/;"	f	typeref:typename:void *
+k_console	kernel/jconsole.c	/^static struct console k_console;$/;"	v	typeref:struct:console	file:
+k_status	includes/process.h	/^    int32_t                 k_status;$/;"	m	struct:task_struct	typeref:typename:int32_t
+kalloc_init	kernel/mm/kalloc.c	/^int kalloc_init(){$/;"	f	typeref:typename:int
+kbd_buffer_key_event	kernel/peripheral/ps2kbd.c	/^void kbd_buffer_key_event(kbd_keycode_t key, uint8_t scancode, kbd_kstate_t state) {$/;"	f	typeref:typename:void
+kbd_keycode_t	includes/peripheral/keyboard.h	/^typedef unsigned short kbd_keycode_t;$/;"	t	typeref:typename:unsigned short
+kbd_kstate_t	includes/peripheral/keyboard.h	/^typedef unsigned short kbd_kstate_t;$/;"	t	typeref:typename:unsigned short
+kbd_recv_key	kernel/peripheral/ps2kbd.c	/^int kbd_recv_key(struct kdb_keyinfo_pkt* key_event) {$/;"	f	typeref:typename:int
+kbd_scancode_t	includes/peripheral/keyboard.h	/^typedef unsigned char kbd_scancode_t;$/;"	t	typeref:typename:unsigned char
+kbd_state	kernel/peripheral/ps2kbd.c	/^static struct ps2_kbd_state  kbd_state;$/;"	v	typeref:struct:ps2_kbd_state	file:
+kcalloc	kernel/mm/kalloc.c	/^void *kcalloc(size_t size){$/;"	f	typeref:typename:void *
+kdb_keyinfo_pkt	includes/peripheral/keyboard.h	/^struct kdb_keyinfo_pkt {$/;"	s
+kernel_heap	kernel/mm/kalloc.c	/^static heap_context_t kernel_heap;$/;"	v	typeref:typename:heap_context_t	file:
+key_buf	kernel/peripheral/ps2kbd.c	/^static struct ps2_key_buffer key_buf;$/;"	v	typeref:struct:ps2_key_buffer	file:
+key_state	includes/peripheral/ps2kbd.h	/^    kbd_kstate_t key_state;$/;"	m	struct:ps2_kbd_state	typeref:typename:kbd_kstate_t
+keycode	includes/peripheral/keyboard.h	/^    kbd_keycode_t keycode;$/;"	m	struct:kdb_keyinfo_pkt	typeref:typename:kbd_keycode_t
+kfree	kernel/mm/kalloc.c	/^void kfree(void *addr){$/;"	f	typeref:typename:void
+kmalloc	kernel/mm/kalloc.c	/^void *kmalloc(size_t size){$/;"	f	typeref:typename:void *
+kprintf_	kernel/kprintf.c	/^int kprintf_(const char* format, ...) {$/;"	f	typeref:typename:int
+kprintf_error	kernel/kprintf.c	/^int kprintf_error(const char* format, ...){$/;"	f	typeref:typename:int
+kprintf_hex	kernel/kprintf.c	/^void kprintf_hex(const void* buffer, unsigned int size) {$/;"	f	typeref:typename:void
+kprintf_live	kernel/kprintf.c	/^int kprintf_live(const char* format, ...){$/;"	f	typeref:typename:int
+kprintf_warn	kernel/kprintf.c	/^int kprintf_warn(const char* format, ...){$/;"	f	typeref:typename:int
+l_	kernel/asm/x86/prologue.S	/^     l_:$/;"	l
+last_error	includes/hal/ahci/hba.h	/^    uint8_t             last_error;$/;"	m	struct:hba_device	typeref:typename:uint8_t
+last_status	includes/hal/ahci/hba.h	/^    uint8_t             last_status;$/;"	m	struct:hba_device	typeref:typename:uint8_t
+lba0	includes/hal/ahci/sata.h	/^    uint8_t lba0, lba8, lba16;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+lba16	includes/hal/ahci/sata.h	/^    uint8_t lba0, lba8, lba16;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+lba24	includes/hal/ahci/sata.h	/^    uint8_t lba24, lba32, lba40;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+lba32	includes/hal/ahci/sata.h	/^    uint8_t lba24, lba32, lba40;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+lba40	includes/hal/ahci/sata.h	/^    uint8_t lba24, lba32, lba40;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+lba8	includes/hal/ahci/sata.h	/^    uint8_t lba0, lba8, lba16;$/;"	m	struct:sata_reg_fis	typeref:typename:uint8_t
+lba_be	includes/hal/ahci/scsi.h	/^    uint32_t lba_be;$/;"	m	struct:scsi_cdb12	typeref:typename:uint32_t
+lba_be_hi	includes/hal/ahci/scsi.h	/^    uint32_t lba_be_hi;$/;"	m	struct:scsi_cdb16	typeref:typename:uint32_t
+lba_be_lo	includes/hal/ahci/scsi.h	/^    uint32_t lba_be_lo;$/;"	m	struct:scsi_cdb16	typeref:typename:uint32_t
+len_high	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t len_high;$/;"	m	struct:multiboot_mmap_entry	typeref:typename:multiboot_uint32_t
+len_low	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t len_low;$/;"	m	struct:multiboot_mmap_entry	typeref:typename:multiboot_uint32_t
+length	includes/hal/acpi/acpi.h	/^    uint32_t            length;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:uint32_t
+length	includes/hal/acpi/madt.h	/^    uint8_t length;$/;"	m	struct:__anonafd5f5b70108	typeref:typename:uint8_t
+length	includes/hal/acpi/sdt.h	/^    uint32_t length;$/;"	m	struct:__anon89a37adc0108	typeref:typename:uint32_t
+length	includes/hal/ahci/scsi.h	/^    uint32_t length;$/;"	m	struct:scsi_cdb12	typeref:typename:uint32_t
+length	includes/hal/ahci/scsi.h	/^    uint32_t length;$/;"	m	struct:scsi_cdb16	typeref:typename:uint32_t
+lines	includes/tty/console.h	/^    unsigned int lines;$/;"	m	struct:console	typeref:typename:unsigned int
+link	includes/arch/x86/tss.h	/^    uint32_t link;$/;"	m	struct:x86_tss	typeref:typename:uint32_t
+link	includes/timer.h	/^    struct list_header link;$/;"	m	struct:timer	typeref:struct:list_header
+list_append	includes/datastructs/jlist.h	/^list_append(struct list_header* head, struct list_header* elem)$/;"	f	typeref:typename:void
+list_delete	includes/datastructs/jlist.h	/^list_delete(struct list_header* elem) {$/;"	f	typeref:typename:void
+list_empty	includes/datastructs/jlist.h	/^static inline int list_empty(struct list_header *head){$/;"	f	typeref:typename:int
+list_entry	includes/datastructs/jlist.h	/^#define list_entry(/;"	d
+list_for_each	includes/datastructs/jlist.h	/^#define list_for_each(/;"	d
+list_header	includes/datastructs/jlist.h	/^struct list_header {$/;"	s
+list_init_head	includes/datastructs/jlist.h	/^list_init_head(struct list_header* head) {$/;"	f	typeref:typename:void
+list_prepend	includes/datastructs/jlist.h	/^list_prepend(struct list_header* head, struct list_header* elem)$/;"	f	typeref:typename:void
+lock	includes/datastructs/fifobuf.h	/^    mutex_t         lock;$/;"	m	struct:fifo_buffer	typeref:typename:mutex_t
+lock	includes/mm/mm.h	/^    mutex_t lock;$/;"	m	struct:__anonda2e58240108	typeref:typename:mutex_t
+loop_until	includes/spike.h	/^#define loop_until(/;"	d
+madt	includes/hal/acpi/acpi.h	/^    acpi_madt_toc_t             madt;$/;"	m	struct:__anon9402a4ee0208	typeref:typename:acpi_madt_toc_t
+madt_parse	hal/acpi/parser/madt_parser.c	/^void madt_parse(acpi_madt_t* madt, acpi_context* toc) {$/;"	f	typeref:typename:void
+masked	includes/peripheral/ps2kbd.h	/^    volatile char masked;$/;"	m	struct:ps2_kbd_state	typeref:typename:volatile char
+master_pile	kernel/mm/cake.c	/^struct cake_pile master_pile ;$/;"	v	typeref:struct:cake_pile
+max_addr	includes/mm/mm.h	/^    uint8_t *max_addr;$/;"	m	struct:__anonda2e58240108	typeref:typename:uint8_t *
+max_lba	includes/hal/ahci/hba.h	/^    uint64_t            max_lba;$/;"	m	struct:hba_device	typeref:typename:uint64_t
+mb_info	arch/x86/boot.S	/^    mb_info:$/;"	l
+mcfg	includes/hal/acpi/acpi.h	/^    struct acpi_mcfg_toc        mcfg;$/;"	m	struct:__anon9402a4ee0208	typeref:struct:acpi_mcfg_toc
+mcfg_alloc_info	includes/hal/acpi/mcfg.h	/^struct mcfg_alloc_info{$/;"	s
+mem_lower	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mem_lower;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+mem_map	kernel/mm/pmm.c	/^static struct p_page mem_map[MEM_MEP_MAX_SIZE];$/;"	v	typeref:struct:p_page[]	file:
+mem_upper	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mem_upper;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+memcmp	libs/libc/string/string.c	/^int memcmp(const void *p1, const void *p2, size_t n){$/;"	f	typeref:typename:int
+memcpy	libs/libc/string/string.c	/^void *memcpy(void *dest, const void *src, size_t n){$/;"	f	typeref:typename:void *
+memmove	libs/libc/string/string.c	/^void *memmove(void *dest, const void *src, size_t n){$/;"	f	typeref:typename:void *
+memset	libs/libc/string/string.c	/^void *memset(void *addr, char c, size_t n){$/;"	f	typeref:typename:void *
+minute	includes/clock.h	/^    uint8_t  minute;$/;"	m	struct:__anonda936bed0108	typeref:typename:uint8_t
+misc1	includes/hal/ahci/scsi.h	/^    uint8_t misc1;$/;"	m	struct:scsi_cdb12	typeref:typename:uint8_t
+misc1	includes/hal/ahci/scsi.h	/^    uint8_t misc1;$/;"	m	struct:scsi_cdb16	typeref:typename:uint8_t
+misc2	includes/hal/ahci/scsi.h	/^    uint8_t misc2;$/;"	m	struct:scsi_cdb12	typeref:typename:uint8_t
+misc2	includes/hal/ahci/scsi.h	/^    uint8_t misc2;$/;"	m	struct:scsi_cdb16	typeref:typename:uint8_t
+mm	includes/process.h	/^    struct proc_mm          mm;$/;"	m	struct:task_struct	typeref:struct:proc_mm
+mm_region	includes/mm/mm.h	/^struct mm_region {$/;"	s
+mmap_addr	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mmap_addr;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+mmap_length	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mmap_length;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+mod_end	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mod_end;$/;"	m	struct:multiboot_mod_list	typeref:typename:multiboot_uint32_t
+mod_start	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mod_start;$/;"	m	struct:multiboot_mod_list	typeref:typename:multiboot_uint32_t
+model	includes/hal/ahci/hba.h	/^    char                model[40];$/;"	m	struct:hba_device	typeref:typename:char[40]
+mods_addr	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mods_addr;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+mods_count	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t mods_count;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+month	includes/clock.h	/^    uint8_t  month;$/;"	m	struct:__anonda936bed0108	typeref:typename:uint8_t
+msi_loc	includes/hal/pci.h	/^    uint32_t            msi_loc;$/;"	m	struct:pci_device	typeref:typename:uint32_t
+multiboot_apm_info	includes/arch/x86/boot/multiboot.h	/^struct multiboot_apm_info$/;"	s
+multiboot_color	includes/arch/x86/boot/multiboot.h	/^struct multiboot_color$/;"	s
+multiboot_elf_section_header_table	includes/arch/x86/boot/multiboot.h	/^struct multiboot_elf_section_header_table$/;"	s
+multiboot_elf_section_header_table_t	includes/arch/x86/boot/multiboot.h	/^  multiboot_elf_section_header_table_t;$/;"	t	typeref:struct:multiboot_elf_section_header_table
+multiboot_info	includes/arch/x86/boot/multiboot.h	/^struct multiboot_info$/;"	s
+multiboot_info_t	includes/arch/x86/boot/multiboot.h	/^typedef struct multiboot_info multiboot_info_t;$/;"	t	typeref:struct:multiboot_info
+multiboot_memory_map_t	includes/arch/x86/boot/multiboot.h	/^typedef struct multiboot_mmap_entry multiboot_memory_map_t;$/;"	t	typeref:struct:multiboot_mmap_entry
+multiboot_mmap_entry	includes/arch/x86/boot/multiboot.h	/^struct multiboot_mmap_entry$/;"	s
+multiboot_mod_list	includes/arch/x86/boot/multiboot.h	/^struct multiboot_mod_list$/;"	s
+multiboot_module_t	includes/arch/x86/boot/multiboot.h	/^typedef struct multiboot_mod_list multiboot_module_t;$/;"	t	typeref:struct:multiboot_mod_list
+multiboot_symbol_table	includes/arch/x86/boot/multiboot.h	/^struct multiboot_symbol_table$/;"	s
+multiboot_symbol_table_t	includes/arch/x86/boot/multiboot.h	/^typedef struct multiboot_symbol_table multiboot_symbol_table_t;$/;"	t	typeref:struct:multiboot_symbol_table
+multiboot_uint16_t	includes/arch/x86/boot/multiboot.h	/^typedef unsigned short multiboot_uint16_t;$/;"	t	typeref:typename:unsigned short
+multiboot_uint32_t	includes/arch/x86/boot/multiboot.h	/^typedef unsigned int multiboot_uint32_t;$/;"	t	typeref:typename:unsigned int
+multiboot_uint64_t	includes/arch/x86/boot/multiboot.h	/^typedef unsigned long long multiboot_uint64_t;$/;"	t	typeref:typename:unsigned long long
+multiboot_uint8_t	includes/arch/x86/boot/multiboot.h	/^typedef unsigned char multiboot_uint8_t;$/;"	t	typeref:typename:unsigned char
+mutex	includes/peripheral/ps2kbd.h	/^    mutex_t mutex;$/;"	m	struct:ps2_cmd_queue	typeref:typename:mutex_t
+mutex	includes/peripheral/ps2kbd.h	/^    mutex_t mutex;$/;"	m	struct:ps2_key_buffer	typeref:typename:mutex_t
+mutex_init	includes/datastructs/mutex.h	/^static inline void mutex_init(mutex_t *mutex) {$/;"	f	typeref:typename:void
+mutex_lock	includes/datastructs/mutex.h	/^static inline void mutex_lock(mutex_t *mutex) {$/;"	f	typeref:typename:void
+mutex_on_hold	includes/datastructs/mutex.h	/^static inline unsigned int mutex_on_hold(mutex_t *mutex) {$/;"	f	typeref:typename:unsigned int
+mutex_t	includes/datastructs/mutex.h	/^typedef struct sem_t mutex_t;$/;"	t	typeref:struct:sem_t
+mutex_unlock	includes/datastructs/mutex.h	/^static inline void mutex_unlock(mutex_t *mutex) {$/;"	f	typeref:typename:void
+name	includes/mm/cake.h	/^    char name[PNAME_MAX_LEN];$/;"	m	struct:cake_pile	typeref:typename:char[]
+next	includes/datastructs/jlist.h	/^    struct list_header* next;$/;"	m	struct:list_header	typeref:struct:list_header *
+next_piece	includes/mm/cake.h	/^    unsigned int        next_piece;$/;"	m	struct:_cake	typeref:typename:unsigned int
+num	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t num;$/;"	m	struct:multiboot_elf_section_header_table	typeref:typename:multiboot_uint32_t
+oem_id	includes/hal/acpi/acpi.h	/^    char                        oem_id[7];$/;"	m	struct:__anon9402a4ee0208	typeref:typename:char[7]
+oem_id	includes/hal/acpi/acpi.h	/^    char                oem_id[6];$/;"	m	struct:__anon9402a4ee0108	typeref:typename:char[6]
+oem_id	includes/hal/acpi/sdt.h	/^    char oem_id[6];$/;"	m	struct:__anon89a37adc0108	typeref:typename:char[6]
+oem_rev	includes/hal/acpi/sdt.h	/^    uint32_t oem_rev;$/;"	m	struct:__anon89a37adc0108	typeref:typename:uint32_t
+oem_table_id	includes/hal/acpi/sdt.h	/^    char oem_table_id[8];$/;"	m	struct:__anon89a37adc0108	typeref:typename:char[8]
+offset	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t offset;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint32_t
+offset	includes/mm/cake.h	/^    unsigned int        offset;$/;"	m	struct:cake_pile	typeref:typename:unsigned int
+offset_of	includes/constant.h	/^#define offset_of(/;"	d
+opcode	includes/hal/ahci/scsi.h	/^    uint8_t opcode;$/;"	m	struct:scsi_cdb12	typeref:typename:uint8_t
+opcode	includes/hal/ahci/scsi.h	/^    uint8_t opcode;$/;"	m	struct:scsi_cdb16	typeref:typename:uint8_t
+ops	includes/hal/ahci/hba.h	/^    }ops;$/;"	m	struct:hba_device	typeref:struct:hba_device::__anoncff169540108
+options	includes/hal/ahci/hba.h	/^    uint16_t options;$/;"	m	struct:hba_cmd_header	typeref:typename:uint16_t
+options	includes/hal/ahci/sata.h	/^    uint8_t options;$/;"	m	struct:sata_fis_head	typeref:typename:uint8_t
+orphaned_task	kernel/sched.c	/^int orphaned_task(pid_t pid){$/;"	f	typeref:typename:int
+os	README.md	/^# os$/;"	c
+out_fct_type	includes/libc/stdio.h	/^typedef void (*out_fct_type)(char character, void* buffer, size_t idx, size_t maxlen);$/;"	t	typeref:typename:void (*)(char character,void * buffer,size_t idx,size_t maxlen)
+out_fct_wrap_type	libs/libc/stdio/printf.c	/^} out_fct_wrap_type;$/;"	t	typeref:struct:__anone6aa6f1d0108	file:
+owner	includes/mm/pmm.h	/^  pid_t       owner;$/;"	m	struct:p_page	typeref:typename:pid_t
+p_addr	includes/mm/page.h	/^  uint32_t    p_addr;$/;"	m	struct:__anon256a80270208	typeref:typename:uint32_t
+p_index	includes/mm/page.h	/^  uint32_t    p_index;$/;"	m	struct:__anon256a80270208	typeref:typename:uint32_t
+p_lvl2_lat	includes/hal/acpi/fadt.h	/^    uint16_t p_lvl2_lat;$/;"	m	struct:acpi_fadt	typeref:typename:uint16_t
+p_lvl3_lat	includes/hal/acpi/fadt.h	/^    uint16_t p_lvl3_lat;$/;"	m	struct:acpi_fadt	typeref:typename:uint16_t
+p_page	includes/mm/pmm.h	/^struct p_page{$/;"	s
+p_page_attr	includes/mm/pmm.h	/^#define p_page_attr /;"	d
+pad	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t pad;$/;"	m	struct:multiboot_mod_list	typeref:typename:multiboot_uint32_t
+page_attr	includes/mm/page.h	/^#define page_attr /;"	d
+page_table	includes/process.h	/^    void                    *page_table;$/;"	m	struct:task_struct	typeref:typename:void *
+panick	kernel/spike.c	/^void panick(const char *msg){$/;"	f	typeref:typename:void
+parent	includes/process.h	/^    struct task_struct      *parent;$/;"	m	struct:task_struct	typeref:struct:task_struct *
+partial	includes/mm/cake.h	/^    struct list_header  partial;$/;"	m	struct:cake_pile	typeref:struct:list_header
+payload	includes/timer.h	/^    void* payload;$/;"	m	struct:timer	typeref:typename:void *
+pci_bar_sizing	hal/pci.c	/^size_t pci_bar_sizing(struct pci_device* dev, uint32_t* bar_out, uint32_t bar_num) {$/;"	f	typeref:typename:size_t
+pci_bus_end	includes/hal/acpi/mcfg.h	/^    uint32_t    pci_bus_end;$/;"	m	struct:acpi_mcfg_alloc	typeref:typename:uint32_t
+pci_bus_end	includes/hal/acpi/mcfg.h	/^    uint8_t     pci_bus_end;$/;"	m	struct:mcfg_alloc_info	typeref:typename:uint8_t
+pci_bus_start	includes/hal/acpi/mcfg.h	/^    uint32_t    pci_bus_start;$/;"	m	struct:acpi_mcfg_alloc	typeref:typename:uint32_t
+pci_bus_start	includes/hal/acpi/mcfg.h	/^    uint8_t     pci_bus_start;$/;"	m	struct:mcfg_alloc_info	typeref:typename:uint8_t
+pci_device	includes/hal/pci.h	/^struct pci_device {$/;"	s
+pci_devices	hal/pci.c	/^static struct list_header pci_devices;$/;"	v	typeref:struct:list_header	file:
+pci_get_device_by_class	hal/pci.c	/^struct pci_device* pci_get_device_by_class(uint32_t class) {$/;"	f	typeref:struct:pci_device *
+pci_get_device_by_id	hal/pci.c	/^struct pci_device* pci_get_device_by_id(uint16_t vendorId, uint16_t deviceId) {$/;"	f	typeref:struct:pci_device *
+pci_init	hal/pci.c	/^void pci_init() {$/;"	f	typeref:typename:void
+pci_print_device	hal/pci.c	/^void pci_print_device() {$/;"	f	typeref:typename:void
+pci_probe	hal/pci.c	/^void pci_probe() {$/;"	f	typeref:typename:void
+pci_probe_device	hal/pci.c	/^void pci_probe_device(int bus, int dev, int funct) {$/;"	f	typeref:typename:void
+pci_probe_msi_info	hal/pci.c	/^void pci_probe_msi_info(struct pci_device* device) {$/;"	f	typeref:typename:void
+pci_read_cspace	includes/hal/pci.h	/^inline pci_reg_t pci_read_cspace(uint32_t base, int offset) {$/;"	f	typeref:typename:pci_reg_t
+pci_reg_t	includes/hal/pci.h	/^typedef unsigned int pci_reg_t;$/;"	t	typeref:typename:unsigned int
+pci_seg_num	includes/hal/acpi/mcfg.h	/^    uint16_t    pci_seg_num;$/;"	m	struct:mcfg_alloc_info	typeref:typename:uint16_t
+pci_seg_num	includes/hal/acpi/mcfg.h	/^    uint32_t    pci_seg_num;$/;"	m	struct:acpi_mcfg_alloc	typeref:typename:uint32_t
+pci_setup_msi	hal/pci.c	/^void pci_setup_msi(struct pci_device* device, int vector) {$/;"	f	typeref:typename:void
+pci_write_cspace	includes/hal/pci.h	/^inline void pci_write_cspace(uint32_t base, int offset, pci_reg_t data) {$/;"	f	typeref:typename:void
+pg_per_cake	includes/mm/cake.h	/^    unsigned int        pg_per_cake;$/;"	m	struct:cake_pile	typeref:typename:unsigned int
+pgid	includes/process.h	/^    pid_t                   pgid;$/;"	m	struct:task_struct	typeref:typename:pid_t
+pic_disable	includes/hal/pic.h	/^static inline void pic_disable() {$/;"	f	typeref:typename:void
+pid	includes/process.h	/^    pid_t                   pid;$/;"	m	struct:task_struct	typeref:typename:pid_t
+pid	includes/types.h	/^typedef int32_t pid;$/;"	t	typeref:typename:int32_t
+pid_t	includes/process.h	/^#define pid_t /;"	d
+piece_alloced	includes/mm/cake.h	/^    unsigned int        piece_alloced;$/;"	m	struct:cake_pile	typeref:typename:unsigned int
+piece_per_cake	includes/mm/cake.h	/^    unsigned int        piece_per_cake;$/;"	m	struct:cake_pile	typeref:typename:unsigned int
+piece_size	includes/mm/cake.h	/^    unsigned int        piece_size;$/;"	m	struct:cake_pile	typeref:typename:unsigned int
+piles	includes/mm/cake.h	/^    struct list_header  piles;$/;"	m	struct:cake_pile	typeref:struct:list_header
+piles	kernel/mm/cake.c	/^struct list_header piles = {$/;"	v	typeref:struct:list_header
+piles	kernel/mm/valloc.c	/^static struct cake_piles *piles[MAX_CLASS];$/;"	v	typeref:struct:cake_piles * []	file:
+piles_dma	kernel/mm/valloc.c	/^static struct cake_piles *piles_dma[MAX_CLASS];$/;"	v	typeref:struct:cake_piles * []	file:
+piles_name	kernel/mm/valloc.c	/^static char piles_name[MAX_CLASS][PNAME_MAX_LEN] = {$/;"	v	typeref:typename:char[][]	file:
+piles_name_dma	kernel/mm/valloc.c	/^static char piles_name_dma[MAX_CLASS][PNAME_MAX_LEN] = {$/;"	v	typeref:typename:char[][]	file:
+play_cxk_gif	kernel/tty/tty.c	/^void play_cxk_gif() {$/;"	f	typeref:typename:void
+pm_profile	includes/hal/acpi/fadt.h	/^    uint8_t pm_profile;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+pm_reg_lens	includes/hal/acpi/fadt.h	/^    uint8_t pm_reg_lens[4];$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t[4]
+pm_reg_ports	includes/hal/acpi/fadt.h	/^    uint32_t pm_reg_ports[6];$/;"	m	struct:acpi_fadt	typeref:typename:uint32_t[6]
+pmm_alloc_page	kernel/mm/pmm.c	/^Pysical(void *) pmm_alloc_page(pid_t owner, p_page_attr attr){$/;"	f	typeref:typename:void *
+pmm_alloc_pages	kernel/mm/pmm.c	/^Pysical (void *) pmm_alloc_pages(pid_t owner, size_t n, p_page_attr attr){$/;"	f	typeref:typename:void *
+pmm_free_page	kernel/mm/pmm.c	/^int pmm_free_page(pid_t owner, void *pg){$/;"	f	typeref:typename:int
+pmm_init	kernel/mm/pmm.c	/^void pmm_init(uint32_t mem_upper_limit){$/;"	f	typeref:typename:void
+pmm_mark_page_free	kernel/mm/pmm.c	/^void pmm_mark_page_free(uint32_t ppn){$/;"	f	typeref:typename:void
+pmm_mark_page_occupied	kernel/mm/pmm.c	/^void pmm_mark_page_occupied(pid_t owner, uint32_t ppn, p_page_attr attr){$/;"	f	typeref:typename:void
+pmm_mark_pages_free	kernel/mm/pmm.c	/^void pmm_mark_pages_free(uint32_t start_pnn, uint32_t n){$/;"	f	typeref:typename:void
+pmm_mark_pages_occupied	kernel/mm/pmm.c	/^pmm_mark_pages_occupied$/;"	f	typeref:typename:void
+pmm_query	kernel/mm/pmm.c	/^struct p_page *pmm_query(uintptr_t p_addr){$/;"	f	typeref:struct:p_page *
+pmm_ref_page	kernel/mm/pmm.c	/^int pmm_ref_page(pid_t owner, void *p_addr){$/;"	f	typeref:typename:int
+port	includes/hal/ahci/hba.h	/^    struct hba_port *port;$/;"	m	struct:hba_device	typeref:struct:hba_port *
+port_map	includes/hal/ahci/hba.h	/^    unsigned int        port_map;$/;"	m	struct:ahci_hba	typeref:typename:unsigned int
+port_nums	includes/hal/ahci/hba.h	/^    unsigned int        port_nums;$/;"	m	struct:ahci_hba	typeref:typename:unsigned int
+ports	includes/hal/ahci/hba.h	/^    struct hba_port *ports[32];$/;"	m	struct:ahci_hba	typeref:struct:hba_port * [32]
+pos	kernel/tty/tty.c	/^  uint16_t pos;$/;"	m	struct:__anonc046eab70108	typeref:typename:uint16_t	file:
+prdt_len	includes/hal/ahci/hba.h	/^    uint16_t prdt_len;$/;"	m	struct:hba_cmd_header	typeref:typename:uint16_t
+present	includes/arch/x86/boot/multiboot.h	/^#define present(/;"	d
+prev	includes/datastructs/jlist.h	/^    struct list_header* prev;$/;"	m	struct:list_header	typeref:struct:list_header *
+prev_regs	includes/process.h	/^    isr_param   prev_regs;$/;"	m	struct:sig_struct	typeref:typename:isr_param
+proc_mm	includes/process.h	/^struct proc_mm{$/;"	s
+processor_id	includes/hal/acpi/madt.h	/^    uint8_t processor_id;$/;"	m	struct:__anonafd5f5b70208	typeref:typename:uint8_t
+ps2_cmd	includes/peripheral/ps2kbd.h	/^struct ps2_cmd {$/;"	s
+ps2_cmd_queue	includes/peripheral/ps2kbd.h	/^struct ps2_cmd_queue {$/;"	s
+ps2_device_post_cmd	kernel/peripheral/ps2kbd.c	/^void ps2_device_post_cmd(char cmd, char arg) {$/;"	f	typeref:typename:void
+ps2_issue_cmd	kernel/peripheral/ps2kbd.c	/^static uint8_t ps2_issue_cmd(char cmd, uint16_t arg) {$/;"	f	typeref:typename:uint8_t	file:
+ps2_issue_dev_cmd	kernel/peripheral/ps2kbd.c	/^static uint8_t ps2_issue_dev_cmd(char cmd, uint16_t arg) {$/;"	f	typeref:typename:uint8_t	file:
+ps2_kbd_init	kernel/peripheral/ps2kbd.c	/^void ps2_kbd_init() {$/;"	f	typeref:typename:void
+ps2_kbd_state	includes/peripheral/ps2kbd.h	/^struct ps2_kbd_state {$/;"	s
+ps2_key_buffer	includes/peripheral/ps2kbd.h	/^struct ps2_key_buffer {$/;"	s
+ps2_keybuffer_next_write	kernel/peripheral/ps2kbd.c	/^static struct kdb_keyinfo_pkt* ps2_keybuffer_next_write() {$/;"	f	typeref:struct:kdb_keyinfo_pkt *	file:
+ps2_post_cmd	kernel/peripheral/ps2kbd.c	/^static void ps2_post_cmd(uint8_t port, char cmd, uint16_t arg) {$/;"	f	typeref:typename:void	file:
+ps2_process_cmd	kernel/peripheral/ps2kbd.c	/^void ps2_process_cmd(void* arg) {$/;"	f	typeref:typename:void
+pt_attr	includes/mm/page.h	/^typedef unsigned int pt_attr;$/;"	t	typeref:typename:unsigned int
+pt_t	includes/mm/page.h	/^typedef unsigned int pt_t;$/;"	t	typeref:typename:unsigned int
+ptd_t	includes/mm/page.h	/^typedef unsigned int ptd_t;$/;"	t	typeref:typename:unsigned int
+pte	includes/mm/page.h	/^  x86_pte_t   *pte;$/;"	m	struct:__anon256a80270208	typeref:typename:x86_pte_t *
+queue_len	includes/peripheral/ps2kbd.h	/^    int queue_len;$/;"	m	struct:ps2_cmd_queue	typeref:typename:int
+queue_ptr	includes/peripheral/ps2kbd.h	/^    int queue_ptr;$/;"	m	struct:ps2_cmd_queue	typeref:typename:int
+random_color	kernel/tty/tty.c	/^uint16_t random_color(uint16_t p, uint16_t i, uint16_t j) {$/;"	f	typeref:typename:uint16_t
+read_buffer	includes/hal/ahci/hba.h	/^        int (*read_buffer)($/;"	m	struct:hba_device::__anoncff169540108	typeref:typename:int (*)(struct hba_device * dev,uint64_t lba,void * buffer,uint32_t size)
+read_ptr	includes/peripheral/ps2kbd.h	/^    int read_ptr;$/;"	m	struct:ps2_key_buffer	typeref:typename:int
+red	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint8_t red;$/;"	m	struct:multiboot_color	typeref:typename:multiboot_uint8_t
+ref_counts	includes/mm/pmm.h	/^  uint32_t    ref_counts;$/;"	m	struct:p_page	typeref:typename:uint32_t
+reg16	includes/hal/cpu.h	/^typedef unsigned short reg16;$/;"	t	typeref:typename:unsigned short
+reg32	includes/hal/cpu.h	/^typedef unsigned int reg32;$/;"	t	typeref:typename:unsigned int
+region_add	kernel/mm/region.c	/^void region_add(struct mm_region *regions, uint32_t start, uint32_t end, uint32_t attr){$/;"	f	typeref:typename:void
+region_copy	kernel/mm/region.c	/^void region_copy(struct mm_region *from, struct mm_region *to){$/;"	f	typeref:typename:void
+region_release	kernel/mm/region.c	/^void region_release(struct task_struct *task){$/;"	f	typeref:typename:void
+regions	includes/process.h	/^    struct mm_region    regions;$/;"	m	struct:proc_mm	typeref:struct:mm_region
+regs	includes/process.h	/^    isr_param               regs;$/;"	m	struct:task_struct	typeref:typename:isr_param
+reserve	includes/hal/acpi/mcfg.h	/^    uint32_t    reserve;$/;"	m	struct:acpi_mcfg_alloc	typeref:typename:uint32_t
+reserved	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t reserved;$/;"	m	struct:multiboot_symbol_table	typeref:typename:multiboot_uint32_t
+reserved	includes/hal/acpi/acpi.h	/^    char                reserved[3];    \/\/ Reserved field$/;"	m	struct:__anon9402a4ee0108	typeref:typename:char[3]
+reserved	includes/hal/acpi/fadt.h	/^    uint8_t reserved;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+reserved	includes/hal/acpi/madt.h	/^    uint8_t reserved;$/;"	m	struct:__anonafd5f5b70308	typeref:typename:uint8_t
+reserved	includes/hal/ahci/hba.h	/^    uint32_t reserved[5];$/;"	m	struct:hba_cmd_header	typeref:typename:uint32_t[5]
+reserved	includes/hal/ahci/hba.h	/^    uint8_t reserved[0x30];$/;"	m	struct:hba_cmd_table	typeref:typename:uint8_t[0x30]
+reserved	includes/hal/ahci/hba.h	/^  uint32_t reserved;$/;"	m	struct:hba_prdte	typeref:typename:uint32_t
+reserved	includes/hal/ahci/sata.h	/^    uint16_t reserved[3];$/;"	m	struct:sata_reg_fis	typeref:typename:uint16_t[3]
+rev	includes/hal/acpi/acpi.h	/^    uint8_t             rev;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:uint8_t
+rev	includes/hal/acpi/sdt.h	/^    uint8_t rev;$/;"	m	struct:__anon89a37adc0108	typeref:typename:uint8_t
+rpos	includes/datastructs/fifobuf.h	/^    unsigned int    rpos;$/;"	m	struct:fifo_buffer	typeref:typename:unsigned int
+rsdt	includes/hal/acpi/acpi.h	/^    acpi_rsdt_t         *rsdt;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:acpi_rsdt_t *
+rtc_counter	kernel/time/timer.c	/^static volatile uint32_t rtc_counter = 0;$/;"	v	typeref:typename:volatile uint32_t	file:
+rtc_date_same	hal/rtc.c	/^int rtc_date_same(datetime_t* a, datetime_t* b) {$/;"	f	typeref:typename:int
+rtc_disable_timer	hal/rtc.c	/^void rtc_disable_timer() {$/;"	f	typeref:typename:void
+rtc_enable_timer	hal/rtc.c	/^void rtc_enable_timer() {$/;"	f	typeref:typename:void
+rtc_init	hal/rtc.c	/^void rtc_init() {$/;"	f	typeref:typename:void
+rtc_read_reg	hal/rtc.c	/^uint8_t rtc_read_reg(uint8_t reg_selector) {$/;"	f	typeref:typename:uint8_t
+rtc_write_reg	hal/rtc.c	/^void rtc_write_reg(uint8_t reg_selector, uint8_t val) {$/;"	f	typeref:typename:void
+run	makefile	/^run: $(BUILD_DIR)\/$(OS_ISO)$/;"	t
+running_frequency	includes/timer.h	/^    uint32_t running_frequency;$/;"	m	struct:timer_context	typeref:typename:uint32_t
+sata_create_fis	hal/ahci/ahci.c	/^void sata_create_fis($/;"	f	typeref:typename:void
+sata_data_fis	includes/hal/ahci/sata.h	/^struct sata_data_fis{$/;"	s
+sata_fis_head	includes/hal/ahci/sata.h	/^struct sata_fis_head{$/;"	s
+sata_ifs	hal/ahci/ahci.c	/^static char sata_ifs[][20] = { "Not detected",$/;"	v	typeref:typename:char[][20]	file:
+sata_read_buffer	hal/ahci/ata.c	/^int sata_read_buffer($/;"	f	typeref:typename:int
+sata_read_error	hal/ahci/ata.c	/^void sata_read_error(struct hba_port *port){$/;"	f	typeref:typename:void
+sata_reg_fis	includes/hal/ahci/sata.h	/^struct sata_reg_fis{$/;"	s
+sata_write_buffer	hal/ahci/ata.c	/^int sata_write_buffer($/;"	f	typeref:typename:int
+scancode	includes/peripheral/keyboard.h	/^    kbd_scancode_t scancode;$/;"	m	struct:kdb_keyinfo_pkt	typeref:typename:kbd_scancode_t
+scancode_set2	kernel/peripheral/ps2kbd.c	/^static kbd_keycode_t scancode_set2[] = {$/;"	v	typeref:typename:kbd_keycode_t[]	file:
+scancode_set2_ex	kernel/peripheral/ps2kbd.c	/^static kbd_keycode_t scancode_set2_ex[] = {$/;"	v	typeref:typename:kbd_keycode_t[]	file:
+scancode_set2_shift	kernel/peripheral/ps2kbd.c	/^static kbd_keycode_t scancode_set2_shift[] = {$/;"	v	typeref:typename:kbd_keycode_t[]	file:
+sched_ctx	kernel/sched.c	/^struct scheduler sched_ctx;$/;"	v	typeref:struct:scheduler
+sched_init	kernel/sched.c	/^void sched_init(){$/;"	f	typeref:typename:void
+sched_ticks	kernel/time/timer.c	/^static volatile uint32_t sched_ticks = 0;$/;"	v	typeref:typename:volatile uint32_t	file:
+sched_ticks_counter	kernel/time/timer.c	/^static volatile uint32_t sched_ticks_counter = 0;$/;"	v	typeref:typename:volatile uint32_t	file:
+sched_yield	kernel/time/timer.c	/^void sched_yield(){$/;"	f	typeref:typename:void
+schedule	kernel/sched.c	/^void schedule(){$/;"	f	typeref:typename:void
+scheduler	includes/sched.h	/^struct scheduler {$/;"	s
+sci_int	includes/hal/acpi/fadt.h	/^    uint16_t sci_int;$/;"	m	struct:acpi_fadt	typeref:typename:uint16_t
+scsi_cdb12	includes/hal/ahci/scsi.h	/^struct scsi_cdb12 {$/;"	s
+scsi_cdb16	includes/hal/ahci/scsi.h	/^struct scsi_cdb16 {$/;"	s
+scsi_create_packet12	hal/ahci/atapi.c	/^void scsi_create_packet12(struct scsi_cdb12* cdb,$/;"	f	typeref:typename:void
+scsi_create_packet16	hal/ahci/atapi.c	/^void scsi_create_packet16(struct scsi_cdb16* cdb,$/;"	f	typeref:typename:void
+scsi_parse_capacity	hal/ahci/atapi.c	/^void scsi_parse_capacity(struct hba_device* device, uint32_t* parameter) {$/;"	f	typeref:typename:void
+scsi_read_buffer	hal/ahci/atapi.c	/^int scsi_read_buffer($/;"	f	typeref:typename:int
+scsi_write_buffer	hal/ahci/atapi.c	/^int scsi_write_buffer($/;"	f	typeref:typename:int
+second	includes/clock.h	/^    uint8_t  second;$/;"	m	struct:__anonda936bed0108	typeref:typename:uint8_t
+sem_init	kernel/ds/semaphore.c	/^void sem_init(struct sem_t *sem, unsigned int initc){$/;"	f	typeref:typename:void
+sem_post	kernel/ds/semaphore.c	/^void sem_post(struct sem_t *sem){$/;"	f	typeref:typename:void
+sem_t	includes/datastructs/semaphore.h	/^struct sem_t {$/;"	s
+sem_wait	kernel/ds/semaphore.c	/^void sem_wait(struct sem_t *sem){$/;"	f	typeref:typename:void
+serial_num	includes/hal/ahci/hba.h	/^    char                serial_num[20];$/;"	m	struct:hba_device	typeref:typename:char[20]
+set_bit	libs/datastructs/bitmap.c	/^void set_bit(bit_array_type *arr, uint32_t position){$/;"	f	typeref:typename:void
+set_n_bits	libs/datastructs/bitmap.c	/^void set_n_bits(bit_array_type *arr, uint32_t start, uint32_t n){$/;"	f	typeref:typename:void
+setup_mem	kernel/kernel_init.c	/^void setup_mem(multiboot_memory_map_t *map, uint32_t size){$/;"	f	typeref:typename:void
+setup_task_mem_region	kernel/process.c	/^void setup_task_mem_region(struct mm_region *from,$/;"	f	typeref:typename:void
+setup_task_page_table	kernel/process.c	/^void setup_task_page_table(struct task_struct *task, uintptr_t mount){$/;"	f	typeref:typename:void
+setup_temp_gdt_	arch/x86/boot.S	/^  setup_temp_gdt_:$/;"	l
+sg_reg	includes/hal/cpu.h	/^} __attribute__((packed)) sg_reg;$/;"	t	typeref:struct:__anon8c10de2d0208
+shndx	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t shndx;$/;"	m	struct:multiboot_elf_section_header_table	typeref:typename:multiboot_uint32_t
+siblings	includes/process.h	/^    struct list_header      siblings;$/;"	m	struct:task_struct	typeref:struct:list_header
+sig_doing	includes/process.h	/^    signal_t                sig_doing;$/;"	m	struct:task_struct	typeref:typename:signal_t
+sig_mask	includes/process.h	/^    signal_t                sig_mask;$/;"	m	struct:task_struct	typeref:typename:signal_t
+sig_num	includes/process.h	/^    int         sig_num;$/;"	m	struct:sig_struct	typeref:typename:int
+sig_pending	includes/process.h	/^    signal_t                sig_pending;$/;"	m	struct:task_struct	typeref:typename:signal_t
+sig_struct	includes/process.h	/^struct sig_struct{$/;"	s
+sig_wrapper	kernel/asm/x86/interrupts.S	/^sig_wrapper:$/;"	l
+signal_dispatch	kernel/signal.c	/^void *signal_dispatch(){$/;"	f	typeref:typename:void *
+signal_handler	includes/process.h	/^    void        *signal_handler;$/;"	m	struct:sig_struct	typeref:typename:void *
+signal_handler	includes/signal.h	/^typedef void (*signal_handler) (int);$/;"	t	typeref:typename:void (*)(int)
+signal_handlers	includes/process.h	/^    void                    *signal_handlers[_SIG_MAX];$/;"	m	struct:task_struct	typeref:typename:void * []
+signal_send	kernel/signal.c	/^int signal_send(pid_t pid, int sig){$/;"	f	typeref:typename:int
+signal_t	includes/signal.h	/^typedef unsigned int signal_t;$/;"	t	typeref:typename:unsigned int
+signature	includes/hal/acpi/sdt.h	/^    uint32_t signature;$/;"	m	struct:__anon89a37adc0108	typeref:typename:uint32_t
+signature	includes/hal/ahci/hba.h	/^    uint32_t            signature;$/;"	m	struct:hba_device	typeref:typename:uint32_t
+signature_h	includes/hal/acpi/acpi.h	/^    uint32_t            signature_h;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:uint32_t
+signature_l	includes/hal/acpi/acpi.h	/^    uint32_t            signature_l;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:uint32_t
+sigsegv_handler	kernel/kernel.c	/^void __USER_SPACE__ sigsegv_handler(int signum) {$/;"	f	typeref:typename:void __USER_SPACE__
+size	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t size;$/;"	m	struct:multiboot_elf_section_header_table	typeref:typename:multiboot_uint32_t
+size	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t size;$/;"	m	struct:multiboot_mmap_entry	typeref:typename:multiboot_uint32_t
+size	includes/datastructs/fifobuf.h	/^    unsigned int    size;$/;"	m	struct:fifo_buffer	typeref:typename:unsigned int
+sleepers	includes/process.h	/^        struct list_header sleepers;$/;"	m	struct:task_struct::__anon40b44dc00108	typeref:struct:list_header
+smi_acpi_disable	includes/hal/acpi/fadt.h	/^    uint8_t smi_acpi_disable;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+smi_acpi_enable	includes/hal/acpi/fadt.h	/^    uint8_t smi_acpi_enable;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+smi_cmd_port_addr	includes/hal/acpi/fadt.h	/^    uint32_t smi_cmd_port_addr;$/;"	m	struct:acpi_fadt	typeref:typename:uint32_t
+smi_pstate	includes/hal/acpi/fadt.h	/^    uint8_t smi_pstate;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+smi_s4bios_state	includes/hal/acpi/fadt.h	/^    uint8_t smi_s4bios_state;$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t
+snprintf	includes/libc/stdio.h	/^#define snprintf /;"	d
+snprintf_	libs/libc/stdio/printf.c	/^int snprintf_(char* buffer, size_t count, const char* format, ...)$/;"	f	typeref:typename:int
+soft_iret	kernel/asm/x86/interrupts.S	/^soft_iret:$/;"	l
+source	includes/hal/acpi/madt.h	/^    uint8_t source;$/;"	m	struct:__anonafd5f5b70408	typeref:typename:uint8_t
+spin	includes/spike.h	/^#define spin(/;"	d
+spin	includes/spike.h	/^inline static void spin() {$/;"	f	typeref:typename:void
+sprintf_	libs/libc/stdio/printf.c	/^int sprintf_(char* buffer, const char* format, ...) {$/;"	f	typeref:typename:int
+ss	includes/arch/x86/interrupts.h	/^  unsigned int ss;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+ss	includes/hal/cpu.h	/^    reg16 ss;$/;"	m	struct:__anon8c10de2d0208	typeref:typename:reg16
+ss0	includes/arch/x86/tss.h	/^    uint16_t ss0;$/;"	m	struct:x86_tss	typeref:typename:uint16_t
+ssts	includes/hal/ahci/hba.h	/^  unsigned int          ssts;$/;"	m	struct:hba_port	typeref:typename:unsigned int
+stack_bottom	arch/x86/boot.S	/^    stack_bottom:$/;"	l
+stack_top	arch/x86/boot.S	/^    stack_top:$/;"	l
+start	includes/mm/mm.h	/^    uint32_t             start;$/;"	m	struct:mm_region	typeref:typename:uint32_t
+start	includes/mm/mm.h	/^    uint8_t *start;$/;"	m	struct:__anonda2e58240108	typeref:typename:uint8_t *
+start_	arch/x86/boot.S	/^   start_:$/;"	l
+state	includes/peripheral/keyboard.h	/^    kbd_kstate_t state;$/;"	m	struct:kdb_keyinfo_pkt	typeref:typename:kbd_kstate_t
+state	includes/peripheral/ps2kbd.h	/^    volatile char state;$/;"	m	struct:ps2_kbd_state	typeref:typename:volatile char
+state	includes/process.h	/^    uint8_t                 state;$/;"	m	struct:task_struct	typeref:typename:uint8_t
+status_or_cmd	includes/hal/ahci/sata.h	/^    uint8_t status_or_cmd;$/;"	m	struct:sata_fis_head	typeref:typename:uint8_t
+strcpy	libs/libc/string/string.c	/^char *strcpy(char *dest, const char *src){$/;"	f	typeref:typename:char *
+strlen	libs/libc/string/string.c	/^size_t strlen(const char *str){$/;"	f	typeref:typename:size_t
+strncpy	libs/libc/string/string.c	/^char *strncpy(char *dest, const char *src, size_t n){$/;"	f	typeref:typename:char *
+strsize	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t strsize;$/;"	m	struct:multiboot_symbol_table	typeref:typename:multiboot_uint32_t
+switch_to	kernel/sched.c	/^void switch_to(struct task_struct *new_task){$/;"	f	typeref:typename:void
+sym_vaddr	includes/mm/page.h	/^#define sym_vaddr(/;"	d
+sym_val	arch/x86/hhk.c	/^#define sym_val(/;"	d	file:
+sys_time	kernel/time/clock.c	/^static volatile time_t sys_time;$/;"	v	typeref:typename:volatile time_t	file:
+syscall	includes/syscall.h	/^static void *syscall(unsigned int callcode){$/;"	f	typeref:typename:void *
+syscall_handler	kernel/asm/x86/syscall.S	/^    syscall_handler:$/;"	l
+syscall_init	kernel/syscall.c	/^void syscall_init() {$/;"	f	typeref:typename:void
+syscall_table	kernel/asm/x86/syscall.S	/^    syscall_table:$/;"	l
+t	kernel/signal.c	/^    signal_t t          = __current->sig_mask;$/;"	v	typeref:typename:signal_t
+t_tmp_task	kernel/asm/x86/interrupts.S	/^    t_tmp_task:$/;"	l
+tabsize	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t tabsize;$/;"	m	struct:multiboot_symbol_table	typeref:typename:multiboot_uint32_t
+task_1_init	kernel/kernel_init.c	/^void task_1_init(){$/;"	f	typeref:typename:void
+task_1_work	kernel/init_task.c	/^void task_1_work(){$/;"	f	typeref:typename:void
+task_len	includes/sched.h	/^    unsigned int        task_len;$/;"	m	struct:scheduler	typeref:typename:unsigned int
+task_struct	includes/process.h	/^struct task_struct{$/;"	s
+tasks	includes/sched.h	/^    struct task_struct *tasks;$/;"	m	struct:scheduler	typeref:struct:task_struct *
+temp_intr_routine_apic_timer	kernel/time/timer.c	/^static void temp_intr_routine_apic_timer(const isr_param* param) {$/;"	f	typeref:typename:void	file:
+temp_intr_routine_rtc_tick	kernel/time/timer.c	/^static void temp_intr_routine_rtc_tick(const isr_param* param) {$/;"	f	typeref:typename:void	file:
+terminate_task	kernel/sched.c	/^void terminate_task(int exit_code){$/;"	f	typeref:typename:void
+test	kernel/kernel.c	/^void test(int *a){$/;"	f	typeref:typename:void
+test_poem	kernel/test/test_disk_io.c	/^char test_poem[] = $/;"	v	typeref:typename:char[]
+test_signal_handler	kernel/kernel.c	/^void __USER_SPACE__ test_signal_handler(int signum){$/;"	f	typeref:typename:void __USER_SPACE__
+test_signal_kill	kernel/kernel.c	/^void __USER_SPACE__ test_signal_kill(int signum){$/;"	f	typeref:typename:void __USER_SPACE__
+test_timer	kernel/kernel.c	/^void test_timer(void *paylod){$/;"	f	typeref:typename:void
+tick_interval	includes/timer.h	/^    uint32_t tick_interval;$/;"	m	struct:timer_context	typeref:typename:uint32_t
+time_getdatetime	kernel/time/clock.c	/^void time_getdatetime(datetime_t* datetime) {$/;"	f	typeref:typename:void
+time_info	includes/hal/acpi/fadt.h	/^    uint8_t time_info[3];$/;"	m	struct:acpi_fadt	typeref:typename:uint8_t[3]
+time_t	includes/clock.h	/^typedef uint32_t time_t;$/;"	t	typeref:typename:uint32_t
+timer	includes/process.h	/^    }timer;$/;"	m	struct:task_struct	typeref:struct:task_struct::__anon40b44dc00108
+timer	includes/timer.h	/^struct timer {$/;"	s
+timer_context	includes/timer.h	/^struct timer_context {$/;"	s
+timer_context	kernel/time/timer.c	/^struct timer_context *timer_context(){$/;"	f	typeref:struct:timer_context *
+timer_ctx	kernel/time/timer.c	/^static volatile struct timer_context *timer_ctx;$/;"	v	typeref:typename:volatile struct timer_context *	file:
+timer_init	kernel/time/timer.c	/^void timer_init(uint32_t frequency){$/;"	f	typeref:typename:void
+timer_primary_init	kernel/time/timer.c	/^void timer_primary_init() {$/;"	f	typeref:typename:void
+timer_run	kernel/time/timer.c	/^struct timer *timer_run(uint32_t ticks, void (*callback)(void*), void* payload, uint8_t flags) {$/;"	f	typeref:struct:timer *
+timer_run_ms	kernel/time/timer.c	/^struct timer *timer_run_ms(uint32_t millisecond, void (*callback)(void*), void* payload, uint8_t/;"	f	typeref:struct:timer *
+timer_run_second	kernel/time/timer.c	/^struct timer *timer_run_second(uint32_t second, void (*callback)(void*), void* payload, uint8_t /;"	f	typeref:struct:timer *
+timestamp	includes/peripheral/keyboard.h	/^    time_t timestamp;$/;"	m	struct:kdb_keyinfo_pkt	typeref:typename:time_t
+tmp_stack	kernel/asm/x86/interrupts.S	/^    tmp_stack:$/;"	l
+transferred_byte_size	includes/hal/ahci/hba.h	/^    uint32_t transferred_byte_size;$/;"	m	struct:hba_cmd_header	typeref:typename:uint32_t
+translation_table	includes/peripheral/ps2kbd.h	/^    kbd_keycode_t* translation_table;$/;"	m	struct:ps2_kbd_state	typeref:typename:kbd_keycode_t *
+tss_update	kernel/asm/x86/tss.c	/^void tss_update(uint32_t ss0, uint32_t esp0){$/;"	f	typeref:typename:void
+tss_update_esp	kernel/asm/x86/tss.c	/^void tss_update_esp(uint32_t esp0){$/;"	f	typeref:typename:void
+tty_buf	kernel/tty/tty.c	/^}tty_buf;$/;"	v	typeref:struct:__anonc046eab70108
+tty_clear_line	kernel/tty/tty.c	/^void tty_clear_line(uint32_t line){$/;"	f	typeref:typename:void
+tty_flush_buffer	kernel/tty/tty.c	/^int  tty_flush_buffer(char *buffer, int pos,$/;"	f	typeref:typename:int
+tty_put_buf	kernel/tty/tty.c	/^static inline void tty_put_buf(int *x, int *y){$/;"	f	typeref:typename:void	file:
+tty_put_char	kernel/tty/tty.c	/^void tty_put_char(char c) {$/;"	f	typeref:typename:void
+tty_put_data	kernel/tty/tty.c	/^void tty_put_data(uint16_t i, uint16_t j, uint16_t data) {$/;"	f	typeref:typename:void
+tty_put_str	kernel/tty/tty.c	/^void tty_put_str(char *str) {$/;"	f	typeref:typename:void
+tty_put_str_at_line	kernel/tty/tty.c	/^void tty_put_str_at_line(char *str, uint32_t line, uint32_t color){$/;"	f	typeref:typename:void
+tty_scroll_up	kernel/tty/tty.c	/^void tty_scroll_up(){$/;"	f	typeref:typename:void
+tty_set_color	kernel/tty/tty.c	/^void tty_set_color(uint16_t color){$/;"	f	typeref:typename:void
+tty_set_cursor	kernel/tty/tty.c	/^void tty_set_cursor(uint32_t x, uint32_t y){$/;"	f	typeref:typename:void
+tty_set_theme	kernel/tty/tty.c	/^void tty_set_theme(uint8_t fg, uint8_t bg) {$/;"	f	typeref:typename:void
+tty_sizeof_char	kernel/tty/tty.c	/^#define tty_sizeof_char /;"	d	file:
+tty_sync_cursor	kernel/tty/tty.c	/^void tty_sync_cursor(){$/;"	f	typeref:typename:void
+type	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t type;$/;"	m	struct:multiboot_mmap_entry	typeref:typename:multiboot_uint32_t
+type	includes/hal/acpi/madt.h	/^    uint8_t type;$/;"	m	struct:__anonafd5f5b70108	typeref:typename:uint8_t
+type	includes/hal/ahci/sata.h	/^    uint8_t type;$/;"	m	struct:sata_fis_head	typeref:typename:uint8_t
+u	includes/arch/x86/boot/multiboot.h	/^    } u;$/;"	m	struct:multiboot_info	typeref:union:multiboot_info::__anonea4247e5010a
+used_piece	includes/mm/cake.h	/^    unsigned int        used_piece;$/;"	m	struct:_cake	typeref:typename:unsigned int
+user_esp	includes/arch/x86/interrupts.h	/^  unsigned int user_esp;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+user_heap	includes/process.h	/^    heap_context_t      user_heap;$/;"	m	struct:proc_mm	typeref:typename:heap_context_t
+user_stack_top	includes/process.h	/^    uint32_t                user_stack_top;$/;"	m	struct:task_struct	typeref:typename:uint32_t
+v2tc	includes/tty/tty.h	/^#define v2tc(/;"	d
+v_mapping	includes/mm/page.h	/^} v_mapping;$/;"	t	typeref:struct:__anon256a80270208
+v_page_attr	includes/mm/vmm.h	/^#define v_page_attr /;"	d
+va	includes/mm/page.h	/^  uint32_t    va;$/;"	m	struct:__anon256a80270208	typeref:typename:uint32_t
+valloc	kernel/mm/valloc.c	/^void *valloc(unsigned int size){$/;"	f	typeref:typename:void *
+valloc_dma	kernel/mm/valloc.c	/^void *valloc_dma(unsigned int size){$/;"	f	typeref:typename:void *
+valloc_init	kernel/mm/valloc.c	/^void valloc_init(){$/;"	f	typeref:typename:void
+vbe_control_info	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t vbe_control_info;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+vbe_interface_len	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t vbe_interface_len;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint16_t
+vbe_interface_off	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t vbe_interface_off;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint16_t
+vbe_interface_seg	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t vbe_interface_seg;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint16_t
+vbe_mode	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t vbe_mode;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint16_t
+vbe_mode_info	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint32_t vbe_mode_info;$/;"	m	struct:multiboot_info	typeref:typename:multiboot_uint32_t
+vector	includes/arch/x86/interrupts.h	/^  unsigned int vector;$/;"	m	struct:__anon391dcb830108	typeref:typename:unsigned int
+vendor_id	includes/hal/acpi/sdt.h	/^    uint32_t vendor_id;$/;"	m	struct:__anon89a37adc0108	typeref:typename:uint32_t
+vendor_rev	includes/hal/acpi/sdt.h	/^    uint32_t vendor_rev;$/;"	m	struct:__anon89a37adc0108	typeref:typename:uint32_t
+version	includes/arch/x86/boot/multiboot.h	/^    multiboot_uint16_t version;$/;"	m	struct:multiboot_apm_info	typeref:typename:multiboot_uint16_t
+version	includes/hal/ahci/hba.h	/^    unsigned int        version;$/;"	m	struct:ahci_hba	typeref:typename:unsigned int
+vfree	kernel/mm/valloc.c	/^void vfree(void *vaddr){$/;"	f	typeref:typename:void
+vfree_dma	kernel/mm/valloc.c	/^void vfree_dma(void *vaddr){$/;"	f	typeref:typename:void
+vga_buffer	kernel/tty/tty.c	/^uint16_t *vga_buffer = (uint16_t *)0xB8000;$/;"	v	typeref:typename:uint16_t *
+vmm_create_new_pd	kernel/mm/vmm.c	/^Pysical(x86_page_t *) vmm_create_new_pd(){$/;"	f	typeref:typename:x86_page_t *
+vmm_dup_page	kernel/mm/cow.c	/^Pysical(void *) vmm_dup_page(pid_t pid, void * paddr){$/;"	f	typeref:typename:void *
+vmm_init	kernel/mm/vmm.c	/^void vmm_init() { }$/;"	f	typeref:typename:void
+vmm_lookup	kernel/mm/vmm.c	/^int vmm_lookup(void *va, v_mapping *mapping){$/;"	f	typeref:typename:int
+vmm_mount_pg_dir	kernel/mm/vmm.c	/^void *vmm_mount_pg_dir(uintptr_t mount, void *pde){$/;"	f	typeref:typename:void *
+vmm_set_mapping	kernel/mm/vmm.c	/^int vmm_set_mapping(uintptr_t mnt, void *va, Pysical(void *) pa, p_page_attr attr, int op){$/;"	f	typeref:typename:int
+vmm_unmount_pg_dir	kernel/mm/vmm.c	/^void vmm_unmount_pg_dir(uint32_t mount){$/;"	f	typeref:typename:void
+vmm_unset_mapping	kernel/mm/vmm.c	/^uintptr_t vmm_unset_mapping(uintptr_t mnt, uintptr_t va){$/;"	f	typeref:typename:uintptr_t
+vmm_v2p	kernel/mm/vmm.c	/^void *vmm_v2p(void *va){$/;"	f	typeref:typename:void *
+vmm_vmap	kernel/mm/vmap.c	/^void * vmm_vmap(uintptr_t paddr, size_t n, page_attr attr){$/;"	f	typeref:typename:void *
+vprintf	includes/libc/stdio.h	/^#define vprintf /;"	d
+vsnprintf	includes/libc/stdio.h	/^#define vsnprintf /;"	d
+wait_until	includes/spike.h	/^#define wait_until(/;"	d
+wait_until_expire	includes/spike.h	/^#define wait_until_expire(/;"	d
+wakeup	includes/process.h	/^        time_t             wakeup;$/;"	m	struct:task_struct::__anon40b44dc00108	typeref:typename:time_t
+weekday	includes/clock.h	/^    uint8_t  weekday;$/;"	m	struct:__anonda936bed0108	typeref:typename:uint8_t
+wpos	includes/datastructs/fifobuf.h	/^    unsigned int    wpos;$/;"	m	struct:fifo_buffer	typeref:typename:unsigned int
+write_buffer	includes/hal/ahci/hba.h	/^        int (*write_buffer)($/;"	m	struct:hba_device::__anoncff169540108	typeref:typename:int (*)(struct hba_device * dev,uint64_t lba,void * buffer,uint32_t size)
+wwn	includes/hal/ahci/hba.h	/^    uint64_t            wwn;$/;"	m	struct:hba_device	typeref:typename:uint64_t
+x86_page_t	includes/mm/page.h	/^} __attribute__((packed)) x86_page_t ;$/;"	t	typeref:struct:__anon256a80270108
+x86_pte_t	includes/mm/page.h	/^typedef uint32_t x86_pte_t;$/;"	t	typeref:typename:uint32_t
+x86_tss	includes/arch/x86/tss.h	/^struct x86_tss{$/;"	s
+x_chksum	includes/hal/acpi/acpi.h	/^    uint8_t             x_chksum;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:uint8_t
+xsdt	includes/hal/acpi/acpi.h	/^    acpi_sdthdr_t       *xsdt;$/;"	m	struct:__anon9402a4ee0108	typeref:typename:acpi_sdthdr_t *
+year	includes/clock.h	/^    uint32_t year;      \/\/ use int32 as we need to store the 4-digit year$/;"	m	struct:__anonda936bed0108	typeref:typename:uint32_t

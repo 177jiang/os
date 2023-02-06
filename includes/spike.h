@@ -2,6 +2,7 @@
 #define __jyos_spike_h_
 
 
+
 #define __USER_SPACE__     __attribute__((section(".user_text")))
 
 // 除法向上取整

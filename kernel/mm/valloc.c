@@ -75,7 +75,7 @@ void __vfree(void *vaddr, struct cake_pile **piles){
 
     for(size_t i=0; i<MAX_CLASS; ++i){
         if(cake_piece_release(piles[i], vaddr)){
-          break;
+            break;
         }
     }
 
@@ -88,10 +88,42 @@ void *valloc(unsigned int size){
     return __valloc(size, piles);
 }
 
+void *vzalloc(unsigned int size){
+
+    void *res =  __valloc(size, piles);
+    memset(res, 0, size);
+    return res;
+}
+
+void *vcalloc(unsigned int size, unsigned int count){
+
+    unsigned int alloc_size;
+    if(__builtin_umul_overflow(size, count, &alloc_size)){
+        return 0;
+    }
+    return vzalloc(alloc_size);
+}
 
 void *valloc_dma(unsigned int size){
     return __valloc(size, piles_dma);
 }
+
+void *vzalloc_dma(unsigned int size){
+
+    void *res =  __valloc(size, piles_dma);
+    memset(res, 0, size);
+    return res;
+}
+
+void *vcalloc_dma(unsigned int size, unsigned int count ){
+
+    unsigned int alloc_size;
+    if(__builtin_umul_overflow(size, count, &alloc_size)){
+        return 0;
+    }
+    return vzalloc_dma(alloc_size);
+}
+
 
 void vfree(void *vaddr){
     return __vfree(vaddr, piles);
