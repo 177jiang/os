@@ -51,7 +51,7 @@ struct v_dnode{
 
     struct hash_str         name;
     struct v_inode          *inode;
-    struct v_dnode          *dnode;
+    struct v_dnode          *parent;
     struct hash_list_node   hash_list;
     struct list_header      children; 
     struct list_header      siblings; 

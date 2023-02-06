@@ -74,6 +74,64 @@ void vfs_dcache_add(struct v_dnode *parent, struct v_dnode *node){
     hash_list_add(&bucket->head, &node->hash_list);
 }
 
+int vfs_walk(struct v_dnode *start,
+             const char *path,
+             struct v_dnode **dentry){
+
+    int error = 0;
+    int i = 0, j = 0;
+    if(*path == PATH_DELIM){
+        start = start->super_block->root;
+        ++i;
+    }
+    char tname[VFS_NAME_MAXLEN];
+    char cur, next;
+    struct hash_str hs = HASH_STR(tname, 0);
+    struct v_dnode *dnode;
+    struct v_dnode *current_level = start;
+    do{
+
+        cur  = path[i++];
+        next = path[i++];
+        if(cur != PATH_DELIM){
+            if(j >= VFS_NAME_MAXLEN - 1){
+                error = VFS_ETOOLONG;
+                goto error;
+            }
+            tname[j++] = cur;
+            if(next) continue;
+        }
+
+        tname[j] = 0;
+        hash_str_rehash(&hs, 32);
+        dnode = vfs_dnode_lookup(current_level, &hs);
+
+        if(!dnode){
+
+            dnode = __new_dnode();
+            dnode->name.hash = hs.hash;
+            dnode->name.len  = j;
+            strcpy(dnode->name.value, hs.value);
+
+            error = dnode->inode->ops.dir_lookup(
+                        current_level->inode, dnode);
+            if(error){
+                goto error;
+            }
+
+            vfs_dcache_add(current_level, dnode);
+            dnode->parent = current_level;
+            list_append(&current_level->children, &dnode->siblings);
+        }
+
+        j = 0;
+        current_level = dnode;
+    }while(next);
+
+error:
+    return error;
+}
+
 int vfs_mount(const char *fs_name,
               bdev_t device,
               struct v_dnode *mnt_point){
