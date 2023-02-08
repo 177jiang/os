@@ -32,7 +32,7 @@ void vfs_init(){
     file_pile       =
         cake_pile_create("file_cache", sizeof(struct v_file), 1, 0);
     superblock_pile =
-        cake_pile_create("v_superblock", sizeof(struct v_superblock), 1, 0);
+        cake_pile_create("sb_cache", sizeof(struct v_superblock), 1, 0);
     dnode_cache     =
         valloc(DNODE_HASHTABLE_SIZE * sizeof(struct hash_bucket));
 

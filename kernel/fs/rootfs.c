@@ -85,7 +85,7 @@ struct rootfs_node *__rootfs_get_node(
     struct rootfs_node *pos, *n;
     list_for_each(pos, n, &parent->children, siblings){
 
-        if(&pos->name == name){
+        if(pos->name.hash == name->hash){
             return pos;
         }
     }
