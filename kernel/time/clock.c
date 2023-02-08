@@ -69,6 +69,15 @@ void time_getdatetime(datetime_t* datetime) {
     datetime->year += RTC_CURRENT_CENTRY * 100;
 }
 
+void clock_walltime(datetime_t *dt){
+    time_getdatetime(dt);
+}
+time_t clock_unixtime(){
+
+    datetime_t dt;
+    clock_walltime(&dt);
+    return clock_tounixtime(&dt);
+}
 
 time_t clock_systime() {
     return sys_time;

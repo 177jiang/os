@@ -5,6 +5,8 @@
 #include <hal/ahci/hba.h>
 #include <stddef.h>
 #include <block.h>
+#include <types.h>
+
 #include <datastructs/hashtable.h>
 #include <datastructs/hstr.h>
 #include <datastructs/jlist.h>
@@ -12,7 +14,33 @@
 #define IN(x)  (x)
 #define OUT(x) (x)
 
-#define   VFS_NAME_MAXLEN     128
+#define     VFS_NAME_MAXLEN             128
+#define     VFS_FD_MAX                  32
+
+#define     VFS_INODE_TYPE_DIR          0x1 
+#define     VFS_INODE_TYPE_FILE         0x2 
+#define     VFS_INODE_TYPE_DEVICE       0x4 
+
+
+#define     VFS_ETOOLONG                -1
+#define     VFS_ENOFS                   -2
+#define     VFS_EBADMNT                 -3
+#define     VFS_ENODIR                  -4
+#define     VFS_EENDDIR                 -5
+#define     VFS_ENOTFOUND               -6
+#define     VFS_ENOOPS                  -7
+#define     VFS_EINVLD                  -8
+#define     VFS_EEOF                    -9
+
+#define     VFS_WALK_MKPARENT           0x1
+#define     VFS_WALK_FSRELATIVE         0x2
+#define     VFS_WALK_MKDIR              0x3
+
+#define     VFS_IOBUF_FDIRTY            0x1
+
+#define     VFS_VALID_CHAR(c)           \
+    (is_alpha(c) || is_number(c)  ||    \
+    ((c)=='.')  || ((c)=='-')    || ((c)=='_') )
 
 struct v_dnode;
 struct v_superblock;
@@ -31,12 +59,13 @@ struct filesystem{
 
 struct v_inode{
 
-    uint32_t  ityep;
+    uint32_t  itype;
     uint32_t  ctime;
     uint32_t  mtime;
     uint64_t  lb_addr;
-    uint32_t  ref_count;
     uint32_t  lb_usage;
+    uint32_t  ref_count;
+    void      *data;
 
     struct {
 
@@ -56,29 +85,39 @@ struct v_dnode{
     struct list_header      children; 
     struct list_header      siblings; 
     struct v_superblock     *super_block;
+    struct {
+        void (*destruct)(struct v_dnode *dnode);
+    }ops;
+};
+
+struct v_fdtable{
+
+    struct v_fd *fds[VFS_FD_MAX];
+};
+
+struct v_file_ops{
+    int (*write)    (struct v_file *this, void IN(*data), uint32_t size);
+    int (*read)     (struct v_file *this, void OUT(*data), uint32_t size);
+    int (*read_dir) (struct v_file *this, int dir_index);
+    int (*seek)     (struct v_file *this, size_t offset);
+    int (*rename)   (struct v_file *this, char *name);
+    int (*close)    (struct v_file *this);
+    int (*sync)     (struct v_file *this);
 };
 
 struct v_file{
 
-    struct v_inode *inode;
+    struct v_inode      *inode;
+    struct list_header  *f_list;
+    uint32_t            f_pos;
+    void                *data;
+    struct v_file_ops   ops;
+};
 
-    struct {
-        void      *data;
-        uint32_t  size;
-        uint64_t  lb_addr;
-        uint32_t  offset;
-        int       dirty
-    }buffer;
+struct v_fd{
 
-    struct {
-        int (*write)    (struct v_file *this, void IN(*data), uint32_t size);
-        int (*read)     (struct v_file *this, void OUT(*data), uint32_t size);
-        int (*read_dir) (struct v_file *this, int dir_index);
-        int (*seek)     (struct v_file *this, size_t offset);
-        int (*rename)   (struct v_file *this, char *name);
-        int (*close)    (struct v_file *this);
-        int (*sync)     (struct v_file *this);
-    }ops;
+    struct v_file *file;
+    int            pos;
 };
 
 struct v_superblock{
@@ -88,6 +127,7 @@ struct v_superblock{
     bdev_t              dev;
     struct v_dnode      *root;
     struct filesystem   *fs;
+    uint32_t            iobuf_size;
 
     struct {
 
@@ -96,13 +136,56 @@ struct v_superblock{
     }ops;
 };
 
+struct dir_context{
+
+    int index;
+    void *cb_data;
+    void (*read_complete_callback)(
+            struct dir_context *this,
+            const char *name,
+            const int   dtype
+        );
+};
 
 
-void fsm_init();
-
-void fsm_register(struct filesystem *fs);
-
+void   fsm_init();
+void   fsm_register(struct filesystem *fs);
 struct filesystem *fsm_get(const char * fs_name);
+
+struct v_dnode *vfs_dcache_lookup(
+        struct v_dnode *parent, struct hash_str *hs);
+
+void   vfs_dcache_add(
+        struct v_dnode *parent, struct v_dnode *node);
+
+int    vfs_walk(
+        struct v_dnode *start,   const char *path,
+        struct v_dnode **dentry, int walk_options);
+
+int vfs_mount(
+        const char *fs_name, bdev_t dev, struct v_dnode *mount_point);
+int vfs_unmount(struct v_dnode *mount_point);
+
+int vfs_mkdir(
+        const char *parent_path, const char *compoent,
+        struct v_dnode **dentry);
+
+int vfs_open(struct v_dnode *dnode, struct v_file **file);
+
+int vfs_close(struct v_file *file);
+
+int vfs_fsync(struct v_file *file);
+
+struct v_superblock *vfs_sb_alloc();
+void                 vfs_sb_free(struct v_superblock *sb);
+
+struct v_dnode *vfs_dnode_alloc();
+void            vfs_dnode_free(struct v_dnode *dnode);
+
+struct v_inode *vfs_inode_alloc();
+void            vfs_inode_free(struct v_inode *inode);
+
+
 
 #endif
 

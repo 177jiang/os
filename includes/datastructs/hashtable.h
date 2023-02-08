@@ -18,7 +18,7 @@ struct hash_bucket{
     struct   hash_bucket name[bucket_num];
 
 #define hashtable_bucket_foreach(bucket, pos, n, member)                 \
-    for(pos=list_entry((bucket)->head, typeof(*pos), member);           \
+    for(pos=list_entry((bucket)->head, typeof(*pos), member);            \
         pos && ({                                                        \
             n = list_entry(pos->member.next, typeof(*pos), member);      \
             1;                                                           \

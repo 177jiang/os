@@ -78,14 +78,17 @@ struct hash_list_node{
 
     struct hash_list_node *next;
     struct hash_list_node **pprev;
-    //pprev : addr of prev's next(addr)
+    //pprev : addr of prev next's addr
 };
 
 static inline void hash_list_del(struct hash_list_node *node){
 
-    *node->pprev =  node->next;
-    node->next   =  0;
-    node->pprev  =  0;
+    if(!node->pprev)return;
+
+    *node->pprev      =  node->next;
+    node->next->pprev =  node->pprev;
+    node->next        =  0;
+    node->pprev       =  0;
 }
 
 static inline void hash_list_add(struct hash_list_node **head,

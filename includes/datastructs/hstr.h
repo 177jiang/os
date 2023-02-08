@@ -3,6 +3,8 @@
 
 #include <libc/hash.h>
 
+#define HSTR_FULL_HASH     32
+
 struct hash_str{
 
     unsigned int hash;
@@ -10,7 +12,7 @@ struct hash_str{
     char         *value;
 };
 
-#define HASH_STR(str, length) (struct hash_str){.len=length, .value=str}
+#define HASH_STR(str, length) (struct hash_str){.len=(length), .value=(str)}
 
 
 

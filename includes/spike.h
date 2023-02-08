@@ -19,6 +19,9 @@
 // 获取v最近的最小k倍数
 #define ROUNDDOWN(v, k)     ((v) & ~((k) - 1))
 
+#define MAX(a, b)           ((a) > (b) ? (a) : (b))
+#define MIN(a, b)           ((a) < (b) ? (a) : (b))
+
 
 inline static void spin() {
     while(1);

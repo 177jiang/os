@@ -23,4 +23,11 @@ int clock_datetime_eq(datetime_t* a, datetime_t *b);
 
 time_t clock_systime();
 
+static inline time_t clock_tounixtime(datetime_t *dt){
+
+    return (dt->year - 1970) * 31556926u + (dt->month - 1) * 2629743u +
+           (dt->day - 1) * 86400u + (dt->hour - 1) * 3600u +
+           (dt->minute - 1) * 60u + dt->second;
+}
+
 #endif
