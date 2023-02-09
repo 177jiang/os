@@ -28,12 +28,14 @@
 #define SIG_OFF_NUM         (SIG_OFF_HANDLER + 4)
 
 #ifndef __ASM_S_
+
 #include <arch/x86/interrupts.h>
 #include <datastructs/jlist.h>
 #include <mm/mm.h>
 #include <mm/page.h>
 #include <signal.h>
 #include <clock.h>
+#include <fs/fs.h>
 
 struct proc_mm{
     heap_context_t      user_heap;
@@ -49,11 +51,9 @@ struct sig_struct{
 struct task_struct{
 
     isr_param               regs;
-
     uint32_t                user_stack_top;
-
     void                    *page_table;
-
+//don't fucking change above member
     pid_t                   pid;
     pid_t                   pgid;
     uint8_t                 state;
@@ -65,6 +65,7 @@ struct task_struct{
     signal_t                sig_mask;
     signal_t                sig_doing;
     void                    *signal_handlers[_SIG_MAX];
+    struct v_fdtable        *fdtable;
 
     struct proc_mm          mm;
 

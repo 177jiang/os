@@ -1,9 +1,12 @@
-#include <process.h>
 #include <mm/vmm.h>
+#include <mm/valloc.h>
+
 #include <hal/cpu.h>
 #include <hal/apic.h>
+
 #include <status.h>
 #include <sched.h>
+#include <process.h>
 #include <spike.h>
 #include <types.h>
 #include <timer.h>
@@ -141,7 +144,7 @@ void commit_task(struct task_struct *task){
     assert_msg(task==(sched_ctx.tasks + task->pid), "Task set error\n");
 
     if(task->state != TASK_CREATED){
-        __current->k_status = INVL;
+        __current->k_status = EINVL;
         return ;
     }
 
@@ -169,6 +172,7 @@ struct task_struct *alloc_task(){
     new_task->state             = TASK_CREATED;
     new_task->timer.created     = clock_systime();
     new_task->user_stack_top    = U_STACK_TOP;
+    new_task->fdtable           = vzalloc(sizeof(struct v_fdtable));
 
 
     list_init_head(&new_task->mm.regions.head);
@@ -203,7 +207,7 @@ pid_t alloc_pid(){
 pid_t destroy_task(pid_t pid){
 
     if(pid <= 1 || pid > sched_ctx.task_len){
-        __current->k_status = INVLDPID;
+        __current->k_status = EINVL;
         return;
     }
 

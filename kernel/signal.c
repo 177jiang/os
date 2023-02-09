@@ -77,7 +77,7 @@ void *signal_dispatch(){
 int signal_send(pid_t pid, int sig){
 
     if(sig < 0 || sig >= _SIG_MAX){
-        __current->k_status = INVL;
+        __current->k_status = EINVL;
         return -1;
     }
 
@@ -93,13 +93,13 @@ int signal_send(pid_t pid, int sig){
             task = get_task(-pid);
             break;
         }else if(pid == -1){
-            __current->k_status = INVL;
+            __current->k_status = EINVL;
             /* send all */
             return -1;
         }
 
         if(TASK_TERMINATED(task->state)){
-            __current->k_status = INVL;
+            __current->k_status = EINVL;
             return -1;
         }
 

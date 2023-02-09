@@ -7,16 +7,18 @@
 #include <mm/valloc.h>
 
 
-static struct rootfs_node fs_root;
-
+static struct rootfs_node *fs_root;
 static struct cake_pile   *rtfs_pile;
 
 int __rootfs_dir_lookup(struct v_inode *inode, struct v_dnode *dnode);
-
 int __rootfs_fileopen(struct v_inode *inode, struct v_file *file);
+int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mount);
 
-struct rootfs_node *__rootfs_get_node(
-    struct rootfs_node *parent, struct hash_str *name);
+struct rootfs_node *__rootfs_get_node
+    (struct rootfs_node *parent, struct hash_str *name);
+struct v_inode *__rootfs_create_inode
+    (struct rootfs_node *node);
+
 
 
 void rootfs_init(){
@@ -27,17 +29,18 @@ void rootfs_init(){
     struct filesystem *rtfs = vzalloc(sizeof(struct filesystem));
 
     rtfs->fs_name = HASH_STR("rootfs", 6);
-    // rtfs->mount   = __rtfs_mount;
+    rtfs->mount   = __rootfs_mount;
     fsm_register(rtfs);
 
-    list_init_head(&fs_root.children);
+    fs_root = rootfs_dir_node(NULL, NULL, 0);
+    list_init_head(&fs_root->children);
 
     rootfs_toplevel_node("kernel", 6);
     rootfs_toplevel_node("dev",    3);
     rootfs_toplevel_node("bus",    3);
 }
 
-struct rootfs_node * rootfs_child_node(
+struct rootfs_node * __rootfs_new_node(
     struct rootfs_node *parent, const char *name, int len){
     
 
@@ -49,16 +52,56 @@ struct rootfs_node * rootfs_child_node(
     if(!node){
 
         node       =  cake_piece_grub(rtfs_pile);
+        memset(node, 0, sizeof(*node));
         node->name =  hn;
         list_init_head(&node->children);
-        list_append(&fs_root.children, &node->siblings);
+
+        if(parent){
+
+            list_append(&parent->children, &node->siblings);
+        }
     }
+    return node;
+}
+
+struct rootfs_node *rootfs_file_node(
+        struct rootfs_node *parent,
+        const char *name,
+        int len){
+
+    struct rootfs_node *node = __rootfs_new_node(parent, name, len);
+    node->itype = VFS_INODE_TYPE_FILE;
+
+    struct v_inode *inode =  __rootfs_create_inode(node);
+    node->inode           =  inode;
+    return node;
+}
+
+struct rootfs_node *rootfs_dir_node(
+        struct rootfs_node *parent,
+        const char *name,
+        int len){
+
+    struct rootfs_node *node =  __rootfs_new_node(parent, name, len);
+    struct rootfs_node *dot  =  __rootfs_new_node(node, ".", 1);
+    struct rootfs_node *ddot =  __rootfs_new_node(node, "..", 2);
+
+    struct v_inode *inode    =  __rootfs_create_inode(node);
+
+    node->itype =  VFS_INODE_TYPE_DIR;
+    dot->itype  =  VFS_INODE_TYPE_DIR;
+    ddot->itype =  VFS_INODE_TYPE_DIR;
+
+    node->inode = inode;
+    dot->inode  = inode;
+    if(parent) ddot->inode = parent->inode;
+
     return node;
 }
 
 struct rootfs_node *rootfs_toplevel_node (const char *name, int len){
 
-    return rootfs_child_node(&fs_root, name, len);
+    return rootfs_dir_node(&fs_root, name, len);
 }
 
 struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
@@ -74,13 +117,16 @@ struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
     return inode;
 }
 
-void __rootfs_mount(struct v_superblock *sb, struct v_dnode *mnt){
+int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mnt){
 
-    mnt->inode = __rootfs_create_inode(&fs_root);
+    mnt->inode = fs_root->inode;
+    return 0;
 }
 
 struct rootfs_node *__rootfs_get_node(
     struct rootfs_node *parent, struct hash_str *name){
+
+    if(!parent)return NULL;
 
     struct rootfs_node *pos, *n;
     list_for_each(pos, n, &parent->children, siblings){
@@ -98,10 +144,10 @@ int __rootfs_dir_lookup(struct v_inode *inode, struct v_dnode *dnode){
         __rootfs_get_node(inode->data, &dnode->name);
 
     if(child_node){
-        dnode->inode = __rootfs_create_inode(child_node);
+        dnode->inode = child_node->inode;
         return 0;
     }
-    return VFS_ENODIR;
+    return ENOENT;
 }
 
 int __rootfs_fileopen(struct v_inode *inode, struct v_file *file){
@@ -124,11 +170,12 @@ int __rootfs_iterate_dir(struct v_file *file, struct dir_context *dc){
 
         if(counter++ >= dc->index){
             dc->index = counter;
-            dc->read_complete_callback(dc, pos->name.value, pos->itype);
-            return 0;
+            dc->read_complete_callback
+                (dc, pos->name.value, pos->name.len, pos->itype);
+            return 1;
         }
     }
-    return VFS_EENDDIR;
+    return 0;
 }
 
 

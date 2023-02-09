@@ -5,6 +5,7 @@
 
 struct rootfs_node{
 
+    struct v_inode     *inode;
     struct hash_str     name;
     uint32_t            itype;
 
@@ -16,9 +17,13 @@ struct rootfs_node{
 
 void rootfs_init();
 
-struct rootfs_node* rootfs_child_node(
+struct rootfs_node* rootfs_file_node(
     struct rootfs_node *parent, const char *name, int name_len);
 
-struct rootfs_node *rootfs_toplevel_node(const char *name, int name_len);
+struct rootfs_node* rootfs_dir_node(
+    struct rootfs_node *parent, const char *name, int name_len);
+
+struct rootfs_node *rootfs_toplevel_node(
+        const char *name, int name_len);
 
 #endif

@@ -23,11 +23,21 @@
 #define __SYSCALL_sigpending    17
 #define __SYSCALL_sigsuspend    18
 
+#define __SYSCALL_open          19
+#define __SYSCALL_close         20
+#define __SYSCALL_read          21
+#define __SYSCALL_write         22
+#define __SYSCALL_readdir       23
+#define __SYSCALL_mkdir         24
+
+
 #define __SYSCALL_MAX    0x100
 
 #define __SYSCALL_MAX_PARAMETER (6 << 2)
 
 #ifndef     __ASM_S_
+
+#define   SYSCALL_ESTATUS(error)    -(error != 0)
 void syscall_init();
 
 #define __SYSCALL_INTERRUPTIBLE(code)               \

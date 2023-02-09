@@ -1,9 +1,16 @@
 #include <libc/string.h>
+
 #include <fs/fs.h>
+#include <fs/dirent.h>
+#include <fs/foptions.h>
+
 #include <mm/cake.h>
 #include <mm/page.h>
 #include <mm/valloc.h>
+
 #include <spike.h>
+#include <process.h>
+#include <syscall.h>
 
 
 #define PATH_DELIM                  '/'
@@ -16,6 +23,7 @@
 static struct cake_pile             *dnode_pile;
 static struct cake_pile             *inode_pile;
 static struct cake_pile             *file_pile;
+static struct cake_pile             *fd_pile;
 static struct cake_pile             *superblock_pile;
 
 static struct v_superblock          *root_sb;
@@ -31,15 +39,15 @@ void vfs_init(){
         cake_pile_create("inode_cache", sizeof(struct v_inode), 1, 0);
     file_pile       =
         cake_pile_create("file_cache", sizeof(struct v_file), 1, 0);
+    fd_pile         =
+        cake_pile_create("fd_cache", sizeof(struct v_fd), 1, 0);
     superblock_pile =
         cake_pile_create("sb_cache", sizeof(struct v_superblock), 1, 0);
     dnode_cache     =
-        valloc(DNODE_HASHTABLE_SIZE * sizeof(struct hash_bucket));
+        vzalloc(DNODE_HASHTABLE_SIZE * sizeof(struct hash_bucket));
 
-    struct filesystem *root_fs = fsm_get("rootfs");
-    root_sb = vfs_sb_alloc();
-    root_fs->mount(root_sb, NULL);
-
+    root_sb                    =  vfs_sb_alloc();
+    root_sb->root              =  vfs_dnode_alloc();
 }
 
 inline struct hash_bucket *__dcache_get_bucket(
@@ -75,18 +83,20 @@ void vfs_dcache_add(struct v_dnode *parent, struct v_dnode *node){
 int vfs_walk(struct v_dnode *start,
              const char *path,
              struct v_dnode **dentry,
+             struct hash_str *compoent,
              int walk_options){
 
     int error = 0;
     int i = 0, j = 0;
     if(*path == PATH_DELIM){
-        if((walk_options & VFS_WALK_FSRELATIVE)){
+        if((walk_options & VFS_WALK_FSRELATIVE) && start){
             start = start->super_block->root;
         }else{
             start = root_sb->root;
         }
         ++i;
     }
+
     struct v_dnode *dnode;
     struct v_dnode *current_level = start;
     char tname[VFS_NAME_MAXLEN];
@@ -100,7 +110,7 @@ int vfs_walk(struct v_dnode *start,
         next = path[i++];
         if(cur != PATH_DELIM){
             if(j >= VFS_NAME_MAXLEN - 1){
-                return VFS_ETOOLONG;
+                return ENAMETOOLONG;
             }
             if(!VFS_VALID_CHAR(cur)){
                 return VFS_EINVLD;
@@ -114,6 +124,18 @@ int vfs_walk(struct v_dnode *start,
 
         tname[j] = 0;
         hash_str_rehash(&hs, HSTR_FULL_HASH);
+
+        if(!next && (walk_options & VFS_WALK_PARENT)){
+
+            if(compoent){
+                compoent->hash =  hs.hash;
+                compoent->len  =  j;
+                strcpy(compoent->value, hs.value);
+            }
+            break;
+        }
+
+
         dnode = vfs_dcache_lookup(current_level, &hs);
 
         if(!dnode){
@@ -126,13 +148,12 @@ int vfs_walk(struct v_dnode *start,
             error = current_level->inode->ops.dir_lookup(
                         current_level->inode, dnode);
 
-            int create = (walk_options  & VFS_WALK_MKPARENT) ||
-                         ((walk_options & VFS_WALK_MKDIR) && !next);
+            int create = (walk_options  & VFS_WALK_MKPARENT);
 
-            if((error == VFS_ENOTFOUND) && create){
+            if((error == ENOENT) && create){
 
                 if(!current_level->inode->ops.mkdir){
-                    error = VFS_ENOOPS;
+                    error = VFS_ENOFS;
                 }else{
                     error = current_level->inode->ops.mkdir(
                             current_level->inode, dnode);
@@ -162,7 +183,7 @@ __error:
 int vfs_open(struct v_dnode *dnode, struct v_file **file){
 
     if(!dnode->inode || !dnode->inode->ops.open){
-        return VFS_ENOOPS;
+        return ENOTSUP;
     }
 
     struct v_file *f = cake_piece_grub(file_pile);
@@ -181,7 +202,7 @@ int vfs_open(struct v_dnode *dnode, struct v_file **file){
 int vfs_close(struct v_file *file){
 
     if(!file || !file->ops.close){
-        return VFS_ENOOPS;
+        return ENOTSUP;
     }
 
     int error = file->ops.close(file);
@@ -195,7 +216,7 @@ int vfs_close(struct v_file *file){
 int vfs_fsync(struct v_file *file){
 
     if(!file || !file->ops.sync){
-        return VFS_ENOOPS;
+        return ENOTSUP;
     }
     int error = file->ops.sync(file);
     if(!error || file->inode->ops.sync){
@@ -204,7 +225,18 @@ int vfs_fsync(struct v_file *file){
     return error;
 }
 
-int vfs_mount(const char *fs_name,
+int vfs_mount(const char *target, const char *fs_name, bdev_t device){
+
+    struct v_dnode *mnt = 0;
+    int error = vfs_walk(NULL, target, &mnt, NULL, 0);
+
+    if(!error){
+        error = vfs_mount_at(fs_name, device, &mnt);
+    }
+    return error;
+}
+
+int vfs_mount_at(const char *fs_name,
               bdev_t device,
               struct v_dnode *mnt_point){
 
@@ -228,7 +260,18 @@ int vfs_mount(const char *fs_name,
 
 }
 
-int vfs_unmount(struct v_dnode *mnt_point){
+int vfs_unmount(const char *target){
+
+    struct v_dnode *mnt = 0;
+    int error = vfs_walk(NULL, target, &mnt, NULL, 0);
+
+    if(!error){
+        error = vfs_unmount_at(mnt);
+    }
+    return error;
+}
+
+int vfs_unmount_at(struct v_dnode *mnt_point){
 
     int error = 0;
     struct v_superblock *sb = mnt_point->super_block;
@@ -283,6 +326,172 @@ void vfs_inode_free(struct v_inode *inode){
 
     cake_piece_release(inode_pile, inode);
 }
+
+int vfs_fdslot_alloc(int *fd){
+
+    for(size_t i=0; i<VFS_FD_MAX; ++i){
+
+        if(!__current->fdtable->fds[i]){
+            *fd = i;
+            return 0;
+        }
+    }
+    return EMFILE;
+}
+
+__DEFINE_SYSTEMCALL_2(int, open,
+                      const char *, path,
+                      int, options){
+
+    char name_str[VFS_NAME_MAXLEN];
+    struct hash_str name = HASH_STR(name_str, 0);
+
+    struct v_dnode *parent, *file;
+
+    int error = vfs_walk(NULL, path, &parent, &name, VFS_WALK_PARENT);
+
+    if(error)return -1;
+
+    file = vfs_dcache_lookup(parent, &name);
+
+    struct v_file *opened_file = 0;
+
+    if(!file && (options * F_CREATE)){
+
+        error = parent->inode->ops.create(parent->inode, opened_file);
+    }else if(!file){
+
+        error = EEXIST;
+    }else{
+
+        error = vfs_open(file, &opened_file);
+    }
+
+    __current->k_status = error;
+
+    int fd;
+    if(!error && !(error = vfs_fdslot_alloc(fd))){
+
+        struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
+        vfd->file = opened_file;
+        vfd->pos  = file->inode->fsize & -(!(options & F_APPEND));
+        __current->fdtable->fds[fd] = vfd;
+    }
+    return SYSCALL_ESTATUS(error);
+}
+
+__DEFINE_SYSTEMCALL_1(int, close,
+                      int, fd){
+
+    struct v_fd *vfd;
+    int error = 0;
+    if(fd < 0 || fd >= VFS_FD_MAX ||
+        !(vfd = __current->fdtable->fds[fd])){
+
+        error = EBADF;
+    }else if(!(error = vfs_close(vfd->file))){
+
+        vfree(vfd);
+    }
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+void __vfs_readdir_callback(struct dir_context *dctx,
+                            const char *name,
+                            const int  len, 
+                            const int dtype){
+
+    struct dirent *dent = dctx->cb_data;
+    strcpy(dent->d_name, name);
+    dent->d_nlen = len;
+    dent->d_type = dtype;
+}
+
+
+__DEFINE_SYSTEMCALL_2(int, readdir,
+                      int, fd,
+                      struct dirent *, dent){
+    
+    struct v_fd *vfd;
+    int error = 0;
+    if(fd < 0 || fd >= VFS_FD_MAX ||
+        !(vfd = __current->fdtable->fds[fd])){
+
+        error = EBADF;
+    }else if(!(vfd->file->inode->itype & VFS_INODE_TYPE_DIR)){
+
+        error = ENOTDIR;
+    }else{
+
+        struct dir_context dctx = (struct dir_context){
+            .cb_data = dent,
+            .index   = dent->d_offset,
+            .read_complete_callback = __vfs_readdir_callback
+        };
+
+        if(!(error = vfd->file->ops.read_dir(vfd->file, &dctx))){
+
+            ++dent->d_offset;
+        }
+    }
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+__DEFINE_SYSTEMCALL_1(int, mkdir,
+                      const char *, path){
+
+    struct v_dnode *parent, *dir;
+    struct hash_str compoent = HASH_STR(valloc(VFS_NAME_MAXLEN), 0);
+
+    int error =
+        vfs_walk(root_sb->root, path, &parent, &compoent, VFS_WALK_PARENT);
+
+    if(error) goto __done;
+
+
+    if(!parent->inode->ops.mkdir){
+
+        error = ENOTSUP;
+    }else if(!(parent->inode->itype & VFS_INODE_TYPE_DIR)){
+
+        error = ENOTDIR;
+    }else{
+
+        dir = vfs_dnode_alloc();
+        dir->name = compoent;
+        if(!(error = parent->inode->ops.mkdir(parent->inode, dir))){
+
+            list_append(&parent->children, &dir->siblings);
+        }else{
+
+            vfs_dnode_free(dir);
+            vfree(compoent.value);
+        }
+    }
+__done:
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

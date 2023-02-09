@@ -9,8 +9,18 @@
 #define INVLDPID -(4)
 #define SEGFAULT -(5)
 
-#define INVL     -(6)
+#define INVL      -(6)
+#define EINVL     -(6)
 
-#define EINTR    -(7)
+#define EINTR     -(7)
+
+
+#define EMFILE          -8
+#define ENOENT          -9
+#define ENAMETOOLONG    -10
+#define ENOTDIR         -11
+#define EEXIST          -12
+#define EBADF           -13
+#define ENOTSUP         -14
 
 #endif

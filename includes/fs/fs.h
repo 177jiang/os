@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <block.h>
 #include <types.h>
+#include <status.h>
 
 #include <datastructs/hashtable.h>
 #include <datastructs/hstr.h>
@@ -22,19 +23,18 @@
 #define     VFS_INODE_TYPE_DEVICE       0x4 
 
 
-#define     VFS_ETOOLONG                -1
 #define     VFS_ENOFS                   -2
 #define     VFS_EBADMNT                 -3
-#define     VFS_ENODIR                  -4
+
 #define     VFS_EENDDIR                 -5
-#define     VFS_ENOTFOUND               -6
-#define     VFS_ENOOPS                  -7
+
 #define     VFS_EINVLD                  -8
 #define     VFS_EEOF                    -9
 
-#define     VFS_WALK_MKPARENT           0x1
-#define     VFS_WALK_FSRELATIVE         0x2
-#define     VFS_WALK_MKDIR              0x3
+#define     VFS_WALK_MKPARENT           1
+#define     VFS_WALK_FSRELATIVE         2
+#define     VFS_WALK_MKDIR              3
+#define     VFS_WALK_PARENT             4
 
 #define     VFS_IOBUF_FDIRTY            0x1
 
@@ -65,10 +65,12 @@ struct v_inode{
     uint64_t  lb_addr;
     uint32_t  lb_usage;
     uint32_t  ref_count;
+    uint32_t  fsize;
     void      *data;
 
     struct {
 
+        int (*create)     (struct v_inode *this, struct v_file *file);
         int (*open)       (struct v_inode *this, struct v_file *file);
         int (*sync)       (struct v_inode *this);
         int (*mkdir)      (struct v_inode *this, struct v_dnode *dnode);
@@ -143,6 +145,7 @@ struct dir_context{
     void (*read_complete_callback)(
             struct dir_context *this,
             const char *name,
+            int len,
             const int   dtype
         );
 };
@@ -152,6 +155,8 @@ void   fsm_init();
 void   fsm_register(struct filesystem *fs);
 struct filesystem *fsm_get(const char * fs_name);
 
+void   vfs_init();
+
 struct v_dnode *vfs_dcache_lookup(
         struct v_dnode *parent, struct hash_str *hs);
 
@@ -159,15 +164,25 @@ void   vfs_dcache_add(
         struct v_dnode *parent, struct v_dnode *node);
 
 int    vfs_walk(
-        struct v_dnode *start,   const char *path,
-        struct v_dnode **dentry, int walk_options);
+        struct v_dnode *start,
+        const char *path,
+        struct v_dnode **dentry,
+        struct hash_str *compoent,
+        int walk_options);
 
 int vfs_mount(
-        const char *fs_name, bdev_t dev, struct v_dnode *mount_point);
-int vfs_unmount(struct v_dnode *mount_point);
+        const char *target, const char *fs_name, bdev_t dev);
+int vfs_unmount(const char *target);
+
+int vfs_mount_at(
+        const char *fs_name,
+        bdev_t device,
+        struct v_dnode *mnt_point);
+
+int vfs_unmount_at(struct v_dnode *mnt_point);
 
 int vfs_mkdir(
-        const char *parent_path, const char *compoent,
+        const char *path,
         struct v_dnode **dentry);
 
 int vfs_open(struct v_dnode *dnode, struct v_file **file);

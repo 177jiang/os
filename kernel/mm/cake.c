@@ -68,10 +68,14 @@ void __cake_pile_init(
 
     };
 
-    unsigned int header_size =
-        sizeof(struct _cake) + (sizeof(cpiece_index_t) * (pile->piece_per_cake));
+    unsigned int lsize       =  (sizeof(cpiece_index_t) * (pile->piece_per_cake));
 
-    pile->offset = ROUNDUP(header_size, align);
+    unsigned int header_size =  sizeof(struct _cake) + lsize;
+
+    pile->offset             =  ROUNDUP(header_size, align);
+
+    pile->piece_per_cake -= 
+        ICEIL((pile->offset - lsize), piece_size);
 
     list_init_head(&pile->free);
     list_init_head(&pile->full);
