@@ -280,7 +280,9 @@ int vfs_unmount_at(struct v_dnode *mnt_point){
     if(!(error = sb->fs->unmount(sb))){
 
         struct v_dnode *fs_root = sb->root;
+
         list_delete(&fs_root->siblings);
+
         list_delete(&sb->sb_list);
         vfs_sb_free(sb);
     }
@@ -370,12 +372,13 @@ __DEFINE_SYSTEMCALL_2(int, open,
     __current->k_status = error;
 
     int fd;
-    if(!error && !(error = vfs_fdslot_alloc(fd))){
+    if(!error && !(error = vfs_fdslot_alloc(&fd))){
 
         struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
         vfd->file = opened_file;
         vfd->pos  = file->inode->fsize & -(!(options & F_APPEND));
         __current->fdtable->fds[fd] = vfd;
+        return fd;
     }
     return SYSCALL_ESTATUS(error);
 }

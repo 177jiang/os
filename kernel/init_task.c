@@ -30,6 +30,7 @@
 #include <syscall.h>
 
 #include <fs/fs.h>
+#include <fs/rootfs.h>
 
 #include <stdint.h>
 #include <stddef.h>
@@ -125,7 +126,11 @@ void _kernel_post_init(){
 
   ahci_init();
 
-  __test_disk_io();
+  fsm_init();
+  vfs_init();
+  rootfs_init();
+
+  // __test_disk_io();
 
   syscall_init();
 

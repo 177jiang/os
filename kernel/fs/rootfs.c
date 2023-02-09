@@ -27,13 +27,11 @@ void rootfs_init(){
       cake_pile_create("rtfs_node", sizeof(struct rootfs_node), 1, 0);
 
     struct filesystem *rtfs = vzalloc(sizeof(struct filesystem));
-
     rtfs->fs_name = HASH_STR("rootfs", 6);
     rtfs->mount   = __rootfs_mount;
     fsm_register(rtfs);
 
     fs_root = rootfs_dir_node(NULL, NULL, 0);
-    list_init_head(&fs_root->children);
 
     rootfs_toplevel_node("kernel", 6);
     rootfs_toplevel_node("dev",    3);
@@ -85,23 +83,22 @@ struct rootfs_node *rootfs_dir_node(
     struct rootfs_node *node =  __rootfs_new_node(parent, name, len);
     struct rootfs_node *dot  =  __rootfs_new_node(node, ".", 1);
     struct rootfs_node *ddot =  __rootfs_new_node(node, "..", 2);
-
-    struct v_inode *inode    =  __rootfs_create_inode(node);
-
+    
+    
     node->itype =  VFS_INODE_TYPE_DIR;
     dot->itype  =  VFS_INODE_TYPE_DIR;
     ddot->itype =  VFS_INODE_TYPE_DIR;
-
-    node->inode = inode;
-    dot->inode  = inode;
-    if(parent) ddot->inode = parent->inode;
-
+    
+    node->inode =  __rootfs_create_inode(node);
+    dot->inode  =  node->inode;
+    ddot->inode =  parent->inode;
+    
     return node;
 }
 
 struct rootfs_node *rootfs_toplevel_node (const char *name, int len){
 
-    return rootfs_dir_node(&fs_root, name, len);
+    return rootfs_dir_node(fs_root, name, len);
 }
 
 struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
