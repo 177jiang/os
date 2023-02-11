@@ -61,6 +61,9 @@ inline struct hash_bucket *__dcache_get_bucket(
 struct v_dnode *vfs_dcache_lookup(struct v_dnode *parent,
                                  struct hash_str *hstr){
 
+    if(!hstr->len){
+        return parent;
+    }
     struct hash_bucket *bucket = __dcache_get_bucket(parent, hstr->hash);
 
     struct v_dnode *pos, *n;
@@ -88,7 +91,7 @@ int vfs_walk(struct v_dnode *start,
 
     int error = 0;
     int i = 0, j = 0;
-    if(*path == PATH_DELIM){
+    if(path[0] == PATH_DELIM){
         if((walk_options & VFS_WALK_FSRELATIVE) && start){
             start = start->super_block->root;
         }else{
@@ -101,12 +104,11 @@ int vfs_walk(struct v_dnode *start,
     struct v_dnode *current_level = start;
     char tname[VFS_NAME_MAXLEN];
     struct hash_str hs = HASH_STR(tname, 0);
-    char cur  = path[i++];
-    char next = cur;
+    char cur  = path[i++], next;
 
     while(cur){
 
-        cur  = next;
+
         next = path[i++];
         if(cur != PATH_DELIM){
             if(j >= VFS_NAME_MAXLEN - 1){
@@ -117,16 +119,18 @@ int vfs_walk(struct v_dnode *start,
             }
             tname[j++] = cur;
 
-            if(next) continue;
+            if(next) goto __cont;
         }
 
-        if(next == PATH_DELIM)continue;
+        if(next == PATH_DELIM)goto __cont;
 
-        tname[j] = 0;
+        tname[j] =  0;
+        hs.len   =  j;
         hash_str_rehash(&hs, HSTR_FULL_HASH);
 
         if(!next && (walk_options & VFS_WALK_PARENT)){
 
+            while(1);
             if(compoent){
                 compoent->hash =  hs.hash;
                 compoent->len  =  j;
@@ -145,13 +149,15 @@ int vfs_walk(struct v_dnode *start,
             dnode->name.hash =  hs.hash;
             strcpy(dnode->name.value, hs.value);
 
-            error = current_level->inode->ops.dir_lookup(
-                        current_level->inode, dnode);
+            if(current_level->inode){
+
+                error = current_level->inode->ops.dir_lookup(
+                            current_level->inode, dnode);
+            }
 
             int create = (walk_options  & VFS_WALK_MKPARENT);
 
             if((error == ENOENT) && create){
-
                 if(!current_level->inode->ops.mkdir){
                     error = VFS_ENOFS;
                 }else{
@@ -169,6 +175,8 @@ int vfs_walk(struct v_dnode *start,
 
         j             =  0;
         current_level =  dnode;
+__cont:
+        cur = next;
     };
 
     *dentry = current_level;
@@ -231,7 +239,7 @@ int vfs_mount(const char *target, const char *fs_name, bdev_t device){
     int error = vfs_walk(NULL, target, &mnt, NULL, 0);
 
     if(!error){
-        error = vfs_mount_at(fs_name, device, &mnt);
+        error = vfs_mount_at(fs_name, device, mnt);
     }
     return error;
 }
@@ -345,6 +353,7 @@ __DEFINE_SYSTEMCALL_2(int, open,
                       const char *, path,
                       int, options){
 
+
     char name_str[VFS_NAME_MAXLEN];
     struct hash_str name = HASH_STR(name_str, 0);
 
@@ -352,9 +361,11 @@ __DEFINE_SYSTEMCALL_2(int, open,
 
     int error = vfs_walk(NULL, path, &parent, &name, VFS_WALK_PARENT);
 
+
     if(error)return -1;
 
-    file = vfs_dcache_lookup(parent, &name);
+
+    vfs_walk(parent, name.value, &file, NULL, 0);
 
     struct v_file *opened_file = 0;
 
@@ -363,7 +374,7 @@ __DEFINE_SYSTEMCALL_2(int, open,
         error = parent->inode->ops.create(parent->inode, opened_file);
     }else if(!file){
 
-        error = EEXIST;
+        error = ENOENT;
     }else{
 
         error = vfs_open(file, &opened_file);

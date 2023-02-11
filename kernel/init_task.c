@@ -45,17 +45,25 @@ void _lock_reserved_memory();
 /* in user space */
 void __USER_SPACE__ __move_to_user_mode(){
 
-  tty_sync_cursor();
-
   if(!fork()){
     asm("jmp _kernel_main");
-  }else{
-    while(1){
-      yield();
-    }
   }
 
-  spin();
+  int p;
+  if( !(p = fork()) ){
+      
+      // __test_disk_io();
+      __test_readdir();
+      _exit(0);
+  }else{
+
+      waitpid(p, 0, 0);
+      while(1){
+        yield();
+      }
+      spin();
+  }
+
 
 }
 
@@ -130,7 +138,8 @@ void _kernel_post_init(){
   vfs_init();
   rootfs_init();
 
-  // __test_disk_io();
+  vfs_mount("/", "rootfs", -1);
+  
 
   syscall_init();
 

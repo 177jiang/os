@@ -91,7 +91,7 @@ struct rootfs_node *rootfs_dir_node(
     
     node->inode =  __rootfs_create_inode(node);
     dot->inode  =  node->inode;
-    ddot->inode =  parent->inode;
+    ddot->inode =  parent ? parent->inode : node->inode;
     
     return node;
 }
@@ -117,6 +117,12 @@ struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
 int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mnt){
 
     mnt->inode = fs_root->inode;
+    if(mnt->parent && mnt->parent->inode){
+
+        struct hash_str ddot_name = HASH_STR("..", 2);
+        struct rootfs_node *root_ddot = __rootfs_get_node(fs_root, &ddot_name);
+        root_ddot->inode = mnt->parent->inode;
+    }
     return 0;
 }
 

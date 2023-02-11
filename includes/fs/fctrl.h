@@ -1,7 +1,7 @@
 #ifndef __jyos_fctl_h_
 #define __jyos_fctl_h_
 
-#include <dirent.h>
+#include <fs/dirent.h>
 #include <syscall.h>
 
 
@@ -13,7 +13,7 @@ __SYSTEMCALL_1(int, close,
                int, fd);
 
 __SYSTEMCALL_1(int, mkdir,
-               const cahr *, path);
+               const char *, path);
 
 __SYSTEMCALL_2(int, readdir,
                int, fd,

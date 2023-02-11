@@ -21,13 +21,15 @@
         .long __do_signal
         .long __do_pause
         .long __do_kill                 /* pause 15 */
+        .long __do_alarm
         .long __do_sigpending
         .long __do_sigsuspend
+
         .long __do_open
         .long __do_close
 
-        .long 0 // .long __do_close
-        .long 0 // .long __do_close
+        .long 0
+        .long 0
 
         .long __do_readdir
         .long __do_mkdir
