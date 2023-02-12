@@ -14,6 +14,14 @@ void __test_readdir(){
         return;
     }
     kprintf_live("succeed to open !!! \n");
+
+    struct dirent dt = { .d_offset = 0 };
+
+    while(!(readdir(fd, &dt))) {
+
+        kprintf_warn("%s\n", dt.d_name);
+    }
+
     close(fd);
 
     return;

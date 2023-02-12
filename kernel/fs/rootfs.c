@@ -13,11 +13,13 @@ static struct cake_pile   *rtfs_pile;
 int __rootfs_dir_lookup(struct v_inode *inode, struct v_dnode *dnode);
 int __rootfs_fileopen(struct v_inode *inode, struct v_file *file);
 int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mount);
+int __rootfs_iterate_dir(struct v_file *file, struct dir_context *dc);
 
 struct rootfs_node *__rootfs_get_node
     (struct rootfs_node *parent, struct hash_str *name);
 struct v_inode *__rootfs_create_inode
     (struct rootfs_node *node);
+
 
 
 
@@ -92,6 +94,8 @@ struct rootfs_node *rootfs_dir_node(
     node->inode =  __rootfs_create_inode(node);
     dot->inode  =  node->inode;
     ddot->inode =  parent ? parent->inode : node->inode;
+
+    node->fops.read_dir = __rootfs_iterate_dir;
     
     return node;
 }
@@ -117,6 +121,7 @@ struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
 int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mnt){
 
     mnt->inode = fs_root->inode;
+
     if(mnt->parent && mnt->parent->inode){
 
         struct hash_str ddot_name = HASH_STR("..", 2);
@@ -158,10 +163,11 @@ int __rootfs_fileopen(struct v_inode *inode, struct v_file *file){
     struct rootfs_node *node = inode->data;
 
     if(node){
-        file->ops = node->fops;
-        return 1;
+        file->ops   = node->fops;
+        file->inode = inode;
+        return 0;
     }
-    return 0;
+    return ENOTSUP;
 }
 
 int __rootfs_iterate_dir(struct v_file *file, struct dir_context *dc){
@@ -175,10 +181,10 @@ int __rootfs_iterate_dir(struct v_file *file, struct dir_context *dc){
             dc->index = counter;
             dc->read_complete_callback
                 (dc, pos->name.value, pos->name.len, pos->itype);
-            return 1;
+            return 0;
         }
     }
-    return 0;
+    return 1;
 }
 
 

@@ -28,8 +28,8 @@
         .long __do_open
         .long __do_close
 
-        .long 0
-        .long 0
+        .long __do_read
+        .long __do_write
 
         .long __do_readdir
         .long __do_mkdir
