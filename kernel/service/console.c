@@ -7,6 +7,7 @@ void _console_main(){
   struct kdb_keyinfo_pkt keyevent;
   while (1) {
       if (!kbd_recv_key(&keyevent)) {
+        yield();
         continue;
       }
       if ((keyevent.state & KBD_KEY_FPRESSED)) {

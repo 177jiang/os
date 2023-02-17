@@ -125,7 +125,7 @@ void console_write(struct console *console, char *data, size_t size){
     unsigned int  wp = console->buffer.wpos;
     unsigned int  rp = console->buffer.rpos;
 
-    int lines = 0, si = size, i=0;
+    int lines = 0, si = size, i = 0;
     char c;
 
     while(i < size){
@@ -135,7 +135,7 @@ void console_write(struct console *console, char *data, size_t size){
         ++i;
     }
 
-    if(console->lines > TTY_HEIGHT && lines){
+    if(console->lines >= TTY_HEIGHT && lines){
         console->buffer.rpos =
             __console_next_line((si + rp) % console->buffer.size);
     }

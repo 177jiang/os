@@ -111,16 +111,7 @@ void _kernel_post_init(){
   cake_init();
   valloc_init();
 
-
   acpi_init(_init_mb_info);
-  uintptr_t ioapic_addr = acpi_get_context()->madt.ioapic->ioapic_addr;
-
-  pmm_mark_page_occupied(KERNEL_PID, FLOOR(__APIC_BASE_PADDR, PG_SIZE_BITS), 0);
-  pmm_mark_page_occupied(KERNEL_PID, FLOOR(ioapic_addr, PG_SIZE_BITS), 0);
-  /* APIC_BASE_VADDR = 0xC0000000 , IOAPIC_BASE_VADDR  = oxC0000000 + 2*/
-  vmm_set_mapping(PD_REFERENCED, APIC_BASE_VADDR, __APIC_BASE_PADDR, PG_PREM_RW, VMAP_NULL);
-  vmm_set_mapping(PD_REFERENCED, IOAPIC_BASE_VADDR, ioapic_addr, PG_PREM_RW, VMAP_NULL);
-
 
   apic_init();
   ioapic_init();
@@ -144,6 +135,7 @@ void _kernel_post_init(){
   syscall_init();
 
   console_start_flushing();
+
 
   cake_stats();
 

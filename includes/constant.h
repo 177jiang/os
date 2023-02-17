@@ -4,9 +4,7 @@
 
 #define KERNEL_VSTART           0xC0000000
 
-#define APIC_BASE_VADDR         KERNEL_VSTART
-#define IOAPIC_BASE_VADDR       APIC_BASE_VADDR + (1 << 12)
-#define VGA_BUFFER_VADDR        IOAPIC_BASE_VADDR + (1 << 12)
+#define VGA_BUFFER_VADDR        KERNEL_VSTART
 
 #define VGA_BUFFER_PADDR        0xB8000
 #define VGA_BUFFER_SIZE         4096

@@ -335,6 +335,7 @@ int  tty_flush_buffer(char *buffer, int pos,
               }
               if(y >= TTY_HEIGHT){
                 --y;
+                tty_set_cursor(x, y);
                 return pos;
               }
               break;

@@ -11,13 +11,14 @@
  */
 #include <hal/apic.h>
 #include <hal/cpu.h>
-
 #include <hal/pic.h>
-
 #include <arch/x86/interrupts.h>
-
 #include <spike.h>
+#include <mm/mmio.h>
 
+
+
+static volatile uintptr_t _apic_base;
 
 void apic_setup_lvts();
 
@@ -31,6 +32,9 @@ void apic_init() {
 
     // As we are going to use APIC, disable the old 8259 PIC
     pic_disable();  // 8259
+
+
+    _apic_base = ioremap(__APIC_BASE_PADDR, 4096);
 
     // Hardware enable the APIC
     // By setting bit 11 of IA32_APIC_BASE register
@@ -85,3 +89,20 @@ void apic_setup_lvts() {
     apic_write_reg(APIC_LVT_LINT1, LVT_ENTRY_LINT1);
     apic_write_reg(APIC_LVT_ERROR, LVT_ENTRY_ERROR(APIC_ERROR_IV));
 }
+
+
+void apic_done_servicing() {
+    *(unsigned int*)(_apic_base + APIC_EOI) = 0;
+}
+
+uint32_t apic_read_reg(unsigned int reg) {
+    return *(unsigned int*)(_apic_base + (reg));
+}
+
+void apic_write_reg(unsigned int reg, unsigned int val) {
+    *(unsigned int*)(_apic_base + reg) = val;
+}
+
+
+
+
