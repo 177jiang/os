@@ -24,15 +24,14 @@
         .long __do_alarm
         .long __do_sigpending
         .long __do_sigsuspend
-
         .long __do_open
         .long __do_close
-
         .long __do_read
         .long __do_write
-
         .long __do_readdir
         .long __do_mkdir
+        .long __do_lseek                  /* 25 */
+        .long __do_geterror
 
     __pos:
         .rept __SYSCALL_MAX - (__pos - syscall_table)/4

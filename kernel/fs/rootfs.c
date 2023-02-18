@@ -42,24 +42,16 @@ void rootfs_init(){
 
 struct rootfs_node * __rootfs_new_node(
     struct rootfs_node *parent, const char *name, int len){
-    
 
-    struct hash_str hn = HASH_STR(name, len);
-    hash_str_rehash(&hn, HSTR_FULL_HASH);
+    struct rootfs_node *node = cake_piece_grub(rtfs_pile);
+    memset(node, 0, sizeof(*node));
 
-    struct rootfs_node *node = __rootfs_get_node(parent, &hn);
+    node->name = HASH_STR(name, len);
+    hash_str_rehash(&node->name, HSTR_FULL_HASH);
+    list_init_head(&node->children);
 
-    if(!node){
-
-        node       =  cake_piece_grub(rtfs_pile);
-        memset(node, 0, sizeof(*node));
-        node->name =  hn;
-        list_init_head(&node->children);
-
-        if(parent){
-
-            list_append(&parent->children, &node->siblings);
-        }
+    if(parent){
+        list_append(&parent->children, &node->siblings);
     }
     return node;
 }
@@ -81,6 +73,12 @@ struct rootfs_node *rootfs_dir_node(
         struct rootfs_node *parent,
         const char *name,
         int len){
+
+    struct hash_str hs = HASH_STR(name, len);
+    hash_str_rehash(&hs, HSTR_FULL_HASH);
+    struct rootfs_node *res = __rootfs_get_node(parent, &hs);
+
+    if(res) return res;
 
     struct rootfs_node *node =  __rootfs_new_node(parent, name, len);
     struct rootfs_node *dot  =  __rootfs_new_node(node, ".", 1);

@@ -2,6 +2,9 @@
 #include <mm/page.h>
 #include <mm/pmm.h>
 #include <mm/kalloc.h>
+#include <mm/vmm.h>
+#include <mm/valloc.h>
+#include <mm/cake.h>
 
 #include <hal/cpu.h>
 #include <hal/rtc.h>
@@ -18,9 +21,6 @@
 
 #include <spike.h>
 #include <jconsole.h>
-#include <mm/vmm.h>
-#include <mm/valloc.h>
-#include <mm/cake.h>
 #include <constant.h>
 #include <tty/tty.h>
 #include <timer.h>
@@ -28,6 +28,7 @@
 #include <proc.h>
 #include <junistd.h>
 #include <syscall.h>
+#include <block.h>
 
 #include <fs/fs.h>
 #include <fs/rootfs.h>
@@ -53,7 +54,8 @@ void __USER_SPACE__ __move_to_user_mode(){
   if( !(p = fork()) ){
       
       // __test_disk_io();
-      __test_readdir();
+      // __test_readdir();
+       __test_io();
       _exit(0);
   }else{
 
@@ -100,53 +102,43 @@ void task_1_work(){
 
 }
 
+void __print_kernel_info(){
+  pci_print_device();
+  cake_stats();
+  ahci_print_device();
+}
 extern multiboot_info_t* _init_mb_info; /* k_init.c */
 void _kernel_post_init(){
 
   _lock_reserved_memory();
 
-  /*set malloc heap*/
-  assert_msg(kalloc_init() , "heap alloc failed !!\n");
-
+  kalloc_init();
   cake_init();
   valloc_init();
-
+  block_init();
   acpi_init(_init_mb_info);
-
   apic_init();
   ioapic_init();
   rtc_init();
   timer_init(SYS_TIMER_FREQUENCY_HZ);
   clock_init();
   ps2_kbd_init();
-
   pci_init();
-  pci_print_device();
-
   ahci_init();
-
   fsm_init();
   vfs_init();
   rootfs_init();
-
-  vfs_mount("/", "rootfs", -1);
-  
-
   syscall_init();
 
+  vfs_mount("/", "rootfs", -1);
+  block_rootfs_create();
+
   console_start_flushing();
+  console_flush();
 
-
-  cake_stats();
+  // __print_kernel_info();
 
   _unlock_reserved_memory();
-
-  /*release  hhk_init_code*/ /* save 1mb */
-  for(uint32_t i=MEM_1MB; i<sym_vaddr(__init_hhk_end); i+=PG_SIZE){
-    vmm_unset_mapping(PD_REFERENCED, (void*)i);
-    pmm_free_page(KERNEL_PID, i);
-  }
-
 
 }
 
@@ -181,7 +173,12 @@ void __do_reserved_memory(int lock){
 }
 
 void _unlock_reserved_memory(){
-      __do_reserved_memory(0);
+    __do_reserved_memory(0);
+    /*release  hhk_init_code*/ /* save 1mb */
+    for(uint32_t i=MEM_1MB; i<sym_vaddr(__init_hhk_end); i+=PG_SIZE){
+      vmm_unset_mapping(PD_REFERENCED, (void*)i);
+      pmm_free_page(KERNEL_PID, i);
+    }
 }
 
 void _lock_reserved_memory(){

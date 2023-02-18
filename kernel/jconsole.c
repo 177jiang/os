@@ -10,11 +10,7 @@
 #include <constant.h>
 #include <jconsole.h>
 
-
-
 static struct console k_console;
-
-volatile int can_flush = 0;
 
 void console_init(){
 
@@ -92,6 +88,11 @@ void console_view_down(){
 
     mutex_unlock(&buffer->lock);
 
+}
+
+void console_flush(){
+
+    __flush_to_tty(NULL);
 }
 
 void __flush_to_tty(void *arg){

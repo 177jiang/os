@@ -4,6 +4,7 @@
 #include <hal/ahci/scsi.h>
 #include <hal/ahci/sata.h>
 #include <hal/pci.h>
+#include <block.h>
 
 
 #include <mm/mmio.h>
@@ -130,6 +131,7 @@ void ahci_init(){
                     kprintf_error("Fail to init device\n");
                 }
 
+                block_mount_disk(port->device);
             }
         }
 
@@ -139,9 +141,6 @@ void ahci_init(){
         port_map >>= 1;
 
     }
-
-    ahci_print_device();
-
 }
 
 

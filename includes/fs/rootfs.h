@@ -13,6 +13,7 @@ struct rootfs_node{
     struct list_header  siblings;
 
     struct v_file_ops   fops;
+    void                *data;
 };
 
 void rootfs_init();

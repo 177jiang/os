@@ -6,7 +6,7 @@
 
 void __test_readdir(){
 
-    int fd = open("/bus/../..", 0);
+    int fd = open("/dev/block", 0);
 
     if(fd == -1){
 

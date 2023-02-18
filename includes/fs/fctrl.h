@@ -19,6 +19,20 @@ __SYSTEMCALL_2(int, readdir,
                int, fd,
                struct dirent *, dent);
 
+__SYSTEMCALL_3(int, lseek,
+               int, fd,
+               int, offset,
+               int, options);
+
+__SYSTEMCALL_3(int,     read,
+               int,     fd,
+               void *,  buffer,
+               unsigned int, count);
+
+__SYSTEMCALL_3(int,    write,
+               int,    fd,
+               void *, buffer,
+               unsigned int, count);
 
 
 

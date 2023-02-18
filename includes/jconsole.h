@@ -13,5 +13,7 @@ void console_view_down();
 
 void console_start_flushing();
 
+void console_flush();
+
 
 #endif

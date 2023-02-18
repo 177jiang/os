@@ -183,6 +183,7 @@ __cont:
 __error:
     vfree(dnode->name.value);
     vfs_dnode_free(dnode);
+    *dentry = NULL;
     return error;
 }
 
@@ -384,20 +385,22 @@ __DEFINE_SYSTEMCALL_2(int, open,
 
         struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
         vfd->file = opened_file;
-        vfd->pos  = file->inode->fsize & -(!(options & F_APPEND));
+        vfd->pos  = file->inode->fsize & -(!!(options & F_APPEND));
         __current->fdtable->fds[fd] = vfd;
         return fd;
     }
     return SYSCALL_ESTATUS(error);
 }
 
+#define INVALID_FD(fd, vfd)           \
+    (fd < 0 || fd >= VFS_FD_MAX || !(vfd = __current->fdtable->fds[fd]))
+
 __DEFINE_SYSTEMCALL_1(int, close,
                       int, fd){
 
     struct v_fd *vfd;
     int error = 0;
-    if(fd < 0 || fd >= VFS_FD_MAX ||
-        !(vfd = __current->fdtable->fds[fd])){
+    if(INVALID_FD(fd, vfd)){
 
         error = EBADF;
     }else if(!(error = vfs_close(vfd->file))){
@@ -428,8 +431,7 @@ __DEFINE_SYSTEMCALL_2(int, readdir,
     
     struct v_fd *vfd;
     int error = 0;
-    if(fd < 0 || fd >= VFS_FD_MAX ||
-        !(vfd = __current->fdtable->fds[fd])){
+    if(INVALID_FD(fd, vfd)){
 
         error = EBADF;
     }else if(!(vfd->file->inode->itype & VFS_INODE_TYPE_DIR)){
@@ -489,18 +491,86 @@ __done:
     return SYSCALL_ESTATUS(error);
 }
 
-__DEFINE_SYSTEMCALL_3(size_t, read,
+__DEFINE_SYSTEMCALL_3(int, read,
                       int,    fd,
                       void *, buf,
-                      size_t, count){
-    return 0;
+                      unsigned int, count){
+
+    int error = 0;
+    struct v_fd *vfd;
+
+    if(INVALID_FD(fd, vfd)){
+
+        error = EBADF;
+    }else{
+
+        struct v_file *file =  vfd->file;
+        file->f_pos         =  vfd->pos;
+        error               =  file->ops.read(file, buf, count);
+        if(error >=  0){
+            vfd->pos += error;
+        }
+    }
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
 }
 
-__DEFINE_SYSTEMCALL_3(size_t, write,
+__DEFINE_SYSTEMCALL_3(int, write,
                       int,    fd,
                       void *, buf,
-                      size_t, count){
-    return 0;
+                      unsigned int, count){
+    int error = 0;
+    struct v_fd *vfd;
+
+    if(INVALID_FD(fd, vfd)){
+
+        error = EBADF;
+    }else{
+
+        struct v_file *file =  vfd->file;
+        file->f_pos         =  vfd->pos;
+        error               =  file->ops.write(file, buf, count);
+        if(error >=  0){
+            vfd->pos += error;
+        }
+    }
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+__DEFINE_SYSTEMCALL_3(int, lseek,
+                      int,    fd,
+                      int, offset,   
+                      int, options){
+
+    int error = 0;
+    struct v_fd *vfd;
+
+    if(INVALID_FD(fd, vfd)){
+
+        error = EBADF;
+    }else{
+
+        size_t fpos = vfd->file->f_pos;
+        switch(options){
+
+            case FSEEK_CUR:
+                fpos = (size_t)(fpos + offset);
+                break;
+            case FSEEK_END:
+                fpos = (size_t)(vfd->file->inode->fsize + offset);
+                break;
+            case FSEEK_SET:
+                fpos = (size_t)offset;
+                break;
+            default:
+                break;
+        }
+
+        vfd->pos = fpos;
+    }
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
 }
 
 

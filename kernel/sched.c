@@ -368,6 +368,11 @@ __DEFINE_SYSTEMCALL_1(unsigned int, alarm, unsigned int, seconds){
 
 }
 
+__DEFINE_SYSTEMCALL_0(int, geterror){
+
+    return __current->k_status;
+}
+
 
 
 
