@@ -5,6 +5,9 @@
 #include <hal/cpu.h>
 
 #include <mm/kalloc.h>
+#include <mm/cake.h>
+#include <mm/valloc.h>
+
 #include <spike.h>
 #include <clock.h>
 #include <sched.h>
@@ -27,16 +30,21 @@ static volatile uint8_t apic_timer_done = 0;
 static volatile uint32_t sched_ticks = 0;
 static volatile uint32_t sched_ticks_counter = 0;
 
+static struct cake_pile *timer_pile;
+
 #define APIC_CALIBRATION_CONST 0x100000
 
 void timer_primary_init() {
-    timer_ctx =
-      (struct timer_context*)kmalloc(sizeof(struct timer_context));
+
+    timer_pile =
+        cake_pile_create("timer", sizeof(struct timer), 1, 0);
+    timer_ctx  =
+      (struct timer_context*)valloc(sizeof(struct timer_context));
 
     assert_msg(timer_ctx, "Fail to initialize timer contex");
 
     timer_ctx->active_timers =
-      (struct timer*)kmalloc(sizeof(struct timer));
+        (struct timer*)cake_piece_grub(timer_pile);
     list_init_head((struct list_header*)timer_ctx->active_timers);
 }
 
@@ -132,7 +140,8 @@ struct timer *timer_run_ms(uint32_t millisecond, void (*callback)(void*), void* 
 
 struct timer *timer_run(uint32_t ticks, void (*callback)(void*), void* payload, uint8_t flags) {
 
-    struct timer *timer = (struct timer*)kmalloc(sizeof(struct timer));
+    struct timer *timer =
+        (struct timer*)cake_piece_grub(timer_pile);
 
     if (!timer) return 0;
 
@@ -165,7 +174,7 @@ static void do_timer_interrupt(const isr_param* param) {
             pos->counter = pos->deadline;
         } else {
             list_delete(&pos->link);
-            kfree(pos);
+            cake_piece_release(timer_pile, pos);
         }
     }
 

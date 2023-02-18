@@ -9,8 +9,18 @@
 
 #include <constant.h>
 #include <jconsole.h>
+#include <device.h>
 
 static struct console k_console;
+
+int __tty_write(struct device *dev,
+                void *buffer,
+                size_t offset,
+                size_t len){
+
+    struct console *con = dev->underlay;
+    console_write(con, buffer, len);
+}
 
 void console_init(){
 
@@ -35,6 +45,8 @@ void console_init(){
     }
 
     memset(k_console.buffer.data, 0, k_console.buffer.size);
+
+    device_add(NULL, &k_console, "tty")->write = __tty_write;
 
 }
 

@@ -883,10 +883,10 @@ int snprintf_(char* buffer, size_t count, const char* format, ...)
 // }
 //
 //
-// int vsnprintf_(char* buffer, size_t count, const char* format, va_list va)
-// {
-//   return _vsnprintf(_out_buffer, buffer, count, format, va);
-// }
+int vsnprintf_(char* buffer, size_t count, const char* format, va_list va)
+{
+  return _vsnprintf(_out_buffer, buffer, count, format, va);
+}
 //
 //
 // int fctprintf(void (*out)(char character, void* arg), void* arg, const char* format, ...)

@@ -21,8 +21,6 @@ struct v_inode *__rootfs_create_inode
     (struct rootfs_node *node);
 
 
-
-
 void rootfs_init(){
 
     rtfs_pile =
@@ -34,10 +32,6 @@ void rootfs_init(){
     fsm_register(rtfs);
 
     fs_root = rootfs_dir_node(NULL, NULL, 0);
-
-    rootfs_toplevel_node("kernel", 6);
-    rootfs_toplevel_node("dev",    3);
-    rootfs_toplevel_node("bus",    3);
 }
 
 struct rootfs_node * __rootfs_new_node(
@@ -103,6 +97,20 @@ struct rootfs_node *rootfs_toplevel_node (const char *name, int len){
     return rootfs_dir_node(fs_root, name, len);
 }
 
+int __rootfs_mkdir(struct v_inode *inode, struct v_dnode *dnode){
+
+    struct rootfs_node *node = inode->data;
+    if(!(node->itype & VFS_INODE_TYPE_DIR)){
+        return ENOTSUP;
+    }
+
+    struct rootfs_node *new_node = 
+        rootfs_dir_node(node, dnode->name.value, dnode->name.len);
+    dnode->inode = new_node->inode;
+
+    return 0;
+}
+
 struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
     
     struct v_inode *inode = vfs_inode_alloc();
@@ -113,6 +121,7 @@ struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
     inode->data           =  node;
     inode->ops.dir_lookup =  __rootfs_dir_lookup;
     inode->ops.open       =  __rootfs_fileopen;
+    inode->ops.mkdir      =  __rootfs_mkdir;
     return inode;
 }
 
@@ -122,9 +131,12 @@ int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mnt){
 
     if(mnt->parent && mnt->parent->inode){
 
-        struct hash_str ddot_name = HASH_STR("..", 2);
-        struct rootfs_node *root_ddot = __rootfs_get_node(fs_root, &ddot_name);
-        root_ddot->inode = mnt->parent->inode;
+        struct hash_str ddot_name     =
+            HASH_STR("..", 2);
+        struct rootfs_node *root_ddot =
+            __rootfs_get_node(fs_root, &ddot_name);
+        root_ddot->inode              =
+            mnt->parent->inode;
     }
     return 0;
 }
@@ -146,6 +158,9 @@ struct rootfs_node *__rootfs_get_node(
 
 int __rootfs_dir_lookup(struct v_inode *inode, struct v_dnode *dnode){
     
+    if(!(inode->itype & VFS_INODE_TYPE_DIR)){
+        return ENOTSUP;
+    }
     struct rootfs_node *child_node =
         __rootfs_get_node(inode->data, &dnode->name);
 
@@ -185,6 +200,24 @@ int __rootfs_iterate_dir(struct v_file *file, struct dir_context *dc){
     return 1;
 }
 
+void rootfs_rm_node(struct rootfs_node *node){
+
+    if(node->itype & VFS_INODE_TYPE_DIR){
+
+        struct rootfs_node *dir1 =
+            __rootfs_get_node(node, &vfs_dot);
+        struct rootfs_node *dir2 =
+            __rootfs_get_node(node, &vfs_ddot);
+        vfs_inode_free(dir1->inode);
+        vfs_inode_free(dir2->inode);
+        cake_piece_release(rtfs_pile, dir1);
+        cake_piece_release(rtfs_pile, dir2);
+    }
+    list_delete(&node->siblings);
+    vfs_inode_free(node->inode);
+    cake_piece_release(rtfs_pile, node);
+
+}
 
 
 

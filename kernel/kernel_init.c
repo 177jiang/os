@@ -68,7 +68,6 @@ void _kernel_pre_init(){
 
 void _kernel_init() {
 
-  console_init();
 
   /*alloc stack page for kernel*/
   for(uint32_t i=0; i<(K_STACK_SIZE >> PG_SIZE_BITS); ++i){

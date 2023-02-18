@@ -29,6 +29,9 @@ static struct cake_pile             *superblock_pile;
 static struct v_superblock          *root_sb;
 static struct hash_bucket           *dnode_cache;
 
+struct hash_str vfs_ddot =  HASH_STR("..", 2);
+struct hash_str vfs_dot  =  HASH_STR(".", 1);
+
 static int fs_id = 0;
 
 void vfs_init(){
@@ -45,6 +48,9 @@ void vfs_init(){
         cake_pile_create("sb_cache", sizeof(struct v_superblock), 1, 0);
     dnode_cache     =
         vzalloc(DNODE_HASHTABLE_SIZE * sizeof(struct hash_bucket));
+
+    hash_str_rehash(&vfs_dot, HSTR_FULL_HASH);
+    hash_str_rehash(&vfs_ddot, HSTR_FULL_HASH);
 
     root_sb        =  vfs_sb_alloc();
     root_sb->root  =  vfs_dnode_alloc();
@@ -315,6 +321,7 @@ struct v_dnode *vfs_dnode_alloc(){
     struct v_dnode *dnode = cake_piece_grub(dnode_pile);
     memset(dnode, 0, sizeof (*dnode));
     list_init_head(&dnode->children);
+    return dnode;
 }
 
 void vfs_dnode_free(struct v_dnode *dnode){
@@ -385,7 +392,7 @@ __DEFINE_SYSTEMCALL_2(int, open,
 
         struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
         vfd->file = opened_file;
-        vfd->pos  = file->inode->fsize & -(!!(options & F_APPEND));
+        vfd->pos  = opened_file->inode->fsize & -(!!(options & F_APPEND));
         __current->fdtable->fds[fd] = vfd;
         return fd;
     }
@@ -467,7 +474,10 @@ __DEFINE_SYSTEMCALL_1(int, mkdir,
     if(error) goto __done;
 
 
-    if(!parent->inode->ops.mkdir){
+    if((parent->super_block->fs->type & FSTYPE_ROFS)){
+
+        error = ENOTSUP;
+    } else if(!parent->inode->ops.mkdir){
 
         error = ENOTSUP;
     }else if(!(parent->inode->itype & VFS_INODE_TYPE_DIR)){

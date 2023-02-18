@@ -29,6 +29,7 @@
 #include <junistd.h>
 #include <syscall.h>
 #include <block.h>
+#include <device.h>
 
 #include <fs/fs.h>
 #include <fs/rootfs.h>
@@ -116,6 +117,13 @@ void _kernel_post_init(){
   cake_init();
   valloc_init();
   block_init();
+  fsm_init();
+  vfs_init();
+  rootfs_init();
+  device_init();
+  console_init();
+  vfs_mount("/", "rootfs", -1);
+
   acpi_init(_init_mb_info);
   apic_init();
   ioapic_init();
@@ -125,13 +133,8 @@ void _kernel_post_init(){
   ps2_kbd_init();
   pci_init();
   ahci_init();
-  fsm_init();
-  vfs_init();
-  rootfs_init();
-  syscall_init();
 
-  vfs_mount("/", "rootfs", -1);
-  block_rootfs_create();
+  syscall_init();
 
   console_start_flushing();
   console_flush();

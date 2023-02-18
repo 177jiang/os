@@ -38,9 +38,15 @@
 
 #define     VFS_IOBUF_FDIRTY            0x1
 
+#define FSTYPE_ROFS                     0x1
+
 #define     VFS_VALID_CHAR(c)           \
     (is_alpha(c) || is_number(c)  ||    \
     ((c)=='.')  || ((c)=='-')    || ((c)=='_') )
+
+extern struct hash_str vfs_dot;
+extern struct hash_str vfs_ddot;
+
 
 struct v_dnode;
 struct v_superblock;
@@ -50,7 +56,7 @@ struct filesystem{
 
     struct hash_list_node fs_list;
     struct hash_str       fs_name;
-
+    uint32_t              type;
     int (*mount)(struct v_superblock *vsb, struct v_dnode *mount_point);
     int (*unmount)(struct v_superblock *vsb);
 };

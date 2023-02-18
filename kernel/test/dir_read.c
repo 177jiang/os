@@ -6,8 +6,7 @@
 
 void __test_readdir(){
 
-    int fd = open("/dev/block", 0);
-
+    int fd = open("/dev", 0);
     if(fd == -1){
 
         kprintf_error("fail to open !!! \n");

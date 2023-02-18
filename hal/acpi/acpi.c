@@ -49,17 +49,7 @@ int acpi_init(multiboot_info_t* mb_info) {
         }
     }
 
-    kprintf_("OEM: %s\n", ctx->oem_id);
-    kprintf_("IOAPIC address: %p\n", ctx->madt.ioapic->ioapic_addr);
-    kprintf_("APIC address: %p\n", ctx->madt.apic_addr);
-
-    for (size_t i = 0; i < 24; i++) {
-        acpi_intso_t* intso = ctx->madt.irq_exception[i];
-        if (!intso)
-            continue;
-
-        kprintf_("IRQ #%u -> GSI #%u\n", intso->source, intso->gsi);
-    }
+    kprintf_("APIC: %s\n", ctx->oem_id);
 }
 
 acpi_context*

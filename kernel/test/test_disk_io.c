@@ -56,20 +56,25 @@ void __test_disk_io() {
 
 void __test_io(){
 
-    int fd = open("/dev/block/bd0", 0);
+    int fd  = open("/dev/sda", 0);
+    int tty = open("/dev/tty", 0);
 
-    if(fd < 0){
+    if(fd < 0 || tty < 0){
         kprintf_error("fail to open (%d)\n", geterror());
         return ;
     }
 
     lseek(fd, 1, FSEEK_SET);
     write(fd, test_poem, sizeof(test_poem));
-
     // lseek(fd, -1, FSEEK_CUR);
     lseek(fd, 1, FSEEK_SET);
     char read_out[256];
     read(fd, read_out, sizeof(read_out));
+    close(fd);
+
+    write(tty, read_out, strlen(read_out));
+    close(tty);
+
 
     kprintf_live("%s\n",read_out);
 }

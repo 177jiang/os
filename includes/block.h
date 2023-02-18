@@ -2,6 +2,7 @@
 #define __jyos_block_h_
 
 #include <hal/ahci/hba.h>
+#include <device.h>
 
 #define LPT_SIG               0x414E554C
 #define PARTITION_NAME_SIZE   48
@@ -16,6 +17,7 @@ struct block_dev{
   char                devid[PARTITION_NAME_SIZE];
   char                name[PARTITION_NAME_SIZE];
   struct hba_device   *hd_dev;
+  struct device       *dev;
   uint64_t            base_lba;
   uint64_t            end_lba;
 
