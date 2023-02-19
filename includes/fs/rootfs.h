@@ -27,6 +27,6 @@ struct rootfs_node* rootfs_dir_node(
 struct rootfs_node *rootfs_toplevel_node(
         const char *name, int name_len);
 
-void rootfs_rm_node(struct rootfs_node *node);
+int rootfs_rm_node(struct rootfs_node *node);
 
 #endif

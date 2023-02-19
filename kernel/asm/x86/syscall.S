@@ -34,6 +34,9 @@
         .long __do_geterror
         .long __do_readlink
         .long __do_readlinkat
+        .long __do_rmdir
+        .long __do_unlink
+        .long __do_unlinkat
 
     __pos:
         .rept __SYSCALL_MAX - (__pos - syscall_table)/4

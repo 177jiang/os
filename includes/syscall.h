@@ -7,7 +7,6 @@
 #define __SYSCALL_yield         2
 #define __SYSCALL_sbrk          3
 #define __SYSCALL_brk           4
-
 #define __SYSCALL_getpid        5
 #define __SYSCALL_getppid       6
 #define __SYSCALL_sleep         7
@@ -22,7 +21,6 @@
 #define __SYSCALL_alarm         16
 #define __SYSCALL_sigpending    17
 #define __SYSCALL_sigsuspend    18
-
 #define __SYSCALL_open          19
 #define __SYSCALL_close         20
 #define __SYSCALL_read          21
@@ -33,6 +31,9 @@
 #define __SYSCALL_geterror      26
 #define __SYSCALL_readlink      27
 #define __SYSCALL_readlinkat    28
+#define __SYSCALL_rmdir         29
+#define __SYSCALL_unlink        30
+#define __SYSCALL_unlinkat      31
 
 
 #define __SYSCALL_MAX    0x100

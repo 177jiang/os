@@ -208,9 +208,9 @@ int vfs_open(struct v_dnode *dnode, struct v_file **file){
     memset(f, 0, sizeof(*f));
     f->dnode = dnode;
     f->inode = dnode->inode;
+    ++dnode->inode->ref_count;
 
     int error = dnode->inode->ops.open(dnode->inode, f);
-
     if(error){
         cake_piece_release(file_pile, f);
     }else{
@@ -229,6 +229,9 @@ int vfs_close(struct v_file *file){
 
     if(!error){
         cake_piece_release(file_pile, file);
+        if(file->inode->ref_count){
+            --file->inode->ref_count;
+        }
     }
     return error;
 }
@@ -438,6 +441,34 @@ void __vfs_readdir_callback(struct dir_context *dctx,
     dent->d_type = dtype;
 }
 
+int vfs_readlink
+    (struct v_dnode *dnode, char *buf, size_t size, int dep){
+
+    if(!dnode) return 0;
+    if(dep > 64) return ELOOP;
+
+    size_t len = vfs_readlink(dnode->parent, buf, size, dep + 1);
+
+    if(len >= size) return len;
+
+    size_t csize = MIN(size-len, dnode->name.len);
+    strncpy(buf + len, dnode->name.value, csize);
+
+    len += csize;
+
+    if(len < size) buf[len++] = PATH_DELIM;
+    return len;
+}
+
+int __vfs_do_unlink(struct v_inode *inode){
+
+    if(inode->ref_count){
+        return EBUSY;
+    }else if(inode->itype != VFS_INODE_TYPE_DIR){
+        return inode->ops.unlink(inode);
+    }
+    return EISDIR;
+}
 
 __DEFINE_SYSTEMCALL_2(int, readdir,
                       int, fd,
@@ -603,8 +634,6 @@ __DEFINE_SYSTEMCALL_3(int, lseek,
     return SYSCALL_ESTATUS(error);
 }
 
-int vfs_readlink
-    (struct v_dnode *dnode, char *buf, size_t size, int dep);
 
 __DEFINE_SYSTEMCALL_3(int, readlink,
                       const char *, path,
@@ -648,25 +677,71 @@ __DEFINE_SYSTEMCALL_4(int, readlinkat,
     return SYSCALL_ESTATUS(error);
 }
 
+__DEFINE_SYSTEMCALL_1(int, rmdir,
+                      const char *, path){
 
-int vfs_readlink
-    (struct v_dnode *dnode, char *buf, size_t size, int dep){
+    int error = 0;
+    do{
+        struct v_dnode *dnode;
+        error = vfs_walk(NULL, path, &dnode, NULL, 0);
+        if(error) break;
 
-    if(!dnode) return 0;
-    if(dep > 64) return ELOOP;
+        if((dnode->super_block->fs->type & FSTYPE_ROFS)){
+            error = EROFS;
+            break;
+        }
+        if(dnode->inode->ref_count){
+            error = EBUSY;
+            break;
+        }
+        if(dnode->inode->itype == VFS_INODE_TYPE_DIR){
+            error = dnode->inode->ops.rmdir(dnode->inode);
+            break;
+        }
+        error = ENOTDIR;
+    }while(0);
 
-    size_t len = vfs_readlink(dnode->parent, buf, size, dep + 1);
-
-    if(len >= size) return len;
-
-    size_t csize = MIN(size-len, dnode->name.len);
-    strncpy(buf + len, dnode->name.value, csize);
-
-    len += csize;
-
-    if(len < size) buf[len++] = PATH_DELIM;
-    return len;
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
 }
+
+__DEFINE_SYSTEMCALL_1(int, unlink,
+                      const char *, path){
+    
+    int error = 0;
+    do{
+        struct v_dnode *dnode;
+        error = vfs_walk(NULL, path, &dnode, NULL, 0);
+        if(error) break;
+
+        if((dnode->super_block->fs->type & FSTYPE_ROFS)){
+            error = EROFS;
+            break;
+        }
+        error = __vfs_do_unlink(dnode->inode);
+    }while(0);
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+__DEFINE_SYSTEMCALL_2(int, unlinkat,
+                      int, fd,
+                      const char *, path){
+    int error;
+    struct v_fd *vfd;
+    if(INVALID_FD(fd, vfd)){
+        error = EBADF;
+    }else{
+        struct v_dnode *dnode;
+        error = vfs_walk(vfd->file->dnode, path, &dnode, NULL, 0);
+        if(!error){
+            error = __vfs_do_unlink(dnode->inode);
+        }
+    }
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
 
 
 

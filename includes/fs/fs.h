@@ -80,6 +80,8 @@ struct v_inode{
         int (*open)       (struct v_inode *this, struct v_file *file);
         int (*sync)       (struct v_inode *this);
         int (*mkdir)      (struct v_inode *this, struct v_dnode *dnode);
+        int (*rmdir)      (struct v_inode *this);
+        int (*unlink)     (struct v_inode *this);
         int (*dir_lookup) (struct v_inode *this, struct v_dnode *dnode);
     }ops;
 };

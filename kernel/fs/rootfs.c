@@ -14,6 +14,7 @@ int __rootfs_dir_lookup(struct v_inode *inode, struct v_dnode *dnode);
 int __rootfs_fileopen(struct v_inode *inode, struct v_file *file);
 int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mount);
 int __rootfs_iterate_dir(struct v_file *file, struct dir_context *dc);
+int __rootfs_rmstuff(struct v_inode *inode);
 
 struct rootfs_node *__rootfs_get_node
     (struct rootfs_node *parent, struct hash_str *name);
@@ -29,6 +30,7 @@ void rootfs_init(){
     struct filesystem *rtfs = vzalloc(sizeof(struct filesystem));
     rtfs->fs_name = HASH_STR("rootfs", 6);
     rtfs->mount   = __rootfs_mount;
+    rtfs->type    = FSTYPE_ROFS;
     fsm_register(rtfs);
 
     fs_root = rootfs_dir_node(NULL, NULL, 0);
@@ -48,6 +50,19 @@ struct rootfs_node * __rootfs_new_node(
         list_append(&parent->children, &node->siblings);
     }
     return node;
+}
+
+int rootfs_rm_node(struct rootfs_node *node){
+
+    if(node->itype & VFS_INODE_TYPE_DIR &&
+       !list_empty(&node->children)) {
+        return ENOTEMPTY;
+    }
+
+    list_delete(&node->siblings);
+    vfs_inode_free(node->inode);
+    cake_piece_release(rtfs_pile, node);
+    return 0;
 }
 
 struct rootfs_node *rootfs_file_node(
@@ -112,6 +127,8 @@ struct v_inode *__rootfs_create_inode(struct rootfs_node *node){
     inode->ops.dir_lookup =  __rootfs_dir_lookup;
     inode->ops.open       =  __rootfs_fileopen;
     inode->ops.mkdir      =  __rootfs_mkdir;
+    inode->ops.rmdir      =  __rootfs_rmstuff;
+    inode->ops.unlink     =  __rootfs_rmstuff;
     return inode;
 }
 
@@ -135,6 +152,11 @@ struct rootfs_node *__rootfs_get_node(
         }
     }
     return 0;
+}
+
+int __rootfs_rmstuff(struct v_inode *inode){
+
+    return rootfs_rm_node((struct rootfs_node*)inode->data);
 }
 
 int __rootfs_dir_lookup(struct v_inode *inode, struct v_dnode *dnode){
@@ -181,17 +203,6 @@ int __rootfs_iterate_dir(struct v_file *file, struct dir_context *dc){
     return 1;
 }
 
-void rootfs_rm_node(struct rootfs_node *node){
-
-    if(node->itype & VFS_INODE_TYPE_DIR){
-
-    }
-
-    list_delete(&node->siblings);
-    vfs_inode_free(node->inode);
-    cake_piece_release(rtfs_pile, node);
-
-}
 
 
 

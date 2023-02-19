@@ -46,4 +46,14 @@ __SYSTEMCALL_4(int, readlinkat,
                char *, buf,
                size_t, size);
 
+__SYSTEMCALL_1(int, rmdir,
+               const char *, path);
+
+__SYSTEMCALL_1(int, unlink,
+               const char *, path);
+
+__SYSTEMCALL_2(int, unlinkat,
+               int, fd,
+               const char *, path);
+
 #endif

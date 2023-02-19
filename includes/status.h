@@ -24,5 +24,9 @@
 #define ENOTSUP         -14
 #define ENXIO           -15
 #define ELOOP           -16
+#define ENOTEMPTY       -17
+#define EROFS           -18
+#define EISDIR          -19
+#define EBUSY           -20
 
 #endif
