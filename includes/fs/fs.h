@@ -21,6 +21,7 @@
 #define     VFS_INODE_TYPE_DIR          0x1 
 #define     VFS_INODE_TYPE_FILE         0x2 
 #define     VFS_INODE_TYPE_DEVICE       0x4 
+#define     VFS_INODE_TYPE_SYMLINK      0x8 
 
 
 #define     VFS_ENOFS                   -2
@@ -70,7 +71,8 @@ struct v_inode{
     uint32_t  mtime;
     uint64_t  lb_addr;
     uint32_t  lb_usage;
-    uint32_t  ref_count;
+    uint32_t  open_count;
+    uint32_t  link_count;
     uint32_t  fsize;
     void      *data;
 
@@ -82,6 +84,7 @@ struct v_inode{
         int (*mkdir)      (struct v_inode *this, struct v_dnode *dnode);
         int (*rmdir)      (struct v_inode *this);
         int (*unlink)     (struct v_inode *this);
+        int (*link)       (struct v_inode *this, struct v_dnode *dnode);
         int (*dir_lookup) (struct v_inode *this, struct v_dnode *dnode);
     }ops;
 };

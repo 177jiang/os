@@ -208,7 +208,7 @@ int vfs_open(struct v_dnode *dnode, struct v_file **file){
     memset(f, 0, sizeof(*f));
     f->dnode = dnode;
     f->inode = dnode->inode;
-    ++dnode->inode->ref_count;
+    ++dnode->inode->open_count;
 
     int error = dnode->inode->ops.open(dnode->inode, f);
     if(error){
@@ -229,8 +229,8 @@ int vfs_close(struct v_file *file){
 
     if(!error){
         cake_piece_release(file_pile, file);
-        if(file->inode->ref_count){
-            --file->inode->ref_count;
+        if(file->inode->open_count){
+            --file->inode->open_count;
         }
     }
     return error;
@@ -245,6 +245,24 @@ int vfs_fsync(struct v_file *file){
     if(!error || file->inode->ops.sync){
         error = file->inode->ops.sync(file->inode);
     }
+    return error;
+}
+
+int vfs_link(struct v_dnode *to_link, struct v_dnode *name){
+
+    int error;
+    if(to_link->super_block->root != name->super_block->root){
+
+        error = EXDEV;
+    }else if(!to_link->inode->ops.link){
+        error = ENOTSUP;
+    }else{
+        error = to_link->inode->ops.link(to_link->inode, name);
+        if(!error){
+            name->inode = to_link->inode;
+            ++to_link->inode->link_count;
+        }
+    } 
     return error;
 }
 
@@ -366,37 +384,54 @@ int vfs_fdslot_alloc(int *fd){
     return EMFILE;
 }
 
-__DEFINE_SYSTEMCALL_2(int, open,
-                      const char *, path,
-                      int, options){
-
+#define FLOCATE_CREATE_EMPTY 1
+int __vfs_try_locate_file(const char *path, struct v_dnode ** fdir, 
+                         struct v_dnode **file, int options){
 
     char name_str[VFS_NAME_MAXLEN];
     struct hash_str name = HASH_STR(name_str, 0);
 
-    struct v_dnode *parent = 0, *file = 0;
+    int error = vfs_walk(NULL, path, fdir, &name, VFS_WALK_PARENT);
+    if(error) return error;
 
-    int error = vfs_walk(NULL, path, &parent, &name, VFS_WALK_PARENT);
+    error = vfs_walk(*fdir, name.value, file, NULL, 0);
+    if(error == ENOENT && (options & FLOCATE_CREATE_EMPTY)){
 
-    if(error)return -1;
+        struct v_dnode *file_new = vfs_dnode_alloc();
+        file_new->name =
+            HSTR_SET(valloc(VFS_NAME_MAXLEN), name.len, name.hash);
+        strcpy(file_new->name.value, name.value);
+        *file = file_new;
 
-    vfs_walk(parent, name.value, &file, NULL, 0);
+        list_append(&(*fdir)->children, &file_new->siblings);
+    }
 
+    return error;
+}
+
+int __vfs_do_open(struct v_file **out_file, const char *path, int options){
+
+    struct v_dnode *parent, *file;
     struct v_file *opened_file = 0;
 
-    if(!file && (options & F_CREATE)){
-
+    int error = __vfs_try_locate_file(path, &parent, &file, 0);
+    if(error != ENOENT && (options & F_CREATE)){
         error = parent->inode->ops.create(parent->inode, opened_file);
-    }else if(!file){
-
-        error = ENOENT;
-    }else{
-
+    }else if(!error){
         error = vfs_open(file, &opened_file);
     }
 
+    *out_file = opened_file;
+    return error;
 
+}
+__DEFINE_SYSTEMCALL_2(int, open,
+                      const char *, path,
+                      int, options){
+
+    struct v_file *opened_file;
     int fd;
+    int error = __vfs_do_open(&opened_file, path, options);
     if(!error && !(error = vfs_fdslot_alloc(&fd))){
 
         struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
@@ -462,12 +497,19 @@ int vfs_readlink
 
 int __vfs_do_unlink(struct v_inode *inode){
 
-    if(inode->ref_count){
-        return EBUSY;
-    }else if(inode->itype != VFS_INODE_TYPE_DIR){
-        return inode->ops.unlink(inode);
+    int error;
+    if(inode->open_count){
+
+        error = EBUSY;
+    }else if(!(inode->itype & VFS_INODE_TYPE_DIR)){
+
+        error = inode->ops.unlink(inode);
+        if(!error) --inode->link_count;
+    }else{
+
+        error =  EISDIR;
     }
-    return EISDIR;
+    return error;
 }
 
 __DEFINE_SYSTEMCALL_2(int, readdir,
@@ -690,11 +732,11 @@ __DEFINE_SYSTEMCALL_1(int, rmdir,
             error = EROFS;
             break;
         }
-        if(dnode->inode->ref_count){
+        if(dnode->inode->open_count){
             error = EBUSY;
             break;
         }
-        if(dnode->inode->itype == VFS_INODE_TYPE_DIR){
+        if(dnode->inode->itype & VFS_INODE_TYPE_DIR){
             error = dnode->inode->ops.rmdir(dnode->inode);
             break;
         }
@@ -724,6 +766,7 @@ __DEFINE_SYSTEMCALL_1(int, unlink,
     __current->k_status = error;
     return SYSCALL_ESTATUS(error);
 }
+    
 __DEFINE_SYSTEMCALL_2(int, unlinkat,
                       int, fd,
                       const char *, path){
@@ -737,6 +780,45 @@ __DEFINE_SYSTEMCALL_2(int, unlinkat,
         if(!error){
             error = __vfs_do_unlink(dnode->inode);
         }
+    }
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+__DEFINE_SYSTEMCALL_2(int, link,
+                      const char *, oldpath,
+                      const char *, newpath){
+
+    struct v_dnode *parent, *to_link, *name_parnet, *name = 0;
+
+    int error = __vfs_try_locate_file(oldpath, &parent, &to_link, 0);
+
+    if(!error){
+        error = __vfs_try_locate_file(
+                newpath,
+                &name_parnet,
+                &name,
+                FLOCATE_CREATE_EMPTY
+        );
+        if(!error){
+            error = EEXIST;
+        }else if(name){
+            error = vfs_link(to_link, name);
+        }
+    }
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+__DEFINE_SYSTEMCALL_1(int, fsync,
+                      int, fildes){
+
+    int error;
+    struct v_fd *vfd;
+    if(INVALID_FD(fildes, vfd)){
+        error = EBADF;
+    }else{
+        error = vfs_fsync(vfd->file);
     }
     __current->k_status = error;
     return SYSCALL_ESTATUS(error);

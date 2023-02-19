@@ -28,5 +28,6 @@
 #define EROFS           -18
 #define EISDIR          -19
 #define EBUSY           -20
+#define EXDEV           -21
 
 #endif

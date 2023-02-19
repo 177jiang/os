@@ -37,6 +37,8 @@
         .long __do_rmdir
         .long __do_unlink
         .long __do_unlinkat
+        .long __do_link
+        .long __do_fsync
 
     __pos:
         .rept __SYSCALL_MAX - (__pos - syscall_table)/4

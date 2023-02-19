@@ -1,6 +1,7 @@
 
 #include <fs/dirent.h>
 #include <fs/fctrl.h>
+#include <junistd.h>
 #include <libc/stdio.h>
 
 

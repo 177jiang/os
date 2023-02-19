@@ -34,6 +34,8 @@
 #define __SYSCALL_rmdir         29
 #define __SYSCALL_unlink        30
 #define __SYSCALL_unlinkat      31
+#define __SYSCALL_link          32
+#define __SYSCALL_fsync         33
 
 
 #define __SYSCALL_MAX    0x100
@@ -42,7 +44,7 @@
 
 #ifndef     __ASM_S_
 
-#define   SYSCALL_ESTATUS(error)    -(error != 0)
+#define   SYSCALL_ESTATUS(error)    -(!!(error))
 void syscall_init();
 
 #define __SYSCALL_INTERRUPTIBLE(code)               \

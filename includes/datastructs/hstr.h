@@ -14,6 +14,10 @@ struct hash_str{
 
 #define HASH_STR(str, length) (struct hash_str){.len=(length), .value=(str)}
 
+#define HSTR_SET(str, length, hs) (struct hash_str){     \
+    .len = (length), .value = (str), .hash = (hs)        \
+}
+
 #define HASH_SEQ(h1, h2) ((h1)->hash == (h2)->hash)
 
 

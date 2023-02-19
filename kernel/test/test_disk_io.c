@@ -11,6 +11,7 @@
 
 #include <spike.h>
 #include <proc.h>
+#include <junistd.h>
 
 char test_poem[] = 
         "Being a cloud in the sky,"
