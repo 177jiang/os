@@ -29,8 +29,9 @@ static struct cake_pile             *superblock_pile;
 static struct v_superblock          *root_sb;
 static struct hash_bucket           *dnode_cache;
 
-struct hash_str vfs_ddot =  HASH_STR("..", 2);
-struct hash_str vfs_dot  =  HASH_STR(".", 1);
+struct hash_str vfs_ddot  =  HASH_STR("..", 2);
+struct hash_str vfs_dot   =  HASH_STR(".", 1);
+struct hash_str vfs_empty =  HASH_STR("", 0);
 
 static int fs_id = 0;
 
@@ -67,9 +68,13 @@ inline struct hash_bucket *__dcache_get_bucket(
 struct v_dnode *vfs_dcache_lookup(struct v_dnode *parent,
                                  struct hash_str *hstr){
 
-    if(!hstr->len){
+    if(!hstr->len || HASH_SEQ(hstr, &vfs_dot)){
         return parent;
     }
+    if(HASH_SEQ(hstr, &vfs_ddot)){
+        return parent->parent ? parent->parent : parent;
+    }
+
     struct hash_bucket *bucket = __dcache_get_bucket(parent, hstr->hash);
 
     struct v_dnode *pos, *n;
@@ -200,8 +205,9 @@ int vfs_open(struct v_dnode *dnode, struct v_file **file){
     }
 
     struct v_file *f = cake_piece_grub(file_pile);
-
     memset(f, 0, sizeof(*f));
+    f->dnode = dnode;
+    f->inode = dnode->inode;
 
     int error = dnode->inode->ops.open(dnode->inode, f);
 
@@ -321,6 +327,7 @@ struct v_dnode *vfs_dnode_alloc(){
     struct v_dnode *dnode = cake_piece_grub(dnode_pile);
     memset(dnode, 0, sizeof (*dnode));
     list_init_head(&dnode->children);
+    dnode->name = vfs_empty;
     return dnode;
 }
 
@@ -385,7 +392,6 @@ __DEFINE_SYSTEMCALL_2(int, open,
         error = vfs_open(file, &opened_file);
     }
 
-    __current->k_status = error;
 
     int fd;
     if(!error && !(error = vfs_fdslot_alloc(&fd))){
@@ -396,6 +402,7 @@ __DEFINE_SYSTEMCALL_2(int, open,
         __current->fdtable->fds[fd] = vfd;
         return fd;
     }
+    __current->k_status = error;
     return SYSCALL_ESTATUS(error);
 }
 
@@ -452,12 +459,25 @@ __DEFINE_SYSTEMCALL_2(int, readdir,
             .read_complete_callback = __vfs_readdir_callback
         };
 
-        if(!(error = vfd->file->ops.read_dir(vfd->file, &dctx))){
+        switch(dent->d_offset){
 
-            ++dent->d_offset;
+            case 0:
+                __vfs_readdir_callback(&dctx, vfs_dot.value, 1, 0);
+                break;
+            case 1:
+                __vfs_readdir_callback(&dctx, vfs_ddot.value, 2, 0);
+                break;
+            default:
+                dctx.index -= 2;
+                error = vfd->file->ops.read_dir(vfd->file, &dctx);
+
+                if(error) goto __done;
+                break;
         }
+        ++dent->d_offset;
     }
 
+__done:
     __current->k_status = error;
     return SYSCALL_ESTATUS(error);
 }
@@ -583,6 +603,70 @@ __DEFINE_SYSTEMCALL_3(int, lseek,
     return SYSCALL_ESTATUS(error);
 }
 
+int vfs_readlink
+    (struct v_dnode *dnode, char *buf, size_t size, int dep);
+
+__DEFINE_SYSTEMCALL_3(int, readlink,
+                      const char *, path,
+                      char *, buf,
+                      size_t, size){
+    int error;
+
+    struct v_dnode *dnode;
+    if(!(error = vfs_walk(NULL, path, &dnode, NULL, 0))){
+
+        error = vfs_readlink(dnode, buf, size, 0);
+    }
+
+    if(error >= 0) return error;
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+__DEFINE_SYSTEMCALL_4(int, readlinkat,
+                      int, dirfd,
+                      const char *, path,
+                      char *, buf,
+                      size_t, size){
+    int error;
+    struct v_fd *vfd;
+    if(INVALID_FD(dirfd, vfd)){
+        error = EBADF;
+    }else{
+        struct v_dnode *dnode;
+        error = vfs_walk(vfd->file->dnode, path, &dnode, NULL, 0);
+        if(!error){
+            error = vfs_readlink(dnode, buf, size, 0);
+        }
+    }
+
+    if(error >= 0) return error;
+
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+
+int vfs_readlink
+    (struct v_dnode *dnode, char *buf, size_t size, int dep){
+
+    if(!dnode) return 0;
+    if(dep > 64) return ELOOP;
+
+    size_t len = vfs_readlink(dnode->parent, buf, size, dep + 1);
+
+    if(len >= size) return len;
+
+    size_t csize = MIN(size-len, dnode->name.len);
+    strncpy(buf + len, dnode->name.value, csize);
+
+    len += csize;
+
+    if(len < size) buf[len++] = PATH_DELIM;
+    return len;
+}
 
 
 

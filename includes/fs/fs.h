@@ -116,6 +116,7 @@ struct v_file_ops{
 struct v_file{
 
     struct v_inode      *inode;
+    struct v_dnode      *dnode;
     struct list_header  *f_list;
     uint32_t            f_pos;
     void                *data;

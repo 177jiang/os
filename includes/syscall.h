@@ -31,6 +31,8 @@
 #define __SYSCALL_mkdir         24
 #define __SYSCALL_lseek         25
 #define __SYSCALL_geterror      26
+#define __SYSCALL_readlink      27
+#define __SYSCALL_readlinkat    28
 
 
 #define __SYSCALL_MAX    0x100

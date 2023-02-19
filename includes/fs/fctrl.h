@@ -3,6 +3,7 @@
 
 #include <fs/dirent.h>
 #include <syscall.h>
+#include <stddef.h>
 
 
 __SYSTEMCALL_2(int, open,
@@ -34,6 +35,15 @@ __SYSTEMCALL_3(int,    write,
                void *, buffer,
                unsigned int, count);
 
+__SYSTEMCALL_3(int, readlink,
+               const char *, path,
+               char *, buf,
+               size_t, size);
 
+__SYSTEMCALL_4(int, readlinkat,
+               int, dirfd,
+               const char *, path,
+               char *, buf,
+               size_t, size);
 
 #endif

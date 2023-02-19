@@ -70,24 +70,14 @@ struct rootfs_node *rootfs_dir_node(
 
     struct hash_str hs = HASH_STR(name, len);
     hash_str_rehash(&hs, HSTR_FULL_HASH);
-    struct rootfs_node *res = __rootfs_get_node(parent, &hs);
 
+    struct rootfs_node *res = __rootfs_get_node(parent, &hs);
     if(res) return res;
 
     struct rootfs_node *node =  __rootfs_new_node(parent, name, len);
-    struct rootfs_node *dot  =  __rootfs_new_node(node, ".", 1);
-    struct rootfs_node *ddot =  __rootfs_new_node(node, "..", 2);
-    
-    
-    node->itype =  VFS_INODE_TYPE_DIR;
-    dot->itype  =  VFS_INODE_TYPE_DIR;
-    ddot->itype =  VFS_INODE_TYPE_DIR;
-    
-    node->inode =  __rootfs_create_inode(node);
-    dot->inode  =  node->inode;
-    ddot->inode =  parent ? parent->inode : node->inode;
-
-    node->fops.read_dir = __rootfs_iterate_dir;
+    node->itype              =  VFS_INODE_TYPE_DIR;
+    node->inode              =  __rootfs_create_inode(node);
+    node->fops.read_dir      =  __rootfs_iterate_dir;
     
     return node;
 }
@@ -129,15 +119,6 @@ int __rootfs_mount(struct v_superblock *sb, struct v_dnode *mnt){
 
     mnt->inode = fs_root->inode;
 
-    if(mnt->parent && mnt->parent->inode){
-
-        struct hash_str ddot_name     =
-            HASH_STR("..", 2);
-        struct rootfs_node *root_ddot =
-            __rootfs_get_node(fs_root, &ddot_name);
-        root_ddot->inode              =
-            mnt->parent->inode;
-    }
     return 0;
 }
 
@@ -204,15 +185,8 @@ void rootfs_rm_node(struct rootfs_node *node){
 
     if(node->itype & VFS_INODE_TYPE_DIR){
 
-        struct rootfs_node *dir1 =
-            __rootfs_get_node(node, &vfs_dot);
-        struct rootfs_node *dir2 =
-            __rootfs_get_node(node, &vfs_ddot);
-        vfs_inode_free(dir1->inode);
-        vfs_inode_free(dir2->inode);
-        cake_piece_release(rtfs_pile, dir1);
-        cake_piece_release(rtfs_pile, dir2);
     }
+
     list_delete(&node->siblings);
     vfs_inode_free(node->inode);
     cake_piece_release(rtfs_pile, node);

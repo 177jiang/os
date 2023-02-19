@@ -32,6 +32,8 @@
         .long __do_mkdir
         .long __do_lseek                  /* 25 */
         .long __do_geterror
+        .long __do_readlink
+        .long __do_readlinkat
 
     __pos:
         .rept __SYSCALL_MAX - (__pos - syscall_table)/4
