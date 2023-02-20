@@ -177,9 +177,12 @@ pid_t dup_proc(){
     new_task->mm.user_heap       = __current->mm.user_heap;
     new_task->regs               = __current->regs;
     new_task->parent             = __current;
+    memcpy(new_task->fdtable, 
+           __current->fdtable,
+           sizeof(struct v_fdtable)
+    );
 
     setup_task_page_table(new_task, PD_REFERENCED);
-
     setup_task_mem_region(&__current->mm.regions,
                           &new_task->mm.regions,
                           PD_MOUNT_1);

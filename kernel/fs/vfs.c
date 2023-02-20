@@ -409,62 +409,6 @@ int __vfs_try_locate_file(const char *path, struct v_dnode ** fdir,
     return error;
 }
 
-int __vfs_do_open(struct v_file **out_file, const char *path, int options){
-
-    struct v_dnode *parent, *file;
-    struct v_file *opened_file = 0;
-
-    int error = __vfs_try_locate_file(path, &parent, &file, 0);
-    if(error != ENOENT && (options & F_CREATE)){
-        error = parent->inode->ops.create(parent->inode, opened_file);
-    }else if(!error){
-        error = vfs_open(file, &opened_file);
-    }
-
-    *out_file = opened_file;
-    return error;
-
-}
-__DEFINE_SYSTEMCALL_2(int, open,
-                      const char *, path,
-                      int, options){
-
-    struct v_file *opened_file;
-    int fd;
-    int error = __vfs_do_open(&opened_file, path, options);
-    if(!error && !(error = vfs_fdslot_alloc(&fd))){
-
-        struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
-        vfd->file = opened_file;
-        vfd->pos  = opened_file->inode->fsize & -(!!(options & F_APPEND));
-        __current->fdtable->fds[fd] = vfd;
-        return fd;
-    }
-    __current->k_status = error;
-    return SYSCALL_ESTATUS(error);
-}
-
-#define INVALID_FD(fd, vfd)           \
-    (fd < 0 || fd >= VFS_FD_MAX || !(vfd = __current->fdtable->fds[fd]))
-
-__DEFINE_SYSTEMCALL_1(int, close,
-                      int, fd){
-
-    struct v_fd *vfd;
-    int error = 0;
-    if(INVALID_FD(fd, vfd)){
-
-        error = EBADF;
-    }else if(!(error = vfs_close(vfd->file))){
-
-        vfree(vfd);
-        __current->fdtable->fds[fd] = 0;
-    }
-
-    __current->k_status = error;
-    return SYSCALL_ESTATUS(error);
-}
-
 void __vfs_readdir_callback(struct dir_context *dctx,
                             const char *name,
                             const int  len, 
@@ -511,6 +455,81 @@ int __vfs_do_unlink(struct v_inode *inode){
     }
     return error;
 }
+int __vfs_dup_fd(struct v_fd *old_fd, struct v_fd **new_fd){
+
+    struct v_file *open_file;
+    int error = vfs_open(old_fd->file->dnode, &open_file);
+    if(!error){
+
+        *new_fd  =  cake_piece_grub(fd_pile);
+        **new_fd =  (struct v_fd){
+            .file  =  open_file,
+            .pos   =  old_fd->pos,
+            .flags =  old_fd->flags
+        };
+    }
+    return error;
+}
+
+int __vfs_do_open(struct v_file **out_file, const char *path, int options){
+
+    struct v_dnode *parent, *file;
+    struct v_file *opened_file = 0;
+
+    int error = __vfs_try_locate_file(path, &parent, &file, 0);
+    if(error != ENOENT && (options & F_CREATE)){
+        error = parent->inode->ops.create(parent->inode, opened_file);
+    }else if(!error){
+        error = vfs_open(file, &opened_file);
+    }
+
+    *out_file = opened_file;
+    return error;
+
+}
+__DEFINE_SYSTEMCALL_2(int, open,
+                      const char *, path,
+                      int, options){
+
+    struct v_file *opened_file;
+    int fd;
+    int error = __vfs_do_open(&opened_file, path, options);
+    if(!error && !(error = vfs_fdslot_alloc(&fd))){
+
+        struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
+        vfd->file = opened_file;
+        vfd->pos  = opened_file->inode->fsize & -(!!(options & F_APPEND));
+        __current->fdtable->fds[fd] = vfd;
+        return fd;
+    }
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+#define VALID_FD(fd)           \
+    (fd>=0 && fd < VFS_FD_MAX)
+
+#define GET_FD(fd, vfd)           \
+    (VALID_FD(fd) && (vfd = __current->fdtable->fds[fd]))
+
+__DEFINE_SYSTEMCALL_1(int, close,
+                      int, fd){
+
+    struct v_fd *vfd;
+    int error = 0;
+    if(!GET_FD(fd, vfd)){
+
+        error = EBADF;
+    }else if(!(error = vfs_close(vfd->file))){
+
+        vfree(vfd);
+        __current->fdtable->fds[fd] = 0;
+    }
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
 
 __DEFINE_SYSTEMCALL_2(int, readdir,
                       int, fd,
@@ -518,7 +537,7 @@ __DEFINE_SYSTEMCALL_2(int, readdir,
     
     struct v_fd *vfd;
     int error = 0;
-    if(INVALID_FD(fd, vfd)){
+    if(!GET_FD(fd, vfd)){
 
         error = EBADF;
     }else if(!(vfd->file->inode->itype & VFS_INODE_TYPE_DIR)){
@@ -602,7 +621,7 @@ __DEFINE_SYSTEMCALL_3(int, read,
     int error = 0;
     struct v_fd *vfd;
 
-    if(INVALID_FD(fd, vfd)){
+    if(!GET_FD(fd, vfd)){
 
         error = EBADF;
     }else{
@@ -625,7 +644,7 @@ __DEFINE_SYSTEMCALL_3(int, write,
     int error = 0;
     struct v_fd *vfd;
 
-    if(INVALID_FD(fd, vfd)){
+    if(!GET_FD(fd, vfd)){
 
         error = EBADF;
     }else{
@@ -649,7 +668,7 @@ __DEFINE_SYSTEMCALL_3(int, lseek,
     int error = 0;
     struct v_fd *vfd;
 
-    if(INVALID_FD(fd, vfd)){
+    if(!GET_FD(fd, vfd)){
 
         error = EBADF;
     }else{
@@ -702,7 +721,7 @@ __DEFINE_SYSTEMCALL_4(int, readlinkat,
                       size_t, size){
     int error;
     struct v_fd *vfd;
-    if(INVALID_FD(dirfd, vfd)){
+    if(!GET_FD(dirfd, vfd)){
         error = EBADF;
     }else{
         struct v_dnode *dnode;
@@ -772,7 +791,7 @@ __DEFINE_SYSTEMCALL_2(int, unlinkat,
                       const char *, path){
     int error;
     struct v_fd *vfd;
-    if(INVALID_FD(fd, vfd)){
+    if(!GET_FD(fd, vfd)){
         error = EBADF;
     }else{
         struct v_dnode *dnode;
@@ -815,7 +834,7 @@ __DEFINE_SYSTEMCALL_1(int, fsync,
 
     int error;
     struct v_fd *vfd;
-    if(INVALID_FD(fildes, vfd)){
+    if(!GET_FD(fildes, vfd)){
         error = EBADF;
     }else{
         error = vfs_fsync(vfd->file);
@@ -824,6 +843,60 @@ __DEFINE_SYSTEMCALL_1(int, fsync,
     return SYSCALL_ESTATUS(error);
 }
 
+__DEFINE_SYSTEMCALL_2(int, dup2,
+                      int, old_fd,
+                      int, new_fd){
+
+    if(old_fd == new_fd){
+        return new_fd;
+    }
+
+
+    struct v_file *old_f, *new_f;
+    int error;
+    do{
+
+        if(!GET_FD(old_fd, old_f) || !VALID_FD(new_fd)){
+            error = EBADF;
+            break;
+        }
+
+        new_f = __current->fdtable->fds[new_fd];
+        if(new_f && (error=vfs_close(new_fd))){
+            break;
+        }
+
+        if((error = __vfs_dup_fd(old_f, &new_f))){
+            __current->fdtable->fds[new_fd] = new_f;
+            return new_fd;
+        }
+    }while(0);
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
+
+__DEFINE_SYSTEMCALL_1(int, dup,
+                      int, old_fd){
+
+    struct v_file *old_f, *new_f;
+    int new_fd, error;
+    do{
+        if(!GET_FD(old_fd, old_f)){
+            error = EBADF;
+            break;
+        }
+
+        error = vfs_fdslot_alloc(&new_fd);
+        if(error) break;
+        error = __vfs_dup_fd(old_f, &new_f);
+        if(error) break;
+        __current->fdtable->fds[new_fd] = new_f;
+        return new_fd;
+    }while(0);
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
 
 
 

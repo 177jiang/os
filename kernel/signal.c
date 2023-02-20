@@ -8,6 +8,7 @@
 
 extern struct scheduler  sched_ctx;
 
+volatile isr_param __temp_regs;
 void __USER_SPACE__ default_signal_hd(int sig){
     _exit(sig);
 }
@@ -21,6 +22,7 @@ void *default_signal_handlers[_SIG_MAX] = {
     [_SIGINT]  = default_signal_hd,
     [_SIGTERM] = default_signal_hd,
     [_SIGKILL] = default_signal_hd,
+    [_SIGSEGV] = default_signal_hd,
 
     [_SIG_USER] = default_signal_user,
 
@@ -55,12 +57,12 @@ void *signal_dispatch(){
     }
 
     /* save old , because if sig causes a page_fault , we will lose old context */
-    isr_param regs = __current->regs;
+     __temp_regs = __current->regs;
 
     struct sig_struct *sig =
         (struct sig_struct *)(ustack - sizeof(struct sig_struct));
 
-    sig->prev_regs      = regs;
+    sig->prev_regs      = __temp_regs;
     sig->sig_num        = cur_sig;
     sig->signal_handler = __current->signal_handlers[cur_sig];
 

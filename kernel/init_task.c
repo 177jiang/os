@@ -66,8 +66,6 @@ void __USER_SPACE__ __move_to_user_mode(){
       }
       spin();
   }
-
-
 }
 
 void task_1_work(){

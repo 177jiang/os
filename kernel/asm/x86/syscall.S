@@ -39,6 +39,8 @@
         .long __do_unlinkat
         .long __do_link
         .long __do_fsync
+        .long __do_dup
+        .long __do_dup2                  /* 30 */
 
     __pos:
         .rept __SYSCALL_MAX - (__pos - syscall_table)/4

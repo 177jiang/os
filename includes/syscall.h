@@ -36,6 +36,8 @@
 #define __SYSCALL_unlinkat      31
 #define __SYSCALL_link          32
 #define __SYSCALL_fsync         33
+#define __SYSCALL_dup           34
+#define __SYSCALL_dup2          35
 
 
 #define __SYSCALL_MAX    0x100

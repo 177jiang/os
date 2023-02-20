@@ -132,6 +132,7 @@ struct v_fd{
 
     struct v_file *file;
     int            pos;
+    int            flags;
 };
 
 struct v_superblock{

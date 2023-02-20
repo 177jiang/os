@@ -211,16 +211,16 @@ pid_t destroy_task(pid_t pid){
         return;
     }
 
+
     struct task_struct *task = sched_ctx.tasks + pid;
     task->state              = TASK_DESTROY;
 
     list_delete(&task->siblings);
 
+
     struct mm_region *pos, *n;
     list_for_each(pos, n, &task->mm.regions.head, head){
-
         kfree(pos);
-
     }
 
     vmm_mount_pg_dir(PD_MOUNT_1, task->page_table);
@@ -339,6 +339,16 @@ __DEFINE_SYSTEMCALL_0(void, yield){
 __DEFINE_SYSTEMCALL_1(void, _exit, int, exit_code){
 
     terminate_task(exit_code);
+
+    struct task_struct *task = __current;
+    for(size_t i=0; i<VFS_FD_MAX; ++i){
+        struct v_fd *fd = task->fdtable->fds[i];
+        if(fd){
+            vfs_close(fd->file);
+        }
+    }
+
+    vfree(task->fdtable);
 
     schedule();
 
