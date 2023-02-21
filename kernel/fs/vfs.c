@@ -94,7 +94,7 @@ void vfs_dcache_add(struct v_dnode *parent, struct v_dnode *node){
     hash_list_add(&bucket->head, &node->hash_list);
 }
 
-int vfs_walk(struct v_dnode *start,
+int __vfs_walk(struct v_dnode *start,
              const char *path,
              struct v_dnode **dentry,
              struct hash_str *compoent,
@@ -197,6 +197,42 @@ __error:
     *dentry = NULL;
     return error;
 }
+
+#define VFS_MAX_SYMLINK 16
+int vfs_walk(struct v_dnode *start,
+             const char *path,
+             struct v_dnode **dentry,
+             struct hash_str *compoent,
+             int options){
+
+    struct v_dnode *temp;
+    char *tpath =  path;
+    int error   =  __vfs_walk(start, tpath, &temp, compoent, options);
+    int count   = 0;
+
+    while(!error){
+        
+        if(count >= VFS_MAX_SYMLINK){
+            error = ELOOP;
+            break;
+        }
+        int f = (temp->inode->itype & VFS_INODE_TYPE_SYMLINK) &&
+                !(options & VFS_WALK_NOFOLLOW)                &&
+                temp->inode->ops.read_symlink;
+        if(!f) break;
+
+        error = temp->inode->ops.read_symlink(temp->inode, &tpath);
+        if(error) break;
+
+        error = __vfs_walk(start, tpath, &temp, compoent, options);
+        ++count;
+    }
+
+    *dentry = error ? 0 : temp;
+    return error;
+}
+
+
 
 int vfs_open(struct v_dnode *dnode, struct v_file **file){
 
@@ -420,13 +456,24 @@ void __vfs_readdir_callback(struct dir_context *dctx,
     dent->d_type = dtype;
 }
 
-int vfs_readlink
+int vfs_readlink(struct v_dnode *dnode, char *buf, size_t size){
+
+    char *link;
+    if(DI_OPS(dnode).read_symlink){
+        int error = DI_OPS(dnode).read_symlink(dnode->inode, &link);
+        strncpy(buf, link, size);
+        return error;
+    }
+    return 0;
+}
+
+int vfs_get_path
     (struct v_dnode *dnode, char *buf, size_t size, int dep){
 
     if(!dnode) return 0;
     if(dep > 64) return ELOOP;
 
-    size_t len = vfs_readlink(dnode->parent, buf, size, dep + 1);
+    size_t len = vfs_get_path(dnode->parent, buf, size, dep + 1);
 
     if(len >= size) return len;
 
@@ -703,9 +750,9 @@ __DEFINE_SYSTEMCALL_3(int, readlink,
     int error;
 
     struct v_dnode *dnode;
-    if(!(error = vfs_walk(NULL, path, &dnode, NULL, 0))){
+    if(!(error = vfs_walk(NULL, path, &dnode, NULL, VFS_WALK_NOFOLLOW))){
 
-        error = vfs_readlink(dnode, buf, size, 0);
+        error = vfs_readlink(dnode, buf, size);
     }
 
     if(error >= 0) return error;
@@ -727,7 +774,7 @@ __DEFINE_SYSTEMCALL_4(int, readlinkat,
         struct v_dnode *dnode;
         error = vfs_walk(vfd->file->dnode, path, &dnode, NULL, 0);
         if(!error){
-            error = vfs_readlink(dnode, buf, size, 0);
+            error = vfs_readlink(dnode, buf, size);
         }
     }
 
@@ -898,8 +945,50 @@ __DEFINE_SYSTEMCALL_1(int, dup,
     return SYSCALL_ESTATUS(error);
 }
 
+__DEFINE_SYSTEMCALL_3(int, realpathat,
+                      int, fd, 
+                      char *, buf,
+                      size_t, size){
+
+    int error;
+    struct v_fd *vfd;
+    if(!GET_FD(fd, vfd)){
+        error = EBADF;
+    }else{
+        struct v_dnode *dnode;
+        error = vfs_get_path(vfd->file->dnode, buf, size, 0);
+    }
+    if(error >= 0)return error;
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
 
 
+__DEFINE_SYSTEMCALL_2(int, symlink,
+                      const char *, path,
+                      const char *, link){
+
+    struct v_dnode *dnode;
+
+    int error = vfs_walk(NULL, path, &dnode, NULL, 0);
+
+    do{
+        if(error)break;
+        if(dnode->super_block->fs->type & FSTYPE_ROFS){
+            error = EROFS;
+            break;
+        }
+        if(!DI_OPS(dnode).symlink){
+            error = ENOTSUP;
+            break;
+        }
+        error = DI_OPS(dnode).symlink(dnode->inode, link);
+    }while(0);
+
+    __current->k_status = error;
+    return SYSCALL_ESTATUS(error);
+}
 
 
 

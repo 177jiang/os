@@ -41,6 +41,8 @@
         .long __do_fsync
         .long __do_dup
         .long __do_dup2                  /* 30 */
+        .long __do_realpathat
+        .long __do_symlink
 
     __pos:
         .rept __SYSCALL_MAX - (__pos - syscall_table)/4

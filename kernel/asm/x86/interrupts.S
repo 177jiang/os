@@ -162,7 +162,7 @@ __after_change_pgtable:
 handle_signal:
 
     pushl   $U_DATA_SEG         /* ss */
-    pushl   %eax                /* temp_eip(sig_struct) setup in signal_dispatch */
+    pushl   %eax                /* user_esp(sig_struct) setup in signal_dispatch */
     pushl   REGS_EFLAGS(%eax)   /* eflags */
     pushl   $U_CODE_SEG         /* cs */
     pushl   $sig_wrapper        /* eip */

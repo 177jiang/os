@@ -28,7 +28,7 @@ void *default_signal_handlers[_SIG_MAX] = {
 
 };
 
-
+//run in a temporary stack (int interrupts.S) !!!!
 void *signal_dispatch(){
 
     if(!__current->sig_pending){

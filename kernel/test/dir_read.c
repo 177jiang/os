@@ -22,7 +22,7 @@ void __test_readdir(){
     }
 
     char path[129];
-    int len = readlinkat(fd, ".", path, 128);
+    int len = realpathat(fd, path, 128);
     if(len < 0){
         kprintf_error("fail to read !!! \n");
     }

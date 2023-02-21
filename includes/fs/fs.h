@@ -36,6 +36,7 @@
 #define     VFS_WALK_FSRELATIVE         2
 #define     VFS_WALK_MKDIR              3
 #define     VFS_WALK_PARENT             4
+#define     VFS_WALK_NOFOLLOW           8
 
 #define     VFS_IOBUF_FDIRTY            0x1
 
@@ -44,6 +45,8 @@
 #define     VFS_VALID_CHAR(c)           \
     (is_alpha(c) || is_number(c)  ||    \
     ((c)=='.')  || ((c)=='-')    || ((c)=='_') )
+
+#define  DI_OPS(dnode)   (dnode->inode->ops)
 
 extern struct hash_str vfs_dot;
 extern struct hash_str vfs_ddot;
@@ -78,14 +81,16 @@ struct v_inode{
 
     struct {
 
-        int (*create)     (struct v_inode *this, struct v_file *file);
-        int (*open)       (struct v_inode *this, struct v_file *file);
-        int (*sync)       (struct v_inode *this);
-        int (*mkdir)      (struct v_inode *this, struct v_dnode *dnode);
-        int (*rmdir)      (struct v_inode *this);
-        int (*unlink)     (struct v_inode *this);
-        int (*link)       (struct v_inode *this, struct v_dnode *dnode);
-        int (*dir_lookup) (struct v_inode *this, struct v_dnode *dnode);
+        int (*create)       (struct v_inode *this, struct v_file *file);
+        int (*open)         (struct v_inode *this, struct v_file *file);
+        int (*sync)         (struct v_inode *this);
+        int (*mkdir)        (struct v_inode *this, struct v_dnode *dnode);
+        int (*rmdir)        (struct v_inode *this);
+        int (*unlink)       (struct v_inode *this);
+        int (*link)         (struct v_inode *this, struct v_dnode *dnode);
+        int (*dir_lookup)   (struct v_inode *this, struct v_dnode *dnode);
+        int (*symlink)      (struct v_inode *this, const char *path);
+        int (*read_symlink) (struct v_inode *this, const char **path_out);
     }ops;
 };
 

@@ -62,6 +62,9 @@ __SYSTEMCALL_1(int, rmdir,
 __SYSTEMCALL_1(int, unlink,
                const char *, path);
 
+__SYSTEMCALL_2(int, symlink,
+               const char *, path,
+               const char *, link);
 
 
 #endif

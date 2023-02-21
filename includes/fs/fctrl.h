@@ -19,4 +19,9 @@ __SYSTEMCALL_4(int, readlinkat,
 __SYSTEMCALL_2(int, unlinkat,
                int, fd,
                const char *, path);
+
+__SYSTEMCALL_3(int, realpathat,
+               int, fd,
+               char *, path,
+               size_t, size);
 #endif
