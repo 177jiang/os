@@ -421,8 +421,10 @@ int vfs_fdslot_alloc(int *fd){
 }
 
 #define FLOCATE_CREATE_EMPTY 1
-int __vfs_try_locate_file(const char *path, struct v_dnode ** fdir, 
-                         struct v_dnode **file, int options){
+int __vfs_try_locate_file(const char *path,
+                          struct v_dnode ** fdir, 
+                          struct v_dnode **file,
+                          int options){
 
     char name_str[VFS_NAME_MAXLEN];
     struct hash_str name = HASH_STR(name_str, 0);
