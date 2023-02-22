@@ -677,7 +677,7 @@ __DEFINE_SYSTEMCALL_3(int, read,
 
         struct v_file *file =  vfd->file;
         file->f_pos         =  vfd->pos;
-        error               =  file->ops.read(file, buf, count);
+        error               =  file->ops.read(file, buf, count, file->f_pos);
         if(error >=  0){
             vfd->pos += error;
         }
@@ -700,7 +700,7 @@ __DEFINE_SYSTEMCALL_3(int, write,
 
         struct v_file *file =  vfd->file;
         file->f_pos         =  vfd->pos;
-        error               =  file->ops.write(file, buf, count);
+        error               =  file->ops.write(file, buf, count, file->f_pos);
         if(error >=  0){
             vfd->pos += error;
         }

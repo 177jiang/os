@@ -13,15 +13,15 @@ void btrie_init(struct btrie *root, uint32_t trun_bits){
 }
 
 struct btrie_node *__btrie_traversal(struct btrie *root,
-                       uint32_t index,
-                       int options){
+                                     uint32_t index,
+                                     int options){
 
     index >>= root->truncated;
     uint32_t bit_shift =
       index ? (ROUNDUP(31-__builtin_clz(index), BTRIE_BITS)) : 0;
     uint32_t bit_mask   =
       ((1 << BTRIE_BITS) - 1) << bit_shift;
-    struct btrie_node *tree = root;
+    struct btrie_node *tree = root->btrie_root;
 
     while(bit_shift && tree){
 

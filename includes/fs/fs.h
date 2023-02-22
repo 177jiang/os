@@ -11,6 +11,7 @@
 #include <datastructs/hashtable.h>
 #include <datastructs/hstr.h>
 #include <datastructs/jlist.h>
+#include <datastructs/btrie.h>
 
 #define IN(x)  (x)
 #define OUT(x) (x)
@@ -79,6 +80,7 @@ struct v_inode{
     uint32_t  fsize;
     void      *data;
 
+    struct   pcache *pg_cache;
     struct {
 
         int (*create)       (struct v_inode *this, struct v_file *file);
@@ -114,8 +116,8 @@ struct v_fdtable{
 };
 
 struct v_file_ops{
-    int (*write)    (struct v_file *this, void IN(*data), uint32_t size);
-    int (*read)     (struct v_file *this, void OUT(*data), uint32_t size);
+    int (*write)    (struct v_file *this, void IN(*data), uint32_t size, uint32_t fpos);
+    int (*read)     (struct v_file *this, void OUT(*data), uint32_t size, uint32_t fpos);
     int (*read_dir) (struct v_file *this, int dir_index);
     int (*seek)     (struct v_file *this, size_t offset);
     int (*rename)   (struct v_file *this, char *name);
@@ -168,6 +170,23 @@ struct dir_context{
         );
 };
 
+struct pcache_pg{
+
+    struct list_header  pg_list;
+    struct list_header  dirty_list;
+    uint32_t            flags;
+    uint32_t            fpos;
+    char                *pg;
+};
+
+struct pcache{
+
+    struct btrie        tree;
+    struct list_header  pages;
+    struct list_header  dirty;
+    uint32_t            dirty_n;
+    uint32_t            page_n;
+};
 
 void   fsm_init();
 void   fsm_register(struct filesystem *fs);
@@ -219,6 +238,34 @@ struct v_inode *vfs_inode_alloc();
 void            vfs_inode_free(struct v_inode *inode);
 
 
+void pcache_init(struct pcache *cache);
+
+struct pcache_pg *pcache_new_page(struct pcache *cache, uint32_t index);
+
+void pcache_set_dirty(struct pcache *cache, struct pcache_pg *page);
+
+int pcache_get_page(struct pcache *cache,
+                    uint32_t index,
+                    uint32_t *offset,
+                    struct pcache_pg **pg);
+
+int pcache_write(struct v_file *file,
+                 char *buf,
+                 uint32_t size);
+
+int pcache_read(struct v_file *file,
+                char *buf,
+                uint32_t size);
+
+void pcache_release(struct pcache *cache);
+
+int pcache_commit(struct v_file *file, struct pcache_pg *page);
+
+void pcache_commit_all(struct v_file *file);
+
+void pcache_release_page(struct pcache *cache, struct pcache_pg *page);
+
+void pcache_invalidate(struct v_file *file, struct pcache_pg *page);
 
 #endif
 

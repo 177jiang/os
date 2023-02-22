@@ -9,9 +9,9 @@ struct list_header dev_list;
 
 static struct rootfs_node *dev_root;
 
-int __dev_read(struct v_file *file, void *buffer, size_t len);
+int __dev_read(struct v_file *file, void *buffer, size_t len, size_t pos);
 
-int __dev_write(struct v_file *file, void *buffer, size_t len);
+int __dev_write(struct v_file *file, void *buffer, size_t len, size_t pos);
 
 
 void device_init(){
@@ -51,22 +51,22 @@ struct device *device_add(struct device *parent,
     return dev;
 }
 
-int __dev_read(struct v_file *file, void *buffer, size_t len){
+int __dev_read(struct v_file *file, void *buffer, size_t len, size_t pos){
 
     struct rootfs_node *dev_node = file->inode->data;
     struct device *dev           = dev_node->data;
 
     if(!dev->read) return ENOTSUP;
-    return dev->read(dev, buffer, file->f_pos, len);
+    return dev->read(dev, buffer, pos, len);
 }
 
-int __dev_write(struct v_file *file, void *buffer, size_t len){
+int __dev_write(struct v_file *file, void *buffer, size_t len, size_t pos){
 
     struct rootfs_node *dev_node = file->inode->data;
     struct device *dev           = dev_node->data;
 
     if(!dev->write) return ENOTSUP;
-    return dev->write(dev, buffer, file->f_pos, len);
+    return dev->write(dev, buffer, pos, len);
 }
 
 void device_remove(struct device *dev){
