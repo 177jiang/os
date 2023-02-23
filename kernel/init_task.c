@@ -55,11 +55,10 @@ void __USER_SPACE__ __move_to_user_mode(){
   if( !(p = fork()) ){
       
       // __test_disk_io();
-      // __test_readdir();
-      __test_io();
+      __test_readdir();
+      // __test_io();
       _exit(0);
   }else{
-
       waitpid(p, 0, 0);
       while(1){
         yield();

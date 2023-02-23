@@ -4,7 +4,6 @@
 
 static char buf[1024];
 
-
 void __assert_fail(const char *msg, const char *file, unsigned int line) {
 
     sprintf_(buf, "[ASSERT] %s (%s:%u)", msg, file, line);

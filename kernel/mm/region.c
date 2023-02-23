@@ -7,7 +7,7 @@
 
 void region_add(struct mm_region *regions, uint32_t start, uint32_t end, uint32_t attr){
 
-    struct mm_region *new_region = kmalloc(sizeof(struct mm_region));
+    struct mm_region *new_region = vzalloc(sizeof(struct mm_region));
 
     *new_region = (struct mm_region){
         .start = start,

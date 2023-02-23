@@ -11,13 +11,14 @@ extern void intr_routine_page_fault(const isr_param *param);
 
 void _intr_print_msg(const char *msg, const isr_param *param){
 
-    char buf[1024];
 
-    sprintf_(buf, "INT %u: (%x) [%p: %p] %s",
-            param->vector, param->err_code, param->cs, param->eip, msg);
+    kprintf_error("INT %u: (%x) [%p: %p] %s",
+                  param->vector,
+                  param->err_code,
+                  param->cs,
+                  param->eip, msg);
 
-    kprintf_error(buf);
-
+    console_flush();
     spin();
 
 }
@@ -35,10 +36,12 @@ void intr_routine_general_protection(const isr_param *param){
 
 
 void intr_routine_sys_panic(const isr_param *param){
+
     _intr_print_msg((const char *)(param->edi), param);
 }
 
 void intr_routine_fallback(const isr_param *param){
+
     _intr_print_msg("Unknow Interrupt !", param);
 }
 
@@ -51,6 +54,7 @@ void intr_routine_apic_error(const isr_param *param){
     char buf[32];
     sprintf_(buf, "APIC error, ESR=0x%x", error_reg);
 
+    console_flush();
     _intr_print_msg(buf, param);
 }
 

@@ -14,13 +14,6 @@ void __test_readdir(){
     }
     kprintf_live("succeed to open !!! \n");
 
-    struct dirent dt = { .d_offset = 0 };
-
-    while(!(readdir(fd, &dt))) {
-
-        kprintf_warn("%s\n", dt.d_name);
-    }
-
     char path[129];
     int len = realpathat(fd, path, 128);
     if(len < 0){
@@ -29,6 +22,14 @@ void __test_readdir(){
         path[len] = 0;
         kprintf_warn("%s\n", path);
     }
+
+    struct dirent dt = { .d_offset = 0 };
+
+    while(!(readdir(fd, &dt))) {
+
+        kprintf_warn("%s\n", dt.d_name);
+    }
+
 
     close(fd);
     return;

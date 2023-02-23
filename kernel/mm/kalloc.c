@@ -3,6 +3,7 @@
 #include <libc/string.h>
 #include <mm/dmm.h>
 #include <constant.h>
+#include <spike.h>
 
 extern uint8_t __kernel_heap_start;
 
@@ -187,12 +188,13 @@ void jfree(void *addr){
     size_t size     = DMM_GET_SIZE(header);
     uint8_t *nhd    = hd + size;
 
-
-    assert_msg(((uintptr_t)addr < (uintptr_t)(-size)) && (((uintptr_t)addr & 0x3) == 0),
+    assert_msg(((uintptr_t)addr < (uintptr_t)(-size)) &&
+               !((uintptr_t)addr & 0x3),
                "free(): invalid pointer");
 
     assert_msg(size > DMM_HEADER_SIZE && (size & ~0x3),
                "free(): invalid size");
+
 
     DMM_SET_HT(hd, header & ~DMM_SELF_ALLOC);
     DMM_SET_HT(hd + size - DMM_HEADER_SIZE, header & ~DMM_SELF_ALLOC);
@@ -205,6 +207,7 @@ void jfree(void *addr){
     mutex_unlock(&kernel_heap.lock);
 
 }
+
 void *kmalloc(size_t size){
     mutex_lock(&kernel_heap.lock);
     void*res =  jmalloc(&kernel_heap, size);

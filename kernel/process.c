@@ -15,7 +15,11 @@ void init_task_user_space(struct task_struct *task){
     vmm_mount_pg_dir(PD_MOUNT_1, task->page_table);
 
     /* user stack */
-    region_add(&task->mm.regions, U_STACK_END, U_STACK_TOP, (REGION_RW | REGION_RSHARED));
+    region_add(&task->mm.regions,
+               U_STACK_END,
+               U_STACK_TOP,
+               (REGION_RW | REGION_RSHARED));
+
     /* user stack in page_table just set 0 , if used will alloc in page_fault*/
     for(uint32_t i=PG_ALIGN(U_STACK_END); i<=PG_ALIGN(U_STACK_TOP); i+=PG_SIZE){
         vmm_set_mapping(PD_MOUNT_1, i, 0, (PG_ALLOW_USER | PG_WRITE), VMAP_NULL);

@@ -219,8 +219,8 @@ pid_t destroy_task(pid_t pid){
 
     struct mm_region *pos, *n;
     list_for_each(pos, n, &task->mm.regions.head, head){
-
-        kfree(pos);
+        //TODO   release  children valloc
+        // vfree(pos);
     }
 
     vmm_mount_pg_dir(PD_MOUNT_1, task->page_table);
@@ -328,7 +328,9 @@ done:
 
     cpu_disable_interrupt();
     status_flags |= TEXITSIG * !!proc->sig_doing;
-    *status = proc->exit_code | status_flags;
+    if(status){
+        *status = proc->exit_code | status_flags;
+    }
     return destroy_task(proc->pid);
 }
 
