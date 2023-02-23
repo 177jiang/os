@@ -75,7 +75,14 @@ void _kernel_init() {
     vmm_set_mapping(PD_REFERENCED, K_STACK_START+(i << PG_SIZE_BITS), pa, PG_PREM_RW, VMAP_NULL);
   }
 
-  // kprintf_("[MM] Allocated %d pages for stack start at %p\n", K_STACK_SIZE>>PG_SIZE_BITS, K_STACK_START);
+  cake_init();
+  valloc_init();
+
+  fsm_init();
+  vfs_init();
+  rootfs_init();
+  device_init();
+  vfs_mount("/", "rootfs", -1);
 
   sched_init();
 

@@ -1,5 +1,6 @@
 #include "madt_parser.h"
 #include <mm/kalloc.h>
+#include <mm/valloc.h>
 
 void madt_parse(acpi_madt_t* madt, acpi_context* toc) {
 
@@ -11,7 +12,7 @@ void madt_parse(acpi_madt_t* madt, acpi_context* toc) {
     // Cosidering only one IOAPIC present (max 24 pins)
     // FIXME: use hash table instead
     toc->madt.irq_exception =
-      (acpi_intso_t*)kcalloc(24 * sizeof(acpi_intso_t*));
+      (acpi_intso_t*)vzalloc(24 * sizeof(acpi_intso_t*));
 
     while (ics_start < ics_end) {
         acpi_ics_hdr_t* entry = (acpi_ics_hdr_t*)ics_start;

@@ -41,23 +41,26 @@ int __block_read(struct device *dev,
 
     struct block_dev *bdev = dev->underlay;
 
-    size_t rd_size = 0, rd_block = 0;
-    size_t bsize   = bdev->hd_dev->block_size;
-    void *bbuf     = valloc(bsize);
+    size_t bsize    =  bdev->hd_dev->block_size;
+    size_t rd_size  =  0,
+           rd_block =  offset / bsize,
+           r        =  offset % bsize;
+    void *bbuf      =  vzalloc(bsize);
     int error;
 
     while(rd_size < len){
 
         if(!bdev->hd_dev->ops.read_buffer
-            (bdev->hd_dev, offset + rd_block, bbuf, bsize)
+            (bdev->hd_dev, rd_block, bbuf, bsize)
           ){
             error = ENXIO;
             goto __error;
         }
-        int rs = MIN(len - rd_size, bsize);
-        memcpy(buffer + rd_size, bbuf, rs);
+        int rs = MIN(len - rd_size, bsize - r);
+        memcpy(buffer + rd_size, bbuf + r, rs);
         rd_size += rs;
         ++rd_block;
+        r = 0;
     }
 
     vfree(bbuf);
@@ -73,23 +76,26 @@ int __block_write(struct device *dev,
   
     struct block_dev *bdev = dev->underlay;
 
-    size_t wr_size = 0, wr_block = 0;
-    size_t bsize   = bdev->hd_dev->block_size;
-    void *bbuf     = valloc(bsize);
+    size_t bsize    =  bdev->hd_dev->block_size;
+    size_t wr_size  =  0,
+           wr_block =  offset / bsize,
+           r        =  offset % bsize;
+    void *bbuf      =  vzalloc(bsize);
     int error;
 
     while(wr_size < len){
 
-        int ws = MIN(len - wr_size, bsize);
-        memcpy(bbuf, buffer + wr_size, ws);
+        int ws = MIN(len - wr_size, bsize - r);
+        memcpy(bbuf + r, buffer + wr_size, ws);
         if(!bdev->hd_dev->ops.write_buffer
-            (bdev->hd_dev, offset + wr_block, bbuf, bsize)
+            (bdev->hd_dev, wr_block, bbuf, bsize)
           ){
             error = ENXIO;
             goto __error;
         }
         wr_size += ws;
         ++wr_block;
+        r = 0;
     }
 
     vfree(bbuf);

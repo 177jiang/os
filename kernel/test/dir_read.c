@@ -25,11 +25,11 @@ void __test_readdir(){
     int len = realpathat(fd, path, 128);
     if(len < 0){
         kprintf_error("fail to read !!! \n");
+    }else{
+        path[len] = 0;
+        kprintf_warn("%s\n", path);
     }
 
-    path[len] = 0;
-    kprintf_warn("%s\n", path);
     close(fd);
-
     return;
 }

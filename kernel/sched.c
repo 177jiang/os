@@ -144,7 +144,7 @@ void commit_task(struct task_struct *task){
     assert_msg(task==(sched_ctx.tasks + task->pid), "Task set error\n");
 
     if(task->state != TASK_CREATED){
-        __current->k_status = EINVL;
+        __current->k_status = EINVAL;
         return ;
     }
 
@@ -207,7 +207,7 @@ pid_t alloc_pid(){
 pid_t destroy_task(pid_t pid){
 
     if(pid <= 1 || pid > sched_ctx.task_len){
-        __current->k_status = EINVL;
+        __current->k_status = EINVAL;
         return;
     }
 
@@ -217,9 +217,9 @@ pid_t destroy_task(pid_t pid){
 
     list_delete(&task->siblings);
 
-
     struct mm_region *pos, *n;
     list_for_each(pos, n, &task->mm.regions.head, head){
+
         kfree(pos);
     }
 

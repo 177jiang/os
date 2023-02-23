@@ -30,7 +30,7 @@
 
 #define     VFS_EENDDIR                 -5
 
-#define     VFS_EINVLD                  -8
+#define     VFS_EINVALD                  -8
 #define     VFS_EEOF                    -9
 
 #define     VFS_WALK_MKPARENT           1
@@ -52,7 +52,7 @@
 extern struct hash_str vfs_dot;
 extern struct hash_str vfs_ddot;
 
-
+struct pcache;
 struct v_dnode;
 struct v_superblock;
 struct v_file;
@@ -83,7 +83,7 @@ struct v_inode{
     struct   pcache *pg_cache;
     struct {
 
-        int (*create)       (struct v_inode *this, struct v_file *file);
+        int (*create)       (struct v_inode *this);
         int (*open)         (struct v_inode *this, struct v_file *file);
         int (*sync)         (struct v_inode *this);
         int (*mkdir)        (struct v_inode *this, struct v_dnode *dnode);
@@ -131,6 +131,7 @@ struct v_file{
     struct v_dnode      *dnode;
     struct list_header  *f_list;
     uint32_t            f_pos;
+    uint32_t            ref_count;
     void                *data;
     struct v_file_ops   ops;
 };
@@ -138,7 +139,6 @@ struct v_file{
 struct v_fd{
 
     struct v_file *file;
-    int            pos;
     int            flags;
 };
 

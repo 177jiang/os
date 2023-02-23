@@ -116,7 +116,7 @@ void setup_task_page_table(struct task_struct *task, uintptr_t mount){
 
         cpu_invplg(pte);
 
-        x86_pte_t p   = *pte;
+        x86_pte_t p = *pte;
 
         uintptr_t new_page = vmm_dup_page(pid, PG_ENTRY_ADDR(p));
 
@@ -214,14 +214,14 @@ __DEFINE_SYSTEMCALL_2(int, setpgid, pid_t, pid, pid_t, pgid){
     struct task_struct *task = pid > 0 ? get_task(pid) : __current;
 
     if(!task || task->pid == task->pgid){
-        __current->k_status = EINVL;
+        __current->k_status = EINVAL;
         return -1;
     }
 
     struct task_struct *pg_task = pgid > 0 ? get_task(pgid) : __current;
 
     if(!pg_task){
-        __current->k_status = EINVL;
+        __current->k_status = EINVAL;
         return -1;
     }
 

@@ -55,8 +55,8 @@ void __USER_SPACE__ __move_to_user_mode(){
   if( !(p = fork()) ){
       
       // __test_disk_io();
-      __test_readdir();
-       // __test_io();
+      // __test_readdir();
+      __test_io();
       _exit(0);
   }else{
 
@@ -112,15 +112,10 @@ void _kernel_post_init(){
   _lock_reserved_memory();
 
   kalloc_init();
-  cake_init();
-  valloc_init();
+
   block_init();
-  fsm_init();
-  vfs_init();
-  rootfs_init();
-  device_init();
+
   console_init();
-  vfs_mount("/", "rootfs", -1);
 
   acpi_init(_init_mb_info);
   apic_init();
@@ -140,6 +135,7 @@ void _kernel_post_init(){
   // __print_kernel_info();
 
   _unlock_reserved_memory();
+
 
 }
 

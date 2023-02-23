@@ -1,6 +1,7 @@
 #include <hal/acpi/acpi.h>
 
 #include <mm/kalloc.h>
+#include <mm/valloc.h>
 #include <spike.h>
 
 #include <libc/string.h>
@@ -24,7 +25,7 @@ int acpi_init(multiboot_info_t* mb_info) {
 
     acpi_rsdt_t* rsdt = rsdp->rsdt;
 
-    ctx = kcalloc(1 * sizeof(acpi_context));
+    ctx = vzalloc(1 * sizeof(acpi_context));
 
     assert_msg(ctx, "Fail to create ACPI context");
 

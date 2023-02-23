@@ -124,8 +124,11 @@ void pcache_release(struct pcache *cache){
 
 int pcache_commit(struct v_file *file, struct pcache_pg *page){
     
+    if(!page){
+        return 0;
+    }
     if(!(page->flags & PCACHE_DIRTY)){
-        return;
+        return 0;
     }
     
     int error = file->ops.write(file, page->pg, PG_SIZE, page->fpos);
@@ -139,10 +142,10 @@ int pcache_commit(struct v_file *file, struct pcache_pg *page){
 
 void pcache_commit_all(struct v_file *file){
     
-    struct pcache_pg *pos, *n;
     struct pcache    *cache = file->inode->pg_cache;
+    struct pcache_pg *pos, *n;
+
     list_for_each(pos, n, &cache->dirty, dirty_list){
-        
         pcache_commit(file, pos);
     }
 }

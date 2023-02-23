@@ -125,7 +125,7 @@ int __vfs_walk(struct v_dnode *start,
                 return ENAMETOOLONG;
             }
             if(!VFS_VALID_CHAR(cur)){
-                return VFS_EINVLD;
+                return EINVAL;
             }
             tname[j++] = cur;
 
@@ -158,11 +158,8 @@ int __vfs_walk(struct v_dnode *start,
             dnode->name.hash =  hs.hash;
             strcpy(dnode->name.value, hs.value);
 
-            if(current_level->inode){
-
-                error = current_level->inode->ops.dir_lookup(
-                            current_level->inode, dnode);
-            }
+            error = current_level->inode->ops.dir_lookup(
+                        current_level->inode, dnode);
 
             int create = (walk_options  & VFS_WALK_MKPARENT);
 
@@ -242,9 +239,19 @@ int vfs_open(struct v_dnode *dnode, struct v_file **file){
 
     struct v_file *f = cake_piece_grub(file_pile);
     memset(f, 0, sizeof(*f));
-    f->dnode = dnode;
-    f->inode = dnode->inode;
+    f->dnode     =  dnode;
+    f->inode     =  dnode->inode;
+    f->ref_count =  1;
     ++dnode->inode->open_count;
+
+
+    if((dnode->inode->itype & VFS_INODE_TYPE_FILE) &&
+       (!dnode->inode->pg_cache)){
+
+        dnode->inode->pg_cache = vzalloc(sizeof(struct pcache));
+        pcache_init(dnode->inode->pg_cache);
+    }
+
 
     int error = dnode->inode->ops.open(dnode->inode, f);
     if(error){
@@ -257,17 +264,17 @@ int vfs_open(struct v_dnode *dnode, struct v_file **file){
 
 int vfs_close(struct v_file *file){
 
-    if(!file || !file->ops.close){
-        return ENOTSUP;
-    }
+    int error = 0;
+    if(!file->ops.close ||
+       !(error=file->ops.close(file))){
 
-    int error = file->ops.close(file);
-
-    if(!error){
-        cake_piece_release(file_pile, file);
         if(file->inode->open_count){
             --file->inode->open_count;
         }
+        if(file->inode->itype & VFS_INODE_TYPE_FILE){
+            pcache_commit_all(file);
+        }
+        cake_piece_release(file_pile, file);
     }
     return error;
 }
@@ -319,7 +326,7 @@ int vfs_mount_at(const char *fs_name,
 
     struct filesystem *fs = fsm_get(fs_name);
 
-    if(!fs)return VFS_ENOFS;
+    if(!fs)return ENODEV;
 
     struct v_superblock *sb = vfs_sb_alloc();
     sb->dev   = device;
@@ -352,7 +359,7 @@ int vfs_unmount_at(struct v_dnode *mnt_point){
 
     int error = 0;
     struct v_superblock *sb = mnt_point->super_block;
-    if(!sb)return VFS_EBADMNT;
+    if(!sb)return ENODEV;
 
     if(!(error = sb->fs->unmount(sb))){
 
@@ -435,6 +442,9 @@ int __vfs_try_locate_file(const char *path,
     error = vfs_walk(*fdir, name.value, file, NULL, 0);
     if(error == ENOENT && (options & FLOCATE_CREATE_EMPTY)){
 
+        error = (*fdir)->inode->ops.create((*fdir)->inode);
+        if(error)return error;
+
         struct v_dnode *file_new = vfs_dnode_alloc();
         file_new->name =
             HSTR_SET(valloc(VFS_NAME_MAXLEN), name.len, name.hash);
@@ -506,17 +516,10 @@ int __vfs_do_unlink(struct v_inode *inode){
 }
 int __vfs_dup_fd(struct v_fd *old_fd, struct v_fd **new_fd){
 
-    struct v_file *open_file;
-    int error = vfs_open(old_fd->file->dnode, &open_file);
-    if(!error){
-
-        *new_fd  =  cake_piece_grub(fd_pile);
-        **new_fd =  (struct v_fd){
-            .file  =  open_file,
-            .pos   =  old_fd->pos,
-            .flags =  old_fd->flags
-        };
-    }
+    int error = 0;
+    *new_fd  =  cake_piece_grub(fd_pile);
+    memcpy(*new_fd, old_fd, sizeof(struct v_fd));
+    ++old_fd->file->ref_count;
     return error;
 }
 
@@ -527,8 +530,9 @@ int __vfs_do_open(struct v_file **out_file, const char *path, int options){
 
     int error = __vfs_try_locate_file(path, &parent, &file, 0);
     if(error != ENOENT && (options & F_CREATE)){
-        error = parent->inode->ops.create(parent->inode, opened_file);
-    }else if(!error){
+        error = parent->inode->ops.create(parent->inode);
+    }
+    if(!error){
         error = vfs_open(file, &opened_file);
     }
 
@@ -545,9 +549,11 @@ __DEFINE_SYSTEMCALL_2(int, open,
     int error = __vfs_do_open(&opened_file, path, options);
     if(!error && !(error = vfs_fdslot_alloc(&fd))){
 
+        opened_file->f_pos = 
+            opened_file->inode->fsize & -(!!(options &F_APPEND));
         struct v_fd *vfd = vzalloc(sizeof(struct v_fd));
-        vfd->file = opened_file;
-        vfd->pos  = opened_file->inode->fsize & -(!!(options & F_APPEND));
+        vfd->file  = opened_file;
+        vfd->flags = options;
         __current->fdtable->fds[fd] = vfd;
         return fd;
     }
@@ -566,14 +572,20 @@ __DEFINE_SYSTEMCALL_1(int, close,
 
     struct v_fd *vfd;
     int error = 0;
-    if(!GET_FD(fd, vfd)){
+    do{
 
-        error = EBADF;
-    }else if(!(error = vfs_close(vfd->file))){
-
+        if(!GET_FD(fd, vfd)){
+            error = EBADF;
+            break;
+        }
+        if(vfd->file->ref_count > 1){
+            --vfd->file->ref_count;
+        }else if(error=vfs_close(vfd->file)){
+            break;
+        }
         vfree(vfd);
         __current->fdtable->fds[fd] = 0;
-    }
+    }while(0);
 
     __current->k_status = error;
     return SYSCALL_ESTATUS(error);
@@ -670,18 +682,28 @@ __DEFINE_SYSTEMCALL_3(int, read,
     int error = 0;
     struct v_fd *vfd;
 
-    if(!GET_FD(fd, vfd)){
+    do{
 
-        error = EBADF;
-    }else{
-
-        struct v_file *file =  vfd->file;
-        file->f_pos         =  vfd->pos;
-        error               =  file->ops.read(file, buf, count, file->f_pos);
-        if(error >=  0){
-            vfd->pos += error;
+        if(!GET_FD(fd, vfd)){
+            error = EBADF;
+            break;
         }
-    }
+        struct v_file *file =  vfd->file;
+        if(file->inode->itype & VFS_INODE_TYPE_DIR){
+            error = EISDIR;
+            break;
+        }
+        if(vfd->flags & F_DIRECT){
+            error =  file->ops.read(file, buf, count, file->f_pos);
+        }else{
+            error = pcache_read(file, buf, count);
+        }
+        if(error > 0){
+            file->f_pos += error;
+            return error;
+        }
+    }while(0);
+
     __current->k_status = error;
     return SYSCALL_ESTATUS(error);
 }
@@ -692,19 +714,30 @@ __DEFINE_SYSTEMCALL_3(int, write,
                       unsigned int, count){
     int error = 0;
     struct v_fd *vfd;
+    do{
 
-    if(!GET_FD(fd, vfd)){
-
-        error = EBADF;
-    }else{
+        if(!GET_FD(fd, vfd)){
+            error = EBADF;
+            break;
+        }
 
         struct v_file *file =  vfd->file;
-        file->f_pos         =  vfd->pos;
-        error               =  file->ops.write(file, buf, count, file->f_pos);
-        if(error >=  0){
-            vfd->pos += error;
+        if((file->inode->itype & VFS_INODE_TYPE_DIR)){
+            error = EISDIR;
+            break;
         }
-    }
+        if((vfd->flags & F_DIRECT)){
+            error =  file->ops.write(file, buf, count, file->f_pos);
+        }else{
+            error =  pcache_write(file, buf, count);
+        }
+
+        if(error > 0){
+            file->f_pos += error;
+            return error;
+        }
+    }while(0);
+
     __current->k_status = error;
     return SYSCALL_ESTATUS(error);
 }
@@ -726,10 +759,10 @@ __DEFINE_SYSTEMCALL_3(int, lseek,
         switch(options){
 
             case FSEEK_CUR:
-                fpos = (size_t)(fpos + offset);
+                fpos = (size_t)((int)fpos + offset);
                 break;
             case FSEEK_END:
-                fpos = (size_t)(vfd->file->inode->fsize + offset);
+                fpos = (size_t)((int)vfd->file->inode->fsize + offset);
                 break;
             case FSEEK_SET:
                 fpos = (size_t)offset;
@@ -737,8 +770,10 @@ __DEFINE_SYSTEMCALL_3(int, lseek,
             default:
                 break;
         }
-
-        vfd->pos = fpos;
+        if(!vfd->file->ops.seek ||
+           !(error=vfd->file->ops.seek(vfd->file, fpos))){
+            vfd->file->f_pos = fpos;
+        }
     }
     __current->k_status = error;
     return SYSCALL_ESTATUS(error);

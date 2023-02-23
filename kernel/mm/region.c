@@ -1,5 +1,6 @@
 #include <mm/region.h>
 #include <mm/kalloc.h>
+#include <mm/valloc.h>
 #include <process.h>
 
 

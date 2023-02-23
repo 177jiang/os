@@ -3,6 +3,7 @@
 
 #define     F_CREATE        1
 #define     F_APPEND        2
+#define     F_DIRECT        4
 
 #define     FSEEK_CUR       1
 #define     FSEEK_END       2

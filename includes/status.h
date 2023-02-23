@@ -10,7 +10,7 @@
 #define SEGFAULT -(5)
 
 #define INVL      -(6)
-#define EINVL     -(6)
+#define EINVAL     -(6)
 
 #define EINTR     -(7)
 
@@ -29,5 +29,6 @@
 #define EISDIR          -19
 #define EBUSY           -20
 #define EXDEV           -21
+#define ENODEV          -22
 
 #endif

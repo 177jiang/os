@@ -3,6 +3,7 @@
 #include <libc/stdio.h>
 #include <hal/pci.h>
 #include <mm/kalloc.h>
+#include <mm/valloc.h>
 #include <spike.h>
 
 static struct list_header pci_devices;
@@ -42,7 +43,7 @@ void pci_probe_device(int bus, int dev, int funct) {
     pci_reg_t intr = pci_read_cspace(base, 0x3c);
     pci_reg_t class = pci_read_cspace(base, 0x8);
 
-    struct pci_device* device = kmalloc(sizeof(struct pci_device));
+    struct pci_device* device = vzalloc(sizeof(struct pci_device));
     *device = (struct pci_device){ .cspace_base = base,
                                    .class_info = class,
                                    .device_info = reg1,
